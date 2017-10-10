@@ -2,12 +2,12 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 
 const ProjectSchema = new Schema({
-  _id: Number,
-  id: Number,
+  _id: String,
+  id: String,
   title: String,
   price: String,
   original_price: String,
-  cover_image: String,
+  cover_image: [String],
   detail_images: [String],
   description: String,
   params: [
@@ -17,12 +17,20 @@ const ProjectSchema = new Schema({
     }
   ],
   doctor: {
-    type: Number,
+    type: String,
     ref: 'Doctor'
+  },
+  status: {
+    type: Number,
+    default: 0
   },
   category: {
     type: Number,
     ref: 'Category'
+  },
+  isTop: {
+    type: Boolean,
+    default: false
   },
   meta: {
     createdAt: {

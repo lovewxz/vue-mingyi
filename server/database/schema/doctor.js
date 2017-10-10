@@ -2,18 +2,18 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 
 const DoctorSchema = new Schema({
-  _id: Number,
-  id: Number,
+  _id: String,
+  id: String,
   realname: String,
   title: String,
   avatar: String,
   desc: String,
   project: [{
-    type: Number,
+    type: String,
     ref: 'Project'
   }],
   case: [{
-    type: Number,
+    type: String,
     ref: 'Case'
   }],
   meta: {

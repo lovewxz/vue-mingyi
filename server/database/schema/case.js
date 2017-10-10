@@ -3,14 +3,14 @@ const { Schema } = mongoose
 const Mixed = Schema.Types.Mixed
 
 const CaseSchema = new Schema({
-  _id: Number,
-  id: Number,
+  _id: String,
+  id: String,
   doctor: {
-    type: Number,
+    type: String,
     ref: 'Doctor'
   },
   project: {
-    type: Number,
+    type: String,
     ref: 'Project'
   },
   title: String,
@@ -21,6 +21,10 @@ const CaseSchema = new Schema({
   compare_photo: {
     before: String,
     after: String
+  },
+  isTop: {
+    type: Boolean,
+    default: false
   },
   meta: {
     createdAt: {
