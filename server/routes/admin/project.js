@@ -1,4 +1,4 @@
-import {get, controller, put, del, post} from '../../lib/decorator/router'
+import { get, controller, put, del, post } from '../../lib/decorator/router'
 import api from '../../api'
 import xss from 'xss'
 import R from 'ramda'
@@ -8,10 +8,18 @@ import randomToken from 'random-token'
 export class projectController {
   @get('projects')
   async getProjectList(ctx, next) {
-    const {limit} = ctx.query || 10
-    const {page} = ctx.query || 1
-    const projects = await api.project.getProjectList(limit, page)
-    const count = await api.project.getProjectCount()
+    let projects = ''
+    let count = ''
+    const { limit } = ctx.query || 10
+    const { page } = ctx.query || 1
+    let { keyword } = ctx.query || ''
+    if (keyword) {
+      const reg = new RegExp(xss(decodeURIComponent(keyword)), 'i')
+      projects = await api.project.getProjectList(limit, page, reg)
+      count = await api.project.getProjectCount(reg)
+    }
+    projects = await api.project.getProjectList(limit, page)
+    count =  await api.project.getProjectCount()
     ctx.body = {
       success: true,
       data: {
@@ -22,8 +30,8 @@ export class projectController {
   }
   @get('projects/:_id')
   async getProjectById(ctx, next) {
-    const {params} = ctx
-    const {_id} = params
+    const { params } = ctx
+    const { _id } = params
     if (_id) {
       ctx.body = {
         success: false,
@@ -39,7 +47,7 @@ export class projectController {
   @put('projects')
   async putProject(ctx, next) {
     let body = ctx.request.body
-    const {_id} = body
+    const { _id } = body
     if (!_id) {
       return ctx.body = {
         success: false,
@@ -82,8 +90,8 @@ export class projectController {
   @put('project/del')
   async delProject(ctx, next) {
     let body = ctx.request.body
-    const {_id} = body
-    const {status} = body
+    const { _id } = body
+    const { status } = body
     if (!_id) {
       return ctx.body = {
         success: false,
