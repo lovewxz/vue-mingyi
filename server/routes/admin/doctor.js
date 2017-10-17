@@ -1,9 +1,10 @@
 import api from '../../api'
-import { controller, get, required } from '../../lib/decorator/router'
+import { controller, get, required, checkToken } from '../../lib/decorator/router'
 
 @controller('admin')
 export class doctorController {
   @get('doctors')
+  @checkToken()
   async getDoctorList(ctx, next) {
     const { limit } = ctx.query || 10
     const { page } = ctx.query || 1
@@ -18,6 +19,7 @@ export class doctorController {
     }
   }
   @get('doctors/:_id')
+  @checkToken()
   async getDoctorById(ctx, next) {
     const { params } = ctx
     const { _id } = params

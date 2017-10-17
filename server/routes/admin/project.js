@@ -1,4 +1,4 @@
-import { get, controller, put, del, post } from '../../lib/decorator/router'
+import { get, controller, put, del, post, checkToken } from '../../lib/decorator/router'
 import api from '../../api'
 import xss from 'xss'
 import R from 'ramda'
@@ -7,6 +7,7 @@ import randomToken from 'random-token'
 @controller('admin')
 export class projectController {
   @get('projects')
+  @checkToken()
   async getProjectList(ctx, next) {
     let projects = ''
     let count = ''
@@ -29,6 +30,7 @@ export class projectController {
     }
   }
   @get('projects/:_id')
+  @checkToken()
   async getProjectById(ctx, next) {
     const { params } = ctx
     const { _id } = params
@@ -45,6 +47,7 @@ export class projectController {
     }
   }
   @put('projects')
+  @checkToken()
   async putProject(ctx, next) {
     let body = ctx.request.body
     const { _id } = body
@@ -88,6 +91,7 @@ export class projectController {
     }
   }
   @put('project/del')
+  @checkToken()
   async delProject(ctx, next) {
     let body = ctx.request.body
     const { _id } = body
@@ -119,6 +123,7 @@ export class projectController {
     }
   }
   @post('projects')
+  @checkToken()
   async createProject(ctx, next) {
     let body = ctx.request.body
     body = {

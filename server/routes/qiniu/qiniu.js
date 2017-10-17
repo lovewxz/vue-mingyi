@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { controller, get, post, put, del } from '../../lib/decorator/router'
+import { controller, get, checkToken } from '../../lib/decorator/router'
 import QiniuSDK from '../../lib/qiniuSDK'
 
 const qiniu = new QiniuSDK()
@@ -7,7 +7,8 @@ const qiniu = new QiniuSDK()
 @controller('/qiniu')
 export class QiniuController {
   @get('/uptoken')
-  async qiniuToken(ctx,next) {
+  @checkToken()
+  async qiniuToken(ctx, next) {
     let key = ctx.query.key
     let token = qiniu.uptoken(key)
     ctx.body = {

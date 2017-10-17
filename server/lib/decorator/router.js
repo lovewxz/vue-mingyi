@@ -2,6 +2,7 @@ import Router from 'koa-router'
 import glob from 'glob'
 import { resolve } from 'path'
 import R from 'ramda'
+import jwt from 'jsonwebtoken'
 
 let routeMap = new Map()
 const symbolPrefix = Symbol('prefix')
@@ -73,7 +74,6 @@ export const required = rules => convert(async (ctx, next) => {
   let errors = []
   const passRules = R.forEachObjIndexed(
     (val, key) => {
-      console.log(ctx.request)
       errors = R.filter(i => {
         return !R.has(i, ctx.request[key])
       })(val)
