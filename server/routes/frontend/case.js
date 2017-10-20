@@ -4,21 +4,21 @@ import api from '../../api'
 @controller('api')
 export class caseController {
   @get('cases')
-  async getCases(ctx, next) {
+  async getPcase(ctx, next) {
     const { limit } = ctx.query || 10
     const { page } = ctx.query || 1
-    const cases = await api.peopleCase.getCases(limit, page)
-    const count = await api.peopleCase.getCasesCount()
+    const pcases = await api.pcase.getPcaseList(limit, page)
+    const count = await api.pcase.getPcaseCount()
     ctx.body = {
       success: true,
       data: {
-        list: cases,
+        list: pcases,
         total: count
       }
     }
   }
   @get('cases/list/:_id')
-  async getCaseById(ctx, next) {
+  async getPcaseById(ctx, next) {
     const { params } = ctx
     const { _id } = params
     if (_id) {
@@ -27,10 +27,10 @@ export class caseController {
         err: 'id不存在'
       }
     }
-    const pepleCase = await api.peopleCase.getCaseById(_id)
+    const Pcase = await api.pcase.getPcaseById(_id)
     ctx.body = {
       success: true,
-      data: pepleCase
+      data: Pcase
     }
   }
 }

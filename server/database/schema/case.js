@@ -22,6 +22,10 @@ const CaseSchema = new Schema({
     before: String,
     after: String
   },
+  status: {
+    type: Number,
+    default: 0
+  },
   isTop: {
     type: Boolean,
     default: false

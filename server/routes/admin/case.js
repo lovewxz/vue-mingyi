@@ -5,34 +5,35 @@ import R from 'ramda'
 import randomToken from 'random-token'
 
 @controller('admin')
-export class projectController {
-  @get('projects')
+export class pcaseController {
+  @get('pcases')
   @checkToken()
-  async getProjectList(ctx, next) {
-    let projects = ''
+  async getPcaseList(ctx, next) {
+    let pcases = ''
     let count = ''
     const { limit } = ctx.query || 10
     const { page } = ctx.query || 1
     let { keyword } = ctx.query || ''
     if (keyword) {
       const reg = new RegExp(xss(decodeURIComponent(keyword)), 'i')
-      projects = await api.project.getProjectList(limit, page, reg)
-      count = await api.project.getProjectCount(reg)
+      pcases = await api.pcase.getPcaseList(limit, page, reg)
+      count = await api.pcase.getPcaseCount(reg)
     } else {
-      projects = await api.project.getProjectList(limit, page)
-      count =  await api.project.getProjectCount()
+      pcases = await api.pcase.getPcaseList(limit, page)
+      count =  await api.pcase.getPcaseCount()
     }
+
     ctx.body = {
       success: true,
       data: {
-        list: projects,
+        list: pcases,
         total: count
       }
     }
   }
-  @get('projects/:_id')
+  @get('pcases/:_id')
   @checkToken()
-  async getProjectById(ctx, next) {
+  async getPcaseById(ctx, next) {
     const { params } = ctx
     const { _id } = params
     if (_id) {
@@ -41,15 +42,15 @@ export class projectController {
         err: 'id不存在'
       }
     }
-    const project = await api.project.getProjectById(_id)
+    const pcase = await api.pcase.getPcaseById(_id)
     ctx.body = {
       success: true,
-      data: project
+      data: pcase
     }
   }
-  @put('projects')
+  @put('pcases')
   @checkToken()
-  async putProject(ctx, next) {
+  async putPcase(ctx, next) {
     let body = ctx.request.body
     const { _id } = body
     if (!_id) {
@@ -58,31 +59,31 @@ export class projectController {
         err: 'id不存在'
       }
     }
-    let project = await api.project.getProjectById(_id)
-    if (!project) {
+    let pcase = await api.pcase.getPcaseById(_id)
+    if (!pcase) {
       return ctx.body = {
         success: false,
         err: '项目不存在'
       }
     }
-    project.title = xss(body.title)
-    project.price = xss(body.price)
-    project.original_price = xss(body.original_price)
-    project.doctor = xss(body.doctor)
-    project.description = xss(body.description)
-    project.category = xss(body.category)
-    project.params = R.map(item => ({
+    pcase.title = xss(body.title)
+    pcase.price = xss(body.price)
+    pcase.original_price = xss(body.original_price)
+    pcase.doctor = xss(body.doctor)
+    pcase.description = xss(body.description)
+    pcase.category = xss(body.category)
+    pcase.params = R.map(item => ({
       key: xss(item.key),
       value: xss(item.value)
     }))(body.params)
-    project.detail_images = R.map(xss)(body.detail_images)
-    project.cover_image = R.map(xss)(body.cover_image)
-    project.isTop = xss(body.isTop)
+    pcase.detail_images = R.map(xss)(body.detail_images)
+    pcase.cover_image = R.map(xss)(body.cover_image)
+    pcase.isTop = xss(body.isTop)
     try {
-      project = await api.project.update(project)
+      pcase = await api.pcase.update(pcase)
       ctx.body = {
         success: true,
-        data: project
+        data: pcase
       }
     } catch (e) {
       ctx.body = {
@@ -91,9 +92,9 @@ export class projectController {
       }
     }
   }
-  @put('project/del')
+  @put('pcase/del')
   @checkToken()
-  async delProject(ctx, next) {
+  async delPcase(ctx, next) {
     let body = ctx.request.body
     const { _id } = body
     const { status } = body
@@ -103,18 +104,18 @@ export class projectController {
         err: 'id不存在'
       }
     }
-    let project = await api.project.getProjectById(_id)
-    if (!project) {
+    let pcase = await api.pcase.getPcaseById(_id)
+    if (!pcase) {
       return ctx.body = {
         success: false,
         err: '项目不存在'
       }
     }
     try {
-      project = await api.project.updateStatus(_id, xss(status))
+      pcase = await api.pcase.updateStatus(_id, xss(status))
       ctx.body = {
         success: true,
-        data: project
+        data: pcase
       }
     } catch (e) {
       ctx.body = {
@@ -123,9 +124,9 @@ export class projectController {
       }
     }
   }
-  @post('projects')
+  @post('pcases')
   @checkToken()
-  async createProject(ctx, next) {
+  async createPcase(ctx, next) {
     let body = ctx.request.body
     body = {
       _id: randomToken(32),
@@ -143,10 +144,10 @@ export class projectController {
       cover_image: R.map(xss)(body.cover_image)
     }
     try {
-      const project = await api.project.save(body)
+      const pcase = await api.pcase.save(body)
       return ctx.body = {
         success: true,
-        data: project
+        data: pcase
       }
     } catch (e) {
       ctx.body = {

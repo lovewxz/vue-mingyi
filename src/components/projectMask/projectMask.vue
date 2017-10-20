@@ -33,7 +33,7 @@
         <i class="iconfont icon-ioscloseoutline"></i>
       </div>
       <div class="cover-image">
-        <img v-lazy="cdnName(coverImg,200)" alt="">
+        <img v-lazy="cdnName(coverImg[0],200)" alt="">
       </div>
     </div>
   </div>
@@ -52,8 +52,10 @@ export default {
       default: 0
     },
     coverImg: {
-      type: String,
-      default: ''
+      type: Array,
+      default: () => {
+        return []
+      }
     }
   },
   data() {

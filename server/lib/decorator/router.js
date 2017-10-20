@@ -70,7 +70,7 @@ const decorate = (args, middleware) => {
 const convert = middleware => (...args) => decorate(args, middleware)
 
 // require
-export const required = rules => convert(async (ctx, next) => {
+export const required = rules => convert(async(ctx, next) => {
   let errors = []
   const passRules = R.forEachObjIndexed(
     (val, key) => {
@@ -86,15 +86,19 @@ export const required = rules => convert(async (ctx, next) => {
 
 export const checkToken = () => convert(async(ctx, next) => {
   const authorization = ctx.get('Authorization')
-  if (authorization === '') {
+  if (!authorization) {
     ctx.throw(401, '没有验证信息')
   }
   const token = authorization.split(' ')[1]
   let tokenContent
-  try {
-    tokenContent = await jwt.verify(token, 'yaojun')
-  } catch (e) {
-    ctx.throw(401, '验证信息过期')
-  }
+  tokenContent = await jwt.verify(token, 'yaojun', (err, decoded) => {
+    if (err) {
+      if (err.name === 'TokenExpiredError') {
+        ctx.throw(402, '验证信息过期')
+      } else {
+        ctx.throw(401, '验证不通过')
+      }
+    }
+  })
   await next()
 })
