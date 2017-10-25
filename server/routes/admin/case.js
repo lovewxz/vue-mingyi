@@ -52,7 +52,6 @@ export class pcaseController {
   @checkToken()
   async putPcase(ctx, next) {
     let body = ctx.request.body
-    console.log(body)
     const { _id } = body
     if (!_id) {
       return ctx.body = {
@@ -68,17 +67,19 @@ export class pcaseController {
       }
     }
     pcase.title = xss(body.title)
-    pcase.price = xss(body.price)
-    pcase.original_price = xss(body.original_price)
+    pcase.user_name = xss(body.user_name)
+    pcase.contents = xss(body.contents)
     pcase.doctor = xss(body.doctor)
-    pcase.description = xss(body.description)
-    pcase.category = xss(body.category)
-    pcase.params = R.map(item => ({
-      key: xss(item.key),
-      value: xss(item.value)
-    }))(body.params)
-    pcase.detail_images = R.map(xss)(body.detail_images)
-    pcase.cover_image = R.map(xss)(body.cover_image)
+    pcase.project = xss(body.project)
+    pcase.all_item = R.map(xss)(body.all_item)
+    pcase.sections = R.map(item => ({
+      article: xss(item.article),
+      title: xss(item.title),
+      id: xss(item.id)
+    }))(body.sections)
+    pcase.compare_photo = R.forEachObjIndexed((v,k) => ({
+      k: xss(v)
+    }))(body.compare_photo)
     pcase.isTop = xss(body.isTop)
     try {
       pcase = await api.pcase.update(pcase)
