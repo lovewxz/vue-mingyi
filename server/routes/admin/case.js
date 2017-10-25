@@ -52,6 +52,7 @@ export class pcaseController {
   @checkToken()
   async putPcase(ctx, next) {
     let body = ctx.request.body
+    console.log(body)
     const { _id } = body
     if (!_id) {
       return ctx.body = {
