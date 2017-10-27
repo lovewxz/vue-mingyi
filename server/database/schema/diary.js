@@ -1,21 +1,15 @@
 import mongoose from 'mongoose'
 const { Schema } = mongoose
 
-const DoctorSchema = new Schema({
+const DiarySchema = new Schema({
   _id: String,
   id: String,
-  realname: String,
-  title: String,
-  avatar: String,
-  desc: String,
-  project: [{
-    type: String,
-    ref: 'Project'
-  }],
-  case: [{
+  caseId: {
     type: String,
     ref: 'Case'
-  }],
+  },
+  title: String,
+  article: String,
   status: {
     type: Number,
     default: 0
@@ -32,8 +26,7 @@ const DoctorSchema = new Schema({
   }
 })
 
-
-DoctorSchema.pre('save', function (err) {
+DiarySchema.pre('save', function (next) {
   if (this.isNew) {
     this.meta.createdAt = this.meta.updatedAt = Date.now()
   } else {
@@ -42,4 +35,4 @@ DoctorSchema.pre('save', function (err) {
   next()
 })
 
-const Doctor = mongoose.model('Doctor', DoctorSchema)
+const Diary = mongoose.model('Diary', DiarySchema)

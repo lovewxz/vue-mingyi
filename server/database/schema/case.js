@@ -17,7 +17,10 @@ const CaseSchema = new Schema({
   user_name: String,
   contents: String,
   all_item: [String],
-  sections: Mixed,
+  sections: [{
+    type: String,
+    ref: 'Diary'
+  }],
   compare_photo: {
     before: String,
     after: String

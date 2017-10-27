@@ -17,11 +17,13 @@ const formateData = (id) => {
 }
 let doctorData = require(r('../database/json/finalYMDoctor.json'))
 let projectData = require(r('../database/json/finalYMProject.json'))
-let caseData = require(r('../database/json/finalYMCase.json'))
+let caseData = require(r('../database/json/finalYMCaseExtract.json'))
+let diaryData = require(r('../database/json/finalYMDiaryExtract.json'))
 
 doctorData = formateData('id')(doctorData)
 projectData = formateData('id')(projectData)
 caseData = formateData('id')(caseData)
+diaryData = formateData('id')(diaryData)
 
 export const database = app => {
   mongoose.set('debug', true)
@@ -40,14 +42,17 @@ export const database = app => {
     const Project = mongoose.model('Project')
     const Case = mongoose.model('Case')
     const User = mongoose.model('User')
+    const Diary = mongoose.model('Diary')
 
     const existDoctor = await Doctor.find({}).exec()
     const existProject = await Project.find({}).exec()
     const existCase = await Case.find({}).exec()
+    const existDiary = await Diary.find({}).exec()
 
     if (!existDoctor.length) Doctor.insertMany(doctorData)
     if (!existProject.length) Project.insertMany(projectData)
     if (!existCase.length) Case.insertMany(caseData)
+    if (!existDiary.length) Diary.insertMany(diaryData)
 
     console.log('用户写入数据库')
     let user = await User.findOne({

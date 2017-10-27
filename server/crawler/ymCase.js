@@ -165,6 +165,32 @@ export const uploadYMCase = async() => {
   writeFileSync(r('../database/json/finalYMCase.json'), JSON.stringify(data, null, 2), 'utf-8')
 }
 
+export const extractCase = () => {
+  let data = require(r('../database/json/finalYMCase.json'))
+  const caseList = R.map(item => {
+    const diaryArr = []
+    item.sections.forEach(article => diaryArr.push(article.id))
+    item.sections = diaryArr
+    return item
+  })(data)
+  writeFileSync(r('../database/json/finalYMCaseExtract.json'), JSON.stringify(caseList, null, 2), 'utf-8')
+
+}
+
+export const extractDiaryFromCase = () => {
+  let data = require(r('../database/json/finalYMCase.json'))
+  const result = []
+  R.forEach(item => {
+    let caseId = R.pick(['id'])(item)
+    R.forEach(diaryData => {
+      diaryData = R.pick(['id','article','title'])(diaryData)
+      diaryData.caseId = caseId.id
+      result.push(diaryData)
+    })(item.sections)
+  })(data)
+  writeFileSync(r('../database/json/finalYMDiaryExtract.json'), JSON.stringify(result, null, 2), 'utf-8')
+}
+
 export const getCompleteCase = async() => {
   const data = require(r('../database/json/case.json'))
   for (let i = 0; i < data.length; i++) {
@@ -177,4 +203,4 @@ export const getCompleteCase = async() => {
   writeFileSync(r('../database/json/mergeCase.json'), JSON.stringify(data, null, 2), 'utf-8')
 }
 
-uploadYMCase()
+extractDiaryFromCase()

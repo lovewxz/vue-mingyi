@@ -5,34 +5,34 @@ import R from 'ramda'
 import randomToken from 'random-token'
 
 @controller('admin')
-export class pcaseController {
-  @get('pcases')
+export class diaryController {
+  @get('diaries')
   @checkToken()
-  async getPcaseList(ctx, next) {
-    let pcases = ''
+  async getDiaryList(ctx, next) {
+    let diaries = ''
     let count = ''
     const { limit } = ctx.query || 10
     const { page } = ctx.query || 1
     let { keyword } = ctx.query || ''
     if (keyword) {
       const reg = new RegExp(xss(decodeURIComponent(keyword)), 'i')
-      pcases = await api.pcase.getPcaseList(limit, page, reg)
-      count = await api.pcase.getPcaseCount(reg)
+      diaries = await api.diary.getDiaryList(limit, page, reg)
+      count = await api.diary.getDiaryCount(reg)
     } else {
-      pcases = await api.pcase.getPcaseList(limit, page)
-      count =  await api.pcase.getPcaseCount()
+      diaries = await api.diary.getDiaryList(limit, page)
+      count =  await api.diary.getDiaryCount()
     }
     ctx.body = {
       success: true,
       data: {
-        list: pcases,
+        list: diaries,
         total: count
       }
     }
   }
-  @get('pcases/:_id')
+  @get('diaries/:_id')
   @checkToken()
-  async getPcaseById(ctx, next) {
+  async getDiaryById(ctx, next) {
     const { params } = ctx
     const { _id } = params
     if (_id) {
@@ -41,15 +41,15 @@ export class pcaseController {
         err: 'id不存在'
       }
     }
-    const pcase = await api.pcase.getPcaseById(_id)
+    const diary = await api.diary.getDiaryById(_id)
     ctx.body = {
       success: true,
-      data: pcase
+      data: diary
     }
   }
-  @put('pcases')
+  @put('diaries')
   @checkToken()
-  async putPcase(ctx, next) {
+  async putDiary(ctx, next) {
     let body = ctx.request.body
     const { _id } = body
     if (!_id) {
@@ -58,33 +58,21 @@ export class pcaseController {
         err: 'id不存在'
       }
     }
-    let pcase = await api.pcase.getPcaseById(_id)
-    if (!pcase) {
+    let diary = await api.diary.getDiaryById(_id)
+    if (!diary) {
       return ctx.body = {
         success: false,
         err: '项目不存在'
       }
     }
-    pcase.title = xss(body.title)
-    pcase.user_name = xss(body.user_name)
-    pcase.contents = xss(body.contents)
-    pcase.doctor = xss(body.doctor)
-    pcase.project = xss(body.project)
-    pcase.all_item = R.map(xss)(body.all_item)
-    pcase.sections = R.map(item => ({
-      article: xss.friendlyAttrValue(item.article),
-      title: xss(item.title),
-      id: xss(item.id)
-    }))(body.sections)
-    pcase.compare_photo = R.forEachObjIndexed((v,k) => ({
-      k: xss(v)
-    }))(body.compare_photo)
-    pcase.isTop = xss(body.isTop)
+    diary._id = xss(body._id)
+    diary.title = xss(body.title)
+    diary.article = xss.friendlyAttrValue(body.article)
     try {
-      pcase = await api.pcase.update(pcase)
+      diary = await api.diary.update(diary)
       ctx.body = {
         success: true,
-        data: pcase
+        data: diary
       }
     } catch (e) {
       ctx.body = {
@@ -93,9 +81,9 @@ export class pcaseController {
       }
     }
   }
-  @put('pcase/del')
+  @put('diary/del')
   @checkToken()
-  async delPcase(ctx, next) {
+  async delDiary(ctx, next) {
     let body = ctx.request.body
     const { _id } = body
     const { status } = body
@@ -105,18 +93,18 @@ export class pcaseController {
         err: 'id不存在'
       }
     }
-    let pcase = await api.pcase.getPcaseById(_id)
-    if (!pcase) {
+    let diary = await api.diary.getDiaryById(_id)
+    if (!diary) {
       return ctx.body = {
         success: false,
         err: '项目不存在'
       }
     }
     try {
-      pcase = await api.pcase.updateStatus(_id, xss(status))
+      diary = await api.diary.updateStatus(_id, xss(status))
       ctx.body = {
         success: true,
-        data: pcase
+        data: diary
       }
     } catch (e) {
       ctx.body = {
@@ -125,30 +113,21 @@ export class pcaseController {
       }
     }
   }
-  @post('pcases')
+  @post('diaries')
   @checkToken()
-  async createPcase(ctx, next) {
+  async createDiary(ctx, next) {
     let body = ctx.request.body
     body = {
       _id: randomToken(32),
       title: xss(body.title),
-      price: xss(body.price),
-      original_price: xss(body.original_price),
-      doctor: xss(body.doctor),
-      description: xss(body.description),
-      category: xss(body.category),
-      params: R.map(item => ({
-        key: xss(item.key),
-        value: xss(item.value)
-      }))(body.params),
-      detail_images: R.map(xss)(body.detail_images),
-      cover_image: R.map(xss)(body.cover_image)
+      article: xss.friendlyAttrValue(body.article),
+      caseId: xss(body.caseId)
     }
     try {
-      const pcase = await api.pcase.save(body)
+      const diary = await api.diary.save(body)
       return ctx.body = {
         success: true,
-        data: pcase
+        data: diary
       }
     } catch (e) {
       ctx.body = {
