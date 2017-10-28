@@ -71,11 +71,6 @@ export class pcaseController {
     pcase.doctor = xss(body.doctor)
     pcase.project = xss(body.project)
     pcase.all_item = R.map(xss)(body.all_item)
-    pcase.sections = R.map(item => ({
-      article: xss.friendlyAttrValue(item.article),
-      title: xss(item.title),
-      id: xss(item.id)
-    }))(body.sections)
     pcase.compare_photo = R.forEachObjIndexed((v,k) => ({
       k: xss(v)
     }))(body.compare_photo)
@@ -132,17 +127,13 @@ export class pcaseController {
     body = {
       _id: randomToken(32),
       title: xss(body.title),
-      price: xss(body.price),
-      original_price: xss(body.original_price),
+      user_name: xss(body.user_name),
+      contents: xss(body.contents),
       doctor: xss(body.doctor),
-      description: xss(body.description),
-      category: xss(body.category),
-      params: R.map(item => ({
-        key: xss(item.key),
-        value: xss(item.value)
-      }))(body.params),
-      detail_images: R.map(xss)(body.detail_images),
-      cover_image: R.map(xss)(body.cover_image)
+      project: xss(body.project),
+      all_item: R.map(xss)(body.all_item),
+      compare_photo: R.forEachObjIndexed((v,k) => {k: xss(v)})(body.compare_photo),
+      isTop: xss(body.isTop)
     }
     try {
       const pcase = await api.pcase.save(body)

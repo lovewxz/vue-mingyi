@@ -37,10 +37,6 @@ export async function getPcaseById(_id) {
     {
       path: 'doctor',
       select: '_id avatar realname title'
-    },
-    {
-      path: 'sections',
-      select: '_id title article'
     }
   ]).exec()
   return data

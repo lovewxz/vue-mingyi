@@ -30,7 +30,7 @@ export class diaryController {
       }
     }
   }
-  @get('diaries/:_id')
+  @get('diary/:_id')
   @checkToken()
   async getDiaryById(ctx, next) {
     const { params } = ctx
@@ -42,6 +42,23 @@ export class diaryController {
       }
     }
     const diary = await api.diary.getDiaryById(_id)
+    ctx.body = {
+      success: true,
+      data: diary
+    }
+  }
+  @get('diaries/:caseId')
+  @checkToken()
+  async getDiariesByCaseId(ctx, next) {
+    const { params } = ctx
+    const { caseId } = params
+    if (caseId) {
+      ctx.body = {
+        success: false,
+        err: '案例不存在'
+      }
+    }
+    const diary = await api.diary.getDiariesByCaseId(caseId)
     ctx.body = {
       success: true,
       data: diary

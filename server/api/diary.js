@@ -10,8 +10,8 @@ export async function getDiaryList(limit = 10, page = 1, reg = '') {
     .skip((page - 1) * Number(limit))
     .limit(Number(limit))
     .sort({ 'meta.createdAt': -1 })
-    .exec()
-  : await Diary
+    .exec() :
+    await Diary
     .find({})
     .where('status')
     .ne(-1)
@@ -34,6 +34,11 @@ export async function getDiaryById(_id) {
       select: '_id user_name'
     }
   ]).exec()
+  return data
+}
+
+export async function getDiariesByCaseId(caseId) {
+  const data = await Diary.find({ caseId }).where('status').ne(-1).exec()
   return data
 }
 
