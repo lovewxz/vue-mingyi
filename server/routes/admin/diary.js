@@ -85,6 +85,7 @@ export class diaryController {
     diary._id = xss(body._id)
     diary.title = xss(body.title)
     diary.article = xss.friendlyAttrValue(body.article)
+    diary.caseId =xss(body.caseId)
     try {
       diary = await api.diary.update(diary)
       ctx.body = {
@@ -137,6 +138,7 @@ export class diaryController {
     body = {
       _id: randomToken(32),
       title: xss(body.title),
+      caseId: xss(body.caseId),
       article: xss.friendlyAttrValue(body.article),
       caseId: xss(body.caseId)
     }
