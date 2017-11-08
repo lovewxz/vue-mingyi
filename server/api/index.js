@@ -3,11 +3,13 @@ import * as project from './project'
 import * as user from './user'
 import * as doctor from './doctor'
 import * as diary from './diary'
+import * as qiniu from './qiniu'
 
 export default {
   pcase,
   project,
   user,
   doctor,
-  diary
+  diary,
+  qiniu
 }

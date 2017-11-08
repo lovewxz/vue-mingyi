@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import { controller, get, post, checkToken } from '../../lib/decorator/router'
 import QiniuSDK from '../../lib/qiniuSDK'
 import xss from 'xss'
+import api from '../../api'
 
 const qiniu = new QiniuSDK()
 
@@ -16,6 +17,16 @@ export class QiniuController {
     ctx.body = {
       success: true,
       data: token
+    }
+  }
+  @get('/prefopStatus')
+  @checkToken()
+  async qiniuPrefop(ctx, next) {
+    const persistentId = ctx.query.persistentId
+    const res = await api.qiniu.getQiniuPrefop(persistentId)
+    ctx.body = {
+      success: true,
+      data: res
     }
   }
   @post('/watermark')
