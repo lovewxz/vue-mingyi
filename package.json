@@ -25,6 +25,7 @@
     "koa-router": "^7.2.1",
     "lodash": "^4.17.4",
     "mongoose": "^4.11.11",
+    "mongoose-auto-increment": "^5.0.1",
     "qiniu": "^7.0.8",
     "ramda": "^0.24.1",
     "random-token": "^0.0.8",

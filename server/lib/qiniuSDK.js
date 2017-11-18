@@ -28,7 +28,7 @@ export default class QiniuSDK {
     const saveJpgEntry = qiniu.util.urlsafeBase64Encode(`${this.bucket}:${filename}`)
     const saveVideoEntry = qiniu.util.urlsafeBase64Encode(`${this.bucket}:${filename}_video`)
     const videoFops = [`vframe/jpg/offset/1|saveas/${saveJpgEntry}`, `avthumb/mp4|saveas/${saveVideoEntry}`]
-    const imgFops = `imageView2/0/q/75|watermark/3/image/aHR0cDovL293M3B0N3gyMy5ia3QuY2xvdWRkbi5jb20vbG9nby5wbmc=/dissolve/45/gravity/Center/dx/100/dy/100|imageslim|saveas/${saveJpgEntry}`
+    const imgFops = `imageView2/0/w/640/q/75|watermark/3/image/aHR0cDovL293M3B0N3gyMy5ia3QuY2xvdWRkbi5jb20vbG9nby5wbmc=/dissolve/45/gravity/Center/dx/100/dy/100|imageslim|saveas/${saveJpgEntry}`
     let persist
     if (pipeline !== '') {
       if (type === 'image') {

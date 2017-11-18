@@ -4,6 +4,7 @@ import * as user from './user'
 import * as doctor from './doctor'
 import * as diary from './diary'
 import * as qiniu from './qiniu'
+import * as category from './category'
 
 export default {
   pcase,
@@ -11,5 +12,6 @@ export default {
   user,
   doctor,
   diary,
-  qiniu
+  qiniu,
+  category
 }
