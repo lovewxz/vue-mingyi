@@ -75,6 +75,7 @@ export class pcaseController {
       k: xss(v)
     }))(body.compare_photo)
     pcase.isTop = xss(body.isTop)
+    pcase.category = R.map(xss)(body.category)
     try {
       pcase = await api.pcase.update(pcase)
       ctx.body = {
@@ -127,6 +128,7 @@ export class pcaseController {
     body = {
       _id: randomToken(32),
       title: xss(body.title),
+      category: R.map(xss)(body.category),
       user_name: xss(body.user_name),
       contents: xss(body.contents),
       doctor: xss(body.doctor),

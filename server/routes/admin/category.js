@@ -60,4 +60,40 @@ export class CategoryController {
       }
     }
   }
+  @put('category')
+  async putCategory(ctx, next) {
+    let body = ctx.request.body
+    const { _id } = body
+    if (!_id) {
+      return ctx.body = {
+        success: false,
+        err: 'id不存在'
+      }
+    }
+    let cate = await api.category.getCategoryById(_id)
+    if (!cate) {
+      return ctx.body = {
+        success: false,
+        err: '分类不存在'
+      }
+    }
+    cate = {
+      _id: Number(xss(body._id)),
+      topId: Number(xss(body.topId)),
+      parentId: Number(xss(body.parentId)),
+      name: xss(body.name)
+    }
+    try {
+      cate = await api.category.update(cate)
+      ctx.body = {
+        success: true,
+        data: cate
+      }
+    } catch (e) {
+      ctx.body = {
+        success: false,
+        data: e
+      }
+    }
+  }
 }

@@ -13,6 +13,10 @@ const CaseSchema = new Schema({
     type: String,
     ref: 'Project'
   },
+  category: [{
+    type: String,
+    ref: 'Category'
+  }],
   title: String,
   user_name: String,
   contents: String,

@@ -24,10 +24,10 @@ const ProjectSchema = new Schema({
     type: Number,
     default: 0
   },
-  category: {
-    type: Number,
+  category: [{
+    type: String,
     ref: 'Category'
-  },
+  }],
   isTop: {
     type: Boolean,
     default: false

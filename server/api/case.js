@@ -4,6 +4,12 @@ const Case = mongoose.model('Case')
 export async function getPcaseList(limit = 10, page = 1, reg = '') {
   const data = reg ? await Case
     .find({})
+    .populate([
+      {
+        path: 'category',
+        select: '_id name'
+      }
+    ])
     .where('status')
     .ne(-1)
     .where('title')
@@ -14,6 +20,12 @@ export async function getPcaseList(limit = 10, page = 1, reg = '') {
     .exec()
   : await Case
     .find({})
+    .populate([
+      {
+        path: 'category',
+        select: '_id name'
+      }
+    ])
     .where('status')
     .ne(-1)
     .skip((page - 1) * Number(limit))

@@ -4,6 +4,12 @@ const Project = mongoose.model('Project')
 export async function getProjectList(limit = 10, page = 1, reg = '') {
   const data = reg ? await Project
     .find({})
+    .populate([
+      {
+        path: 'category',
+        select: '_id name'
+      }
+    ])
     .where('status')
     .ne(-1)
     .where('title')
@@ -14,6 +20,12 @@ export async function getProjectList(limit = 10, page = 1, reg = '') {
     .exec()
   : await Project
     .find({})
+    .populate([
+      {
+        path: 'category',
+        select: '_id name'
+      }
+    ])
     .where('status')
     .ne(-1)
     .skip((page - 1) * Number(limit))

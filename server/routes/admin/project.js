@@ -70,7 +70,7 @@ export class projectController {
     project.original_price = xss(body.original_price)
     project.doctor = xss(body.doctor)
     project.description = xss(body.description)
-    project.category = xss(body.category)
+    project.category = R.map(xss)(body.category)
     project.params = R.map(item => ({
       key: xss(item.key),
       value: xss(item.value)
@@ -134,7 +134,7 @@ export class projectController {
       original_price: xss(body.original_price),
       doctor: xss(body.doctor),
       description: xss(body.description),
-      category: xss(body.category),
+      category: R.map(xss)(body.category),
       params: R.map(item => ({
         key: xss(item.key),
         value: xss(item.value)
