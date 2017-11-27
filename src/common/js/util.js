@@ -16,3 +16,26 @@ export const transArticle = (data) => {
   })
   return data
 }
+
+export const removeHTMLTag = (str) => {
+  str = str.replace(/<\/?[^>]*>/g, '') // 去除HTML tag
+  str = str.replace(/[ | ]*\n/g, '\n') // 去除行尾空白
+  str = str.replace(/ /ig, '') // 去掉
+  return str
+}
+
+export const getImgSrc = (data) => {
+  const imgArr = []
+  if (!data) {
+    return
+  }
+  const $ = cheerio.load(data)
+  if ($('img') == null) {
+    return
+  }
+  $('img').each(function () {
+    const src = $(this).attr('src')
+    imgArr.push(src)
+  })
+  return imgArr
+}

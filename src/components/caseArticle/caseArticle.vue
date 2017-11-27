@@ -45,7 +45,7 @@
           <div class="section-page">
             <h3 class="text">{{casePost.title}}</h3>
           </div>
-          <div class="section-text" v-html="caseArticle" ref="sectionTxt"></div>
+          <div class="section-text" v-html="casePost.article" ref="sectionTxt"></div>
         </div>
       </div>
     </div>
@@ -99,22 +99,19 @@ export default {
         res = res.data
         if (res.success) {
           this.caseData = res.data
-          this.casePost = this._genResult(res.data, this.$route.params.artId)[0]
-          this.caseArticle = this.trans(this.casePost.article)
+          // this.casePost = this._genResult(res.data, this.$route.params.artId)[0]
+          // this.caseArticle = this.trans(this.casePost.article)
         }
       })
     },
-    _genResult(data, sectionId) {
-      if (!data.sections) {
-        return
-      }
-      const sections = data.sections
-      const ret = sections.filter(item => {
-        if (item.id === sectionId) {
-          return item
+    async _getDiaryById(id) {
+      await axios.get(`/api/diary/id/${id}`).then(res => {
+        res = res.data
+        if (res.success) {
+          this.casePost = res.data
+          this.casePost.article = transArticle(this.casePost.article)
         }
       })
-      return ret
     },
     _onloadImg(imgs) {
       let len = imgs.length
@@ -144,8 +141,10 @@ export default {
     }
   },
   async created() {
+    console.log(this.$route.params.artId, this.$route.params.id)
     this.probeType = 3
     await this._getCaseListById(this.$route.params.id)
+    await this._getDiaryById(this.$route.params.artId)
     setTimeout(() => {
       this.$refs.caseScroll.refresh()
     }, 20)

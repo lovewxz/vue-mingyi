@@ -54,19 +54,19 @@
       </div>
       <div class="case-sections">
         <ul>
-          <li v-for="section in caseData.sections" class="section-item">
-            <router-link :to="`/case/list/${caseData._id}/${section.id}`">
+          <li v-for="diary in diaryData" class="section-item">
+            <router-link :to="`/case/list/${caseData._id}/${diary._id}`">
               <div class="section-page">
-                <h3 class="text">{{section.title}}</h3>
+                <h3 class="text">{{diary.title}}</h3>
               </div>
               <div class="section-imgs">
                 <ul>
-                  <li v-for="img in section.images" class="img-item">
+                  <li v-for="img in diary.images" class="img-item">
                     <img v-lazy="cdnName(img,300)" alt="">
                   </li>
                 </ul>
               </div>
-              <div class="section-text" v-html="section.text"></div>
+              <div class="section-text">{{diary.text}}</div>
             </router-link>
           </li>
         </ul>
@@ -86,6 +86,7 @@ import axios from 'axios'
 import Scroll from '@/base/scroll/scroll'
 import Layer from '@/base/layer/layer'
 import { cdnUrlMixin } from '@/common/js/mixin'
+import { removeHTMLTag, getImgSrc } from '@/common/js/util'
 import fixRight from '@/base/fixRight/fixRight'
 
 export default {
@@ -95,7 +96,8 @@ export default {
       title: '日记详情',
       caseData: {},
       listenScroll: true,
-      scrollY: -1
+      scrollY: -1,
+      diaryData: []
     }
   },
   methods: {
@@ -123,6 +125,25 @@ export default {
           this.caseData = res.data
         }
       })
+    },
+    async _getDiaryListById(id) {
+      await axios.get(`/api/diary/${id}`).then(res => {
+        res = res.data
+        if (res.success) {
+          this.diaryData = this._genDiary(res.data)
+          console.log(this.diaryData)
+        }
+      })
+    },
+    _genDiary(arr) {
+      arr = arr.map(item => {
+        if (item.article) {
+          item.text = removeHTMLTag(item.article)
+          item.images = getImgSrc(item.article)
+        }
+        return item
+      })
+      return arr
     }
   },
   watch: {
@@ -146,6 +167,7 @@ export default {
   async created() {
     this.probeType = 3
     await this._getCaseListById(this.$route.params.id)
+    await this._getDiaryListById(this.$route.params.id)
     setTimeout(() => {
       this.$refs.caseListScroll.refresh()
     }, 20)
