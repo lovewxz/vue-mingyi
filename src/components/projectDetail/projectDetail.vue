@@ -145,6 +145,35 @@ export default {
       this.$refs.projectDetailScroll.refresh()
     }, 20)
   },
+  beforeMount() {
+    const wx = window.wx
+    const url = window.location.href
+    axios.get(`/wechat-signature?url=${url}`).then(res => {
+      res = res.data
+      if (res.success) {
+        const params = res.params
+        wx.config({
+          debug: true,
+          appId: params.appID,
+          timestamp: params.timestamp,
+          nonceStr: params.noncestr,
+          signature: params.signature,
+          jsApiList: [
+            'previewImage',
+            'uploadImage',
+            'downloadImage',
+            'chooseImage',
+            'onMenuShareTimeline',
+            'hideAllNonBaseMenuItem'
+          ]
+        })
+        wx.ready(() => {
+          wx.hideAllNonBaseMenuItem()
+          console.log('success')
+        })
+      }
+    })
+  },
   components: {
     swiper,
     swiperSlide,

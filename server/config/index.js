@@ -1,6 +1,6 @@
 export default {
   db: 'mongodb://localhost/mingyi',
-  SITE_URL: 'http://aweixin.ngrok.cc',
+  SITE_URL: 'http://frp.0755mingyi.com',
   qiniu: {
     AK: 'Jrida2qZ_ul1FgR6BZhyrhNdreZcCk3XR_mLuXr2',
     SK: 'If-CH9GODwIzDYMXF3m5uaSGcvyGOPxCbCcAsKRT'
@@ -8,6 +8,6 @@ export default {
   wechat: {
     appID: 'wx2e4428e24285652d',
     appSecret: 'fe9852f1b7f5b5067d2aa0bb32cc2520',
-    token: 'testtokenyaojun'
+    token: 'yaojun'
   }
 }

@@ -1,5 +1,6 @@
 const state = {
-  tabDisplay: false
+  tabDisplay: false,
+  user: ''
 }
 
 export default state

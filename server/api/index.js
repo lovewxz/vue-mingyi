@@ -5,6 +5,7 @@ import * as doctor from './doctor'
 import * as diary from './diary'
 import * as qiniu from './qiniu'
 import * as category from './category'
+import * as wechat from './wechat'
 
 export default {
   pcase,
@@ -13,5 +14,6 @@ export default {
   doctor,
   diary,
   qiniu,
-  category
+  category,
+  wechat
 }

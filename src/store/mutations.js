@@ -3,6 +3,9 @@ import * as types from './mutation-types'
 const mutations = {
   [types.SET_TABDISPLAY](state, tabDisplay) {
     state.tabDisplay = tabDisplay
+  },
+  [types.SET_USER](state, user) {
+    state.user = user
   }
 }
 
