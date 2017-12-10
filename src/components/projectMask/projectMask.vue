@@ -26,7 +26,7 @@
           </li>
         </ul>
       </div>
-      <div class="submit-order">
+      <div class="submit-order" @click.stop="createOrder">
         <p>立即预订</p>
       </div>
       <div class="layer-close" @click.stop="hide">
@@ -43,6 +43,7 @@
 import Switches from '@/base/switches/switches'
 import Plus from '@/base/plus/plus'
 import { cdnUrlMixin } from '@/common/js/mixin'
+import { mapGetters } from 'vuex'
 
 export default {
   mixins: [cdnUrlMixin],
@@ -73,7 +74,10 @@ export default {
       } else if (this.currentIndex === 0) {
         return this.num * parseInt(this.price * 0.1)
       }
-    }
+    },
+    ...mapGetters([
+      'user'
+    ])
   },
   methods: {
     hide() {
@@ -87,6 +91,12 @@ export default {
     },
     getNum(num) {
       this.num = num
+    },
+    createOrder() {
+      const url = encodeURIComponent(window.location.hash.replace('#/', ''))
+      if (!this.user) {
+        window.location.href = `/wechat-redirect?visit=${url}`
+      }
     }
   },
   components: {

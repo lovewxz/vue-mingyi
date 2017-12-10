@@ -69,7 +69,7 @@ export default class Wechat {
 
   async fetchAccessToken() {
     let data = await this.getAccessToken()
-    if (!this.isVailToken(data, 'access_token')) {
+    if (!data || !this.isVailToken(data, 'access_token')) {
       data = await this.updateAccessToken()
     }
     await this.saveAccessToken(data)

@@ -11,7 +11,7 @@ export default async (ctx, next) => {
       if (message.Content === "1") {
         let wechat = getWechat()
         const data = await wechat.handlerOperation('getBlackList')
-        console.log(data)
+        ctx.body = '你好'
       }
       break
     case 'image':

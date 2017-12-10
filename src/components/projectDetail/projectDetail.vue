@@ -74,10 +74,10 @@ import axios from 'axios'
 import Scroll from '@/base/scroll/scroll'
 import ProjectMask from '@/components/projectMask/projectMask'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
-import { cdnUrlMixin } from '@/common/js/mixin'
+import { cdnUrlMixin, wxInit } from '@/common/js/mixin'
 
 export default {
-  mixins: [cdnUrlMixin],
+  mixins: [cdnUrlMixin, wxInit],
   data() {
     return {
       projectDetail: {},
@@ -146,33 +146,8 @@ export default {
     }, 20)
   },
   beforeMount() {
-    const wx = window.wx
     const url = window.location.href
-    axios.get(`/wechat-signature?url=${url}`).then(res => {
-      res = res.data
-      if (res.success) {
-        const params = res.params
-        wx.config({
-          debug: true,
-          appId: params.appID,
-          timestamp: params.timestamp,
-          nonceStr: params.noncestr,
-          signature: params.signature,
-          jsApiList: [
-            'previewImage',
-            'uploadImage',
-            'downloadImage',
-            'chooseImage',
-            'onMenuShareTimeline',
-            'hideAllNonBaseMenuItem'
-          ]
-        })
-        wx.ready(() => {
-          wx.hideAllNonBaseMenuItem()
-          console.log('success')
-        })
-      }
-    })
+    this.wxInit(url)
   },
   components: {
     swiper,

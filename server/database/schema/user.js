@@ -19,7 +19,7 @@ const UserSchema = new Schema({
   sex: String,
   headimgurl: String,
   password: String,
-  telephone: String,
+  phoneNumber: String,
   email: String,
   meta: {
     createdAt: {

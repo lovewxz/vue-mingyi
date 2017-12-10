@@ -41,6 +41,7 @@ export default function (opts, reply) {
       ctx.status = 200
       ctx.type = 'application/xml'
       ctx.body = xml
+      return ctx.body
     }
   }
 }

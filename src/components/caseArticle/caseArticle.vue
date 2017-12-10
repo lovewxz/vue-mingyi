@@ -99,8 +99,6 @@ export default {
         res = res.data
         if (res.success) {
           this.caseData = res.data
-          // this.casePost = this._genResult(res.data, this.$route.params.artId)[0]
-          // this.caseArticle = this.trans(this.casePost.article)
         }
       })
     },

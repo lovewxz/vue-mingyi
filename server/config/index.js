@@ -6,8 +6,14 @@ export default {
     SK: 'If-CH9GODwIzDYMXF3m5uaSGcvyGOPxCbCcAsKRT'
   },
   wechat: {
-    appID: 'wx2e4428e24285652d',
-    appSecret: 'fe9852f1b7f5b5067d2aa0bb32cc2520',
-    token: 'yaojun'
+    appID: 'wx93c6b1c4da3be676',
+    appSecret: 'b591073019a5f918177d748303d76c53',
+    token: '8b7c3fa90712465889ba16c02d07a75e'
+  },
+  shop: {
+    appId: 'wx93c6b1c4da3be676',
+    partnerKey: 'oQdNXSdBMDCPEkaeNl1xTYScp3N8PRGd',
+    mchId: '1439054002',
+    notifyUrl: 'http://frp.0755mingyi.com/notify',
   }
 }
