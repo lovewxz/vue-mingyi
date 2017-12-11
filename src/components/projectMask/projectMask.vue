@@ -5,7 +5,7 @@
       <h3>预订方式</h3>
       <switches :switches="switches" :currentIndex="currentIndex" @switch="seletSwitch"></switches>
       <h3>预订数量</h3>
-      <plus @getNum="getNum"></plus>
+      <plus @getNum="getNum" :num="num"></plus>
       <div class="price-detail">
         <ul>
           <li>
@@ -90,13 +90,22 @@ export default {
       this.currentIndex = index
     },
     getNum(num) {
+      console.log(num)
       this.num = num
     },
     createOrder() {
-      const url = encodeURIComponent(window.location.hash.replace('#/', ''))
-      if (!this.user) {
-        window.location.href = `/wechat-redirect?visit=${url}`
+      // const url = encodeURIComponent(window.location.hash.replace('#/', ''))
+      // if (!this.user) {
+      //   window.location.href = `/wechat-redirect?visit=${url}`
+      // }
+      const params = {
+        totalPrice: this.totalPrice,
+        singlePrice: this.currentIndex === 0 ? parseInt(this.price * 0.1) : parseInt(this.price),
+        price: this.price,
+        num: this.num,
+        type: this.currentIndex === 0 ? '支付订金' : '支付全款'
       }
+      this.$emit('confirm', params)
     }
   },
   components: {

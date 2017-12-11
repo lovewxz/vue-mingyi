@@ -11,11 +11,10 @@ export default {
     oneOnly: {
       type: Boolean,
       default: false
-    }
-  },
-  data() {
-    return {
-      num: 1
+    },
+    num: {
+      type: Number,
+      default: 1
     }
   },
   methods: {
@@ -23,19 +22,21 @@ export default {
       if (this.oneOnly) {
         return
       }
-      this.num++
-      this.$emit('getNum', this.num)
-      return this.num
+      let num = this.num
+      num++
+      this.$emit('getNum', num)
+      return num
     },
     decrease() {
       if (this.oneOnly) {
         return
       }
+      let num = this.num
       if (this.num > 1) {
-        this.num--
-        this.$emit('getNum', this.num)
+        num--
+        this.$emit('getNum', num)
       }
-      return this.num
+      return num
     }
   }
 }
@@ -66,7 +67,7 @@ export default {
     .num {
         display: inline-block;
         vertical-align: top;
-        width: 50px;
+        width: 30px;
         font-size: 16px;
         text-align: center;
         line-height: 30px;

@@ -8,6 +8,8 @@ import Project from '@/components/project/project'
 import CaseList from '@/components/caseList/caseList'
 import CaseArticle from '@/components/caseArticle/caseArticle'
 import ProjectDetail from '@/components/projectDetail/projectDetail'
+import ProjectConfirmOrder from '@/components/projectConfirmOrder/projectConfirmOrder'
+import ProjectPay from '@/components/projectPay/projectPay'
 import wechatOauth from '@/components/wechatOauth/wechatOauth'
 
 Vue.use(Router)
@@ -44,7 +46,19 @@ let routes = [
   {
     name: 'project-detail',
     path: '/project/:id',
-    component: ProjectDetail
+    component: ProjectDetail,
+    children: [
+      {
+        name: 'project-confirm-order',
+        path: 'confirm',
+        component: ProjectConfirmOrder
+      },
+      {
+        name: 'project-pay',
+        path: 'pay',
+        component: ProjectPay
+      }
+    ]
   },
   {
     name: 'doctor',

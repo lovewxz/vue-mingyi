@@ -65,7 +65,10 @@
         </li>
       </ul>
     </div>
-    <project-mask ref="mask" :price="parseInt(projectDetail.price)" :cover-img="projectDetail.cover_image"></project-mask>
+    <project-mask ref="mask" :price="parseInt(projectDetail.price)" :cover-img="projectDetail.cover_image" @confirm="confirm"></project-mask>
+    <transition name="moveInLeft">
+      <router-view></router-view>
+    </transition>
   </div>
 </transition>
 </template>
@@ -113,6 +116,10 @@ export default {
         }, 20)
         this.checkLoaded = true
       }
+    },
+    confirm(params) {
+      params = Object.assign({}, params, { coverImg: this.projectDetail.cover_image[0], title: this.projectDetail.title })
+      this.$router.push({ name: 'project-confirm-order', params: params })
     },
     async _getProjectDeatil() {
       if (!this.$route.params.id) {
@@ -176,118 +183,126 @@ export default {
     &.moveInLeft-leave-to {
         transform: translate3d(-100%,0,0);
     }
+    .moveInLeft-enter-active,
+    .moveInLeft-leave-active {
+        transition: all 0.3s linear;
+    }
+    .moveInLeft-enter,
+    .moveInLeft-leave-to {
+        transform: translate3d(-100%,0,0);
+    }
     .project-detail-scroll {
         height: 100%;
         overflow: hidden;
         .project-wrapper {
             .project-swiper-wrapper {
-              position: relative;
-              .iconfont {
-                position: absolute;
-                z-index: 320;
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                text-align: center;
-                background: rgba(0,0,0,.6);
-                &.icon-left {
-                  color: #fff;
-                  font-size: 24px;
-                  top: 10px;
-                  left: 10px;
-                  display: block;
-                  line-height: 50px;
-                  &:before {
+                position: relative;
+                .iconfont {
                     position: absolute;
-                    top: -10px;
-                    left: -10px;
-                    right: -10px;
-                    bottom: -10px;
-                  }
+                    z-index: 320;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    text-align: center;
+                    background: rgba(0,0,0,.6);
+                    &.icon-left {
+                        color: #fff;
+                        font-size: 24px;
+                        top: 10px;
+                        left: 10px;
+                        display: block;
+                        line-height: 50px;
+                        &:before {
+                            position: absolute;
+                            top: -10px;
+                            left: -10px;
+                            right: -10px;
+                            bottom: -10px;
+                        }
+                    }
+                    &.icon-home {
+                        color: #fff;
+                        font-size: 24px;
+                        right: 10px;
+                        top: 10px;
+                        display: block;
+                        line-height: 50px;
+                        &:before {
+                            position: absolute;
+                            top: -10px;
+                            left: -10px;
+                            right: -10px;
+                            bottom: -10px;
+                        }
+                    }
+                    &.icon-star {
+                        color: #fff;
+                        font-size: 18px;
+                        right: 50px;
+                        top: 10px;
+                        line-height: 47px;
+                        display: block;
+                        &:before {
+                            position: absolute;
+                            top: -10px;
+                            left: -10px;
+                            right: -10px;
+                            bottom: -10px;
+                        }
+                    }
                 }
-                &.icon-home {
-                  color: #fff;
-                  font-size: 24px;
-                  right: 10px;
-                  top: 10px;
-                  display: block;
-                  line-height: 50px;
-                  &:before {
-                    position: absolute;
-                    top: -10px;
-                    left: -10px;
-                    right: -10px;
-                    bottom: -10px;
-                  }
+                .project-swiper {
+                    position: relative;
+                    .swiper-wrapper {
+                        display: flex;
+                        width: 100%;
+                        position: relative;
+                        .swiper-item {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            flex-shrink: 0;
+                            position: relative;
+                            .swiper-lazy-preloader {
+                                width: 40px;
+                                height: 40px;
+                                left: 50%;
+                                top: 50%;
+                                transform: translate(-50%,50%);
+                                position: absolute;
+                                &:after {
+                                    display: block;
+                                    background-image: url('../../common/images/loading.gif');
+                                    width: 100%;
+                                    height: 100%;
+                                    background-size: 100%;
+                                    background-repeat: no-repeat;
+                                    content: '';
+                                }
+                            }
+                        }
+                    }
+                    .swiper-pagination {
+                        position: absolute;
+                        display: inline-block;
+                        font-size: 0;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        height: 5px;
+                        bottom: 20px;
+                        span {
+                            display: inline-block;
+                            width: 5px;
+                            height: 5px;
+                            margin-right: 5px;
+                            background: #fff;
+                            border-radius: 50%;
+                            &.swiper-pagination-bullet-active {
+                                background: #ff5370;
+                            }
+                        }
+                    }
                 }
-                &.icon-star {
-                  color: #fff;
-                  font-size: 18px;
-                  right: 50px;
-                  top: 10px;
-                  line-height: 47px;
-                  display: block;
-                  &:before {
-                    position: absolute;
-                    top: -10px;
-                    left: -10px;
-                    right: -10px;
-                    bottom: -10px;
-                  }
-                }
-              }
-              .project-swiper {
-                  position: relative;
-                  .swiper-wrapper {
-                      display: flex;
-                      width: 100%;
-                      position: relative;
-                      .swiper-item {
-                          display: flex;
-                          justify-content: space-between;
-                          align-items: center;
-                          flex-shrink: 0;
-                          position: relative;
-                          .swiper-lazy-preloader {
-                              width: 40px;
-                              height: 40px;
-                              left: 50%;
-                              top: 50%;
-                              transform: translate(-50%,50%);
-                              position: absolute;
-                              &:after {
-                                  display: block;
-                                  background-image: url('../../common/images/loading.gif');
-                                  width: 100%;
-                                  height: 100%;
-                                  background-size: 100%;
-                                  background-repeat: no-repeat;
-                                  content: '';
-                              }
-                          }
-                      }
-                  }
-                  .swiper-pagination {
-                      position: absolute;
-                      display: inline-block;
-                      font-size: 0;
-                      left: 50%;
-                      transform: translateX(-50%);
-                      height: 5px;
-                      bottom: 20px;
-                      span {
-                          display: inline-block;
-                          width: 5px;
-                          height: 5px;
-                          margin-right: 5px;
-                          background: #fff;
-                          border-radius: 50%;
-                          &.swiper-pagination-bullet-active {
-                              background: #ff5370;
-                          }
-                      }
-                  }
-              }
             }
             .project-content {
                 padding: 12px;
@@ -432,60 +447,60 @@ export default {
         }
     }
     .bottom-bar {
-      position: fixed;
-      height: 50px;
-      width: 100%;
-      bottom: 0;
-      left: 0;
-      z-index: 320;
-      background: #fff;
-      ul {
-        display: flex;
-        height: 100%;
-        border-top: 1px solid #e5e5e5;
-        li {
-          flex: 0 0 35%;
-          width: 35%;
-          text-align: center;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-direction: column;
-          &.size-s {
-            flex: 0 0 15%;
-            width: 15%;
-            border-right: 1px solid #e5e5e5;
-          }
-          &.zx-wrapper {
-            background: #ffa89d;
-            .btn-zx {
-              color: #fff;
-              font-size: 16px;
-              font-weight: 200;
+        position: fixed;
+        height: 50px;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        z-index: 320;
+        background: #fff;
+        ul {
+            display: flex;
+            height: 100%;
+            border-top: 1px solid #e5e5e5;
+            li {
+                flex: 0 0 35%;
+                width: 35%;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                &.size-s {
+                    flex: 0 0 15%;
+                    width: 15%;
+                    border-right: 1px solid #e5e5e5;
+                }
+                &.zx-wrapper {
+                    background: #ffa89d;
+                    .btn-zx {
+                        color: #fff;
+                        font-size: 16px;
+                        font-weight: 200;
+                    }
+                }
+                &.buy-wrapper {
+                    background: #ff5c77;
+                    .btn-buy {
+                        color: #fff;
+                        font-size: 16px;
+                        font-weight: 200;
+                    }
+                }
+                .iconfont {
+                    display: block;
+                    font-size: 18px;
+                    &.icon-Tel {
+                        color: #ff5370;
+                    }
+                }
+                .text {
+                    margin-top: 6px;
+                    font-size: 12px;
+                    font-weight: 200;
+                }
             }
-          }
-          &.buy-wrapper {
-            background: #ff5c77;
-            .btn-buy {
-              color: #fff;
-              font-size: 16px;
-              font-weight: 200;
-            }
-          }
-          .iconfont {
-            display: block;
-            font-size: 18px;
-            &.icon-Tel {
-              color: #ff5370;
-            }
-          }
-          .text {
-            margin-top: 6px;
-            font-size: 12px;
-            font-weight: 200;
-          }
         }
-      }
     }
 }
 </style>
