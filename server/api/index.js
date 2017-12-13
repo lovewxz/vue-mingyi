@@ -6,6 +6,7 @@ import * as diary from './diary'
 import * as qiniu from './qiniu'
 import * as category from './category'
 import * as wechat from './wechat'
+import * as payment from './payment'
 
 export default {
   pcase,
@@ -15,5 +16,6 @@ export default {
   diary,
   qiniu,
   category,
-  wechat
+  wechat,
+  payment
 }

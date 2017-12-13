@@ -5,8 +5,8 @@ const User = mongoose.model('User')
 export async function getSignatureAsync(url) {
   const Wechat = getWechat()
   const tokenData = await Wechat.fetchAccessToken()
-  const acessToken = tokenData.access_token
-  const ticketData = await Wechat.fetchTicket(acessToken)
+  const accessToken = tokenData.access_token
+  const ticketData = await Wechat.fetchTicket(accessToken)
   const ticket = ticketData.ticket
   const params = await Wechat.ticketSignature(ticket, url)
   params.appID = Wechat.appID

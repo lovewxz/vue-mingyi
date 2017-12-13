@@ -77,10 +77,11 @@ import axios from 'axios'
 import Scroll from '@/base/scroll/scroll'
 import ProjectMask from '@/components/projectMask/projectMask'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
-import { cdnUrlMixin, wxInit } from '@/common/js/mixin'
+import { cdnUrlMixin } from '@/common/js/mixin'
+import { mapGetters } from 'vuex'
 
 export default {
-  mixins: [cdnUrlMixin, wxInit],
+  mixins: [cdnUrlMixin],
   data() {
     return {
       projectDetail: {},
@@ -96,7 +97,10 @@ export default {
   computed: {
     sale() {
       return (Number(this.projectDetail.price) / Number(this.projectDetail.original_price) * 10).toFixed(1)
-    }
+    },
+    ...mapGetters([
+      'user'
+    ])
   },
   methods: {
     showMask() {
@@ -118,8 +122,14 @@ export default {
       }
     },
     confirm(params) {
-      params = Object.assign({}, params, { coverImg: this.projectDetail.cover_image[0], title: this.projectDetail.title })
-      this.$router.push({ name: 'project-confirm-order', params: params })
+      params = Object.assign({}, params, { coverImg: this.projectDetail.cover_image[0], title: this.projectDetail.title, projectId: this.projectDetail._id })
+      let { fullPath } = this.$route
+      fullPath = encodeURIComponent(fullPath.substr(1))
+      if (!this.user) {
+        window.location.href = `/wechat-redirect?visit=${fullPath}`
+      } else {
+        this.$router.push({ name: 'project-confirm-order', params: params })
+      }
     },
     async _getProjectDeatil() {
       if (!this.$route.params.id) {
@@ -151,10 +161,7 @@ export default {
     setTimeout(() => {
       this.$refs.projectDetailScroll.refresh()
     }, 20)
-  },
-  beforeMount() {
-    const url = window.location.href
-    this.wxInit(url)
+    console.log(window.location.href)
   },
   components: {
     swiper,

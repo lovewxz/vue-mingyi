@@ -9,7 +9,7 @@ const PaymentSchema = new Schema({
     ref: 'User'
   },
   project: {
-    type: ObjectId,
+    type: String,
     ref: 'Project'
   },
   payType: String,
@@ -18,6 +18,10 @@ const PaymentSchema = new Schema({
   description: String,
   name: String,
   order: Mixed,
+  num: {
+    type: Number,
+    default: 1
+  },
   success: {
     type: Number,
     default: 0
@@ -34,7 +38,7 @@ const PaymentSchema = new Schema({
   }
 })
 
-PaymentSchema.pre('save', function (err) {
+PaymentSchema.pre('save', function (next) {
   if (this.isNew) {
     this.meta.createdAt = this.meta.updatedAt = Date.now()
   } else {

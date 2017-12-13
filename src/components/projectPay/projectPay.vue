@@ -2,7 +2,7 @@
   <div class="project-pay">
     <div class="totalFee">
       <span>合计:</span>
-      <span class="color">¥{{totalPrice}}</span>
+      <span class="color">¥{{totalFee}}</span>
     </div>
     <div class="pay-type">
       <div class="pay-select">
@@ -19,17 +19,69 @@
       </div>
     </div>
     <div class="tip">订单已经生成，请尽快支付</div>
-    <div class="pay-btn">确认支付</div>
+    <div class="pay-btn" @click="pay">确认支付</div>
   </div>
 </template>
 
 <script>
+import { wxInit } from '@/common/js/mixin'
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
-  beforeCreate() {
-    if (!this.$route.params.totalPrice) {
+  mixins: [wxInit],
+  data() {
+    return {
+      totalFee: 0
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'user'
+    ])
+  },
+  beforeMount() {
+    const { params } = this.$route
+    console.log(params)
+    console.log(this.user)
+    if (!params.totalPrice || !params.projectId || !this.user) {
       this.$router.back()
     }
-    this.totalPrice = this.$route.params.totalPrice
+    this.totalFee = params.totalPrice
+    this.projectId = params.projectId
+    const url = window.location.href.replace(window.location.search, '')
+    this.wxInit(url)
+  },
+  methods: {
+    pay() {
+      const params = {
+        totalFee: this.totalFee,
+        projectId: this.projectId,
+        user: this.user
+      }
+      let res = this.wechatPay(params)
+      res = res.data
+      console.log(res)
+      window.wx.chooseWXPay({
+        timestamp: res.timeStamp,
+        nonceStr: res.nonceStr,
+        package: res.package,
+        signType: res.signType,
+        paySign: res.paySign,
+        success: function (response) {
+          try {
+            window.WeixinJSBridge.log(response.err_msg)
+          } catch (e) {
+            console.error(e)
+          }
+          if (response.err_msg === 'get_brand_wcpay_request:ok') {
+            console.log('支付成功')
+          }
+        }
+      })
+    },
+    ...mapActions([
+      'wechatPay'
+    ])
   }
 }
 </script>

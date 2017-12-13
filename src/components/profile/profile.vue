@@ -18,6 +18,7 @@ export default {
   },
   created() {
     this.userInfo = this.user
+    console.log(this.user)
   }
 }
 </script>

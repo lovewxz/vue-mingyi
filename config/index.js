@@ -47,6 +47,10 @@ module.exports = {
       '/wechat-signature': {
         target: 'http://localhost:3000',
 				changeOrigin: true
+      },
+      '/wechat-pay': {
+        target: 'http://localhost:3000',
+				changeOrigin: true
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

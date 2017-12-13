@@ -6,7 +6,7 @@ import wechatMiddle from '../../lib/wechat-lib/middleware'
 import { signature, redirect, oauth } from '../../controllers/wechatController'
 import { post, get, controller, required } from '../../lib/decorator/router'
 import { getParamsAsync } from '../../lib/wechat-lib/pay'
-import uuidv4 from 'uuid/v4'
+import uuidv1 from 'uuid/v1'
 import api from '../../api'
 import R from 'ramda'
 import xss from 'xss'
@@ -42,57 +42,51 @@ export class WechatController {
     await oauth(ctx, next)
   }
   @post('/wechat-pay')
-  @required({ body: ['userInfo', 'projectId', 'phoneNumber', 'name'] })
+  @required({ body: [ 'user', 'projectId', 'totalFee' ] })
   async createOrder(ctx, next) {
     const ip = ctx.ip.replace('::ffff:', '')
     const {
-      userInfo,
+      user,
       projectId,
-      phoneNumber,
-      name
+      totalFee
     } = ctx.request.body
-    const project = await api.project.getProjectById(projectId)
-    console.log(project)
-    if (!project) {
-      ctx.body = {
+    const userInfo = await api.user.getUserByOpenid(user.openid)
+    if (!userInfo) {
+      return ctx.body = {
         success: false,
-        err: '这个宝贝不在了'
+        err: '用户不存在'
       }
     }
-    try {
-      let user = await api.user.getUserByOpenid(userInfo.openid)
-      if (!user) {
-        user = {
-          openid: [xss(userInfo.openid)],
-          nickname: xss(userInfo.nickname),
-          province: xss(userInfo.province),
-          country: xss(userInfo.country),
-          city: xss(userInfo.city),
-          sex: xss(userInfo.sex),
-          headimgurl: xss(userInfo.headimgurl),
-        }
-        user = await api.user.saveUser(user)
+    const project = await api.project.getProjectById(projectId)
+    if (!project) {
+      return ctx.body = {
+        success: false,
+        err: '宝贝不存在'
       }
+    }
+    let payment = await api.payment.getPaymentByProjectId(project._id, userInfo._id)
+    if (!payment) {
+      return ctx.body = {
+        success: false,
+        err: '订单不存在'
+      }
+    }
+    console.log(payment)
+    try {
       let orderParams = {
         body: project.title,
         attach: '深圳铭医医疗美容医院在线支付',
-        out_trade_no: `Project${uuidv4()}`,
+        out_trade_no: `Project-${uuidv1().substr(18)}`,
         spbill_create_ip: ip,
         total_fee: 1,
         openid: userInfo.openid,
         trade_type: 'JSAPI'
       }
       const order = await getParamsAsync(orderParams)
-      let payment = {
-        user: xss(user._id),
-        project: xss(project._id),
-        name: xss(name),
-        phoneNumber: xss(phoneNumber),
-        payType: '公众号',
-        totalFee: 1,
-        order: order
-      }
-      payment = await api.payment.savePayment(payment)
+      payment.totalFee = 1
+      payment.order = order
+      console.log(payment)
+      payment = await api.payment.updatePayment(payment)
       ctx.body = {
         success: true,
         data: payment.order

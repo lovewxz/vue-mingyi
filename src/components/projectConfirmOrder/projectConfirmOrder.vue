@@ -56,6 +56,7 @@
         <p>提交订单</p>
       </div>
     </div>
+    <confirm :text="confirmText" ref="confirmBox"></confirm>
     <router-view></router-view>
   </div>
 </template>
@@ -63,12 +64,15 @@
 <script>
 import { cdnUrlMixin } from '@/common/js/mixin'
 import plus from '@/base/plus/plus'
+import confirm from '@/base/confirm/confirm'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   mixins: [ cdnUrlMixin ],
   data() {
     return {
-      confirmInfo: {}
+      confirmInfo: {},
+      confirmText: ''
     }
   },
   computed: {
@@ -77,7 +81,10 @@ export default {
     },
     restPay() {
       return (parseInt(this.confirmInfo.price) - parseInt(this.confirmInfo.singlePrice)) * parseInt(this.confirmInfo.num)
-    }
+    },
+    ...mapGetters([
+      'user'
+    ])
   },
   methods: {
     getNum(num) {
@@ -86,9 +93,44 @@ export default {
     inputFocus(type) {
       this.$refs[type].focus()
     },
-    confirmOrder() {
-      this.$router.replace({ name: 'project-pay', params: { totalPrice: this.totalPrice } })
-    }
+    async confirmOrder() {
+      const name = this.$refs.inputName.value
+      const phone = this.$refs.inputTel.value
+      const phoneReg = /^1[0-9]{10}$/
+      if (!name) {
+        this.confirmText = '姓名未填写'
+        this.$nextTick(() => {
+          this.$refs.confirmBox.show()
+        })
+        return
+      }
+      if (!phoneReg.test(phone)) {
+        this.confirmText = '手机格式错误'
+        this.$nextTick(() => {
+          this.$refs.confirmBox.show()
+        })
+        return
+      }
+      const params = Object.assign({}, {user: this.user}, {
+        name: name,
+        phoneNumber: phone,
+        projectId: this.confirmInfo.projectId,
+        num: parseInt(this.confirmInfo.num),
+        payType: this.confirmInfo.type
+      })
+      const { data } = await this.saveProjectOrder(params)
+      if (!data.success) {
+        this.confirmText = '订单保存错误'
+        this.$nextTick(() => {
+          this.$refs.confirmBox.show()
+        })
+        return
+      }
+      this.$router.replace({ name: 'project-pay', params: { totalPrice: data.data.totalFee, projectId: data.data.project } })
+    },
+    ...mapActions([
+      'saveProjectOrder'
+    ])
   },
   created() {
     if (!this.$route.params.coverImg) {
@@ -97,7 +139,8 @@ export default {
     this.confirmInfo = Object.assign({}, this.$route.params)
   },
   components: {
-    plus
+    plus,
+    confirm
   }
 }
 </script>

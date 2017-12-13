@@ -90,14 +90,9 @@ export default {
       this.currentIndex = index
     },
     getNum(num) {
-      console.log(num)
       this.num = num
     },
     createOrder() {
-      // const url = encodeURIComponent(window.location.hash.replace('#/', ''))
-      // if (!this.user) {
-      //   window.location.href = `/wechat-redirect?visit=${url}`
-      // }
       const params = {
         totalPrice: this.totalPrice,
         singlePrice: this.currentIndex === 0 ? parseInt(this.price * 0.1) : parseInt(this.price),
