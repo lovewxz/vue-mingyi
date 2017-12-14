@@ -4,10 +4,10 @@ export const getWXSignature = function ({ commit }, url) {
   return Services.getWXSignature(url)
 }
 
-export const saveProjectOrder = function ({ commit }, params) {
-  return Services.saveProjectOrder(params)
+export const saveProjectOrder = async function ({ commit }, params) {
+  return await Services.saveProjectOrder(params)
 }
 
-export const wechatPay = function ({ commit }, params) {
-  return Services.wechatPay(params)
+export const wechatPay = async function ({ commit }, params) {
+  return await Services.wechatPay(params)
 }

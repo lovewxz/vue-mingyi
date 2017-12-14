@@ -71,12 +71,11 @@ export class WechatController {
         err: '订单不存在'
       }
     }
-    console.log(payment)
     try {
       let orderParams = {
         body: project.title,
         attach: '深圳铭医医疗美容医院在线支付',
-        out_trade_no: `Project-${uuidv1().substr(18)}`,
+        out_trade_no: `Project-${uuidv1().substr(0,18)}`,
         spbill_create_ip: ip,
         total_fee: 1,
         openid: userInfo.openid,

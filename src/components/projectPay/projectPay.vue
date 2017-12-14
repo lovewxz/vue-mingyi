@@ -41,32 +41,31 @@ export default {
   },
   beforeMount() {
     const { params } = this.$route
-    console.log(params)
-    console.log(this.user)
     if (!params.totalPrice || !params.projectId || !this.user) {
       this.$router.back()
     }
     this.totalFee = params.totalPrice
     this.projectId = params.projectId
-    const url = window.location.href.replace(window.location.search, '')
+    const url = encodeURIComponent(window.location.href.split('#')[0])
+    console.log(url)
     this.wxInit(url)
   },
   methods: {
-    pay() {
+    async pay() {
       const params = {
         totalFee: this.totalFee,
         projectId: this.projectId,
         user: this.user
       }
-      let res = this.wechatPay(params)
+      let res = await this.wechatPay(params)
       res = res.data
       console.log(res)
       window.wx.chooseWXPay({
-        timestamp: res.timeStamp,
-        nonceStr: res.nonceStr,
-        package: res.package,
-        signType: res.signType,
-        paySign: res.paySign,
+        timestamp: res.data.timeStamp,
+        nonceStr: res.data.nonceStr,
+        package: res.data.package,
+        signType: res.data.signType,
+        paySign: res.data.paySign,
         success: function (response) {
           try {
             window.WeixinJSBridge.log(response.err_msg)

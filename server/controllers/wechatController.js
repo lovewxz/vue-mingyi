@@ -6,6 +6,7 @@ import config from '../config'
 export async function signature(ctx, next) {
   let url = ctx.query.url
   url = decodeURIComponent(url)
+  console.log(url)
   if (!url) ctx.throw(404)
   const params = await api.wechat.getSignatureAsync(url)
   ctx.body = {

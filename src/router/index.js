@@ -1,16 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
-import Case from '@/components/case/case'
-import Doctor from '@/components/doctor/doctor'
-import Profile from '@/components/profile/profile'
-import Project from '@/components/project/project'
-import CaseList from '@/components/caseList/caseList'
-import CaseArticle from '@/components/caseArticle/caseArticle'
-import ProjectDetail from '@/components/projectDetail/projectDetail'
-import ProjectConfirmOrder from '@/components/projectConfirmOrder/projectConfirmOrder'
-import ProjectPay from '@/components/projectPay/projectPay'
-import wechatOauth from '@/components/wechatOauth/wechatOauth'
+// import Case from '@/components/case/case'
+// import Doctor from '@/components/doctor/doctor'
+// import Profile from '@/components/profile/profile'
+// import Project from '@/components/project/project'
+// import CaseList from '@/components/caseList/caseList'
+// import CaseArticle from '@/components/caseArticle/caseArticle'
+// import ProjectDetail from '@/components/projectDetail/projectDetail'
+// import ProjectConfirmOrder from '@/components/projectConfirmOrder/projectConfirmOrder'
+// import ProjectPay from '@/components/projectPay/projectPay'
+// import wechatOauth from '@/components/wechatOauth/wechatOauth'
+const Case = () => import('@/components/case/case')
+const Doctor = () => import('@/components/doctor/doctor')
+const Profile = () => import('@/components/profile/profile')
+const Project = () => import('@/components/project/project')
+const CaseList = () => import('@/components/caseList/caseList')
+const CaseArticle = () => import('@/components/caseArticle/caseArticle')
+const ProjectDetail = () => import('@/components/projectDetail/projectDetail')
+const ProjectConfirmOrder = () => import('@/components/projectConfirmOrder/projectConfirmOrder')
+const ProjectPay = () => import('@/components/projectPay/projectPay')
+const wechatOauth = () => import('@/components/wechatOauth/wechatOauth')
 
 Vue.use(Router)
 

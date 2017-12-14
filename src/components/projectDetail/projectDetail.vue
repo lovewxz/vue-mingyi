@@ -107,14 +107,13 @@ export default {
       this.$refs.mask.show()
     },
     back() {
-      this.$router.back()
+      this.$router.push('/project')
     },
     backHome() {
       this.$router.push('/')
     },
     loadImage() {
       if (!this.checkLoaded) {
-        console.log(this.checkLoaded)
         setTimeout(() => {
           this.$refs.projectDetailScroll.refresh()
         }, 20)
@@ -161,7 +160,6 @@ export default {
     setTimeout(() => {
       this.$refs.projectDetailScroll.refresh()
     }, 20)
-    console.log(window.location.href)
   },
   components: {
     swiper,

@@ -80,7 +80,7 @@ export default class Wechat {
     const url = `${api.accessToken}&appid=${this.appID}&secret=${this.appSecret}`
     const data = await this.request({ url: url })
     const now = new Date().getTime()
-    const expiresIn = now + (data.expires_in - 20) * 1000
+    const expiresIn = now + (parseInt(data.expires_in) - 20) * 1000
     data.expires_in = expiresIn
     return data
   }

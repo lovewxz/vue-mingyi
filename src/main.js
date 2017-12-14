@@ -10,6 +10,12 @@ import store from './store'
 Vue.config.productionTip = false
 import '@/common/scss/index.scss'
 
+/* eslint-disable no-unused-vars */
+import VConsole from 'vconsole'
+const vconsole = new VConsole()
+
+console.log('test')
+
 Vue.use(VueLazyLoad, {
   preLoad: 1.3,
   loading: require('@/common/images/default.png')

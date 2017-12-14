@@ -1,5 +1,6 @@
 import Koa from 'koa'
 import R from 'ramda'
+import serve from 'koa-static'
 import { resolve } from 'path'
 
 const host = process.env.HOST || '127.0.0.1'
@@ -25,6 +26,9 @@ class Server {
       )
     )
   }
+  use(middleware) {
+    this.app.use(middleware)
+  }
   start() {
     this.app.listen(this.port, this.host)
     console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console
@@ -32,4 +36,5 @@ class Server {
 }
 
 const app = new Server(host, port)
+app.use(serve(r('./dist')))
 app.start()
