@@ -66,6 +66,7 @@ import { cdnUrlMixin } from '@/common/js/mixin'
 import plus from '@/base/plus/plus'
 import confirm from '@/base/confirm/confirm'
 import { mapActions, mapGetters } from 'vuex'
+import { getStorage } from '@/common/js/cache'
 
 export default {
   mixins: [ cdnUrlMixin ],
@@ -111,7 +112,8 @@ export default {
         })
         return
       }
-      const params = Object.assign({}, {user: this.user}, {
+      const storageUser = getStorage('user')
+      const params = Object.assign({}, {user: this.user || storageUser}, {
         name: name,
         phoneNumber: phone,
         projectId: this.confirmInfo.projectId,

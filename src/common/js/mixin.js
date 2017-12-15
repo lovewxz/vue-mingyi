@@ -36,7 +36,6 @@ export const wxInit = {
             ]
           })
           wx.ready(() => {
-            wx.hideAllNonBaseMenuItem()
             console.log('success')
           })
         } else {

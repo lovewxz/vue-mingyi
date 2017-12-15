@@ -26,6 +26,7 @@
 <script>
 import { wxInit } from '@/common/js/mixin'
 import { mapActions, mapGetters } from 'vuex'
+import { getStorage } from '@/common/js/cache'
 
 export default {
   mixins: [wxInit],
@@ -40,26 +41,33 @@ export default {
     ])
   },
   beforeMount() {
+    const currentURL = window.location.href
+    if (currentURL.indexOf('?') === -1) {
+      window.location.href = '/?#/pay'
+    }
     const { params } = this.$route
-    if (!params.totalPrice || !params.projectId || !this.user) {
+    const user = this.user ? this.user : getStorage('user')
+    if (!params.totalPrice || !params.projectId || !user) {
       this.$router.back()
     }
     this.totalFee = params.totalPrice
     this.projectId = params.projectId
-    const url = encodeURIComponent(window.location.href.split('#')[0])
-    console.log(url)
+    const url = encodeURIComponent(currentURL.split('#')[0])
+    console.log(currentURL.split('#')[0])
     this.wxInit(url)
   },
   methods: {
     async pay() {
+      const storageUser = getStorage('user')
       const params = {
         totalFee: this.totalFee,
         projectId: this.projectId,
-        user: this.user
+        user: this.user || storageUser
       }
       let res = await this.wechatPay(params)
       res = res.data
       console.log(res)
+      console.log(window.location.href)
       window.wx.chooseWXPay({
         timestamp: res.data.timeStamp,
         nonceStr: res.data.nonceStr,
@@ -81,6 +89,12 @@ export default {
     ...mapActions([
       'wechatPay'
     ])
+  },
+  watch: {
+    $route(to, from) {
+      const url = encodeURIComponent(window.location.href.split('#')[0])
+      this.wxInit(url)
+    }
   }
 }
 </script>

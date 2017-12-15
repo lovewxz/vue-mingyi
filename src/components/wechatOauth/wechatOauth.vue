@@ -3,16 +3,15 @@
 
 <script>
 import axios from 'axios'
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   async beforeMount() {
     const url = window.location.href
     const { data } = await axios.get(`/wechat-oauth?url=${encodeURIComponent(url)}`)
     if (data.success) {
-      this.setUser(data.data)
-      const paramArr = this.getUrlParam('state')
-      const visit = `/${paramArr}`
+      this.saveUser(data.data)
+      const visit = this.getUrlParam('state')
       this.$router.replace(visit)
     } else {
       throw new Error('用户信息获取失败')
@@ -24,9 +23,9 @@ export default {
       const result = window.location.search.substr(1).match(reg)
       return result ? decodeURIComponent(result[2]) : null
     },
-    ...mapMutations({
-      setUser: 'SET_USER'
-    })
+    ...mapActions([
+      'saveUser'
+    ])
   }
 }
 </script>

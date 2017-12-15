@@ -1,16 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
-// import Case from '@/components/case/case'
-// import Doctor from '@/components/doctor/doctor'
-// import Profile from '@/components/profile/profile'
-// import Project from '@/components/project/project'
-// import CaseList from '@/components/caseList/caseList'
-// import CaseArticle from '@/components/caseArticle/caseArticle'
-// import ProjectDetail from '@/components/projectDetail/projectDetail'
-// import ProjectConfirmOrder from '@/components/projectConfirmOrder/projectConfirmOrder'
-// import ProjectPay from '@/components/projectPay/projectPay'
-// import wechatOauth from '@/components/wechatOauth/wechatOauth'
+import { getStorage } from '@/common/js/cache'
 const Case = () => import('@/components/case/case')
 const Doctor = () => import('@/components/doctor/doctor')
 const Profile = () => import('@/components/profile/profile')
@@ -21,6 +12,7 @@ const ProjectDetail = () => import('@/components/projectDetail/projectDetail')
 const ProjectConfirmOrder = () => import('@/components/projectConfirmOrder/projectConfirmOrder')
 const ProjectPay = () => import('@/components/projectPay/projectPay')
 const wechatOauth = () => import('@/components/wechatOauth/wechatOauth')
+const Login = () => import('@/components/login/login')
 
 Vue.use(Router)
 
@@ -28,6 +20,11 @@ let routes = [
   {
     path: '/',
     redirect: '/case'
+  },
+  {
+    name: 'login',
+    path: '/login',
+    component: Login
   },
   {
     name: 'case',
@@ -62,13 +59,13 @@ let routes = [
         name: 'project-confirm-order',
         path: 'confirm',
         component: ProjectConfirmOrder
-      },
-      {
-        name: 'project-pay',
-        path: 'pay',
-        component: ProjectPay
       }
     ]
+  },
+  {
+    name: 'project-pay',
+    path: '/pay',
+    component: ProjectPay
   },
   {
     name: 'doctor',
@@ -94,10 +91,11 @@ const router = new Router({ routes })
 
 router.beforeEach((to, from, next) => {
   let user = store.state.user
-  let fullPath = encodeURIComponent(to.fullPath.substr(1))
+  let storageUser = getStorage('user')
+  let fullPath = encodeURIComponent(to.fullPath)
   if (to.matched.some(record => record.meta.requireAuth)) {
-    if (!user) {
-      window.location.href = `/wechat-redirect?visit=${fullPath}`
+    if (!user && !storageUser) {
+      next(`/login?visit=${fullPath}`)
     } else {
       next()
     }

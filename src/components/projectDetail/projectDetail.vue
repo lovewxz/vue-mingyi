@@ -79,6 +79,7 @@ import ProjectMask from '@/components/projectMask/projectMask'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import { cdnUrlMixin } from '@/common/js/mixin'
 import { mapGetters } from 'vuex'
+import { getStorage } from '@/common/js/cache'
 
 export default {
   mixins: [cdnUrlMixin],
@@ -123,9 +124,10 @@ export default {
     confirm(params) {
       params = Object.assign({}, params, { coverImg: this.projectDetail.cover_image[0], title: this.projectDetail.title, projectId: this.projectDetail._id })
       let { fullPath } = this.$route
-      fullPath = encodeURIComponent(fullPath.substr(1))
-      if (!this.user) {
-        window.location.href = `/wechat-redirect?visit=${fullPath}`
+      fullPath = encodeURIComponent(fullPath)
+      let storageUser = getStorage('user')
+      if (!this.user && !storageUser) {
+        this.$router.push(`/login?visit=${fullPath}`)
       } else {
         this.$router.push({ name: 'project-confirm-order', params: params })
       }

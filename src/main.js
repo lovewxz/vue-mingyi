@@ -14,8 +14,6 @@ import '@/common/scss/index.scss'
 import VConsole from 'vconsole'
 const vconsole = new VConsole()
 
-console.log('test')
-
 Vue.use(VueLazyLoad, {
   preLoad: 1.3,
   loading: require('@/common/images/default.png')
