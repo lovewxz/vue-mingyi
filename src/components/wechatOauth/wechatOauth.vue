@@ -12,7 +12,7 @@ export default {
     if (data.success) {
       this.saveUser(data.data)
       const visit = this.getUrlParam('state')
-      this.$router.replace(visit)
+      this.$router.replace({ name: visit })
     } else {
       throw new Error('用户信息获取失败')
     }

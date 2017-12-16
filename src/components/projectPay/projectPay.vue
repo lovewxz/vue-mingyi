@@ -24,15 +24,14 @@
 </template>
 
 <script>
-import { wxInit } from '@/common/js/mixin'
 import { mapActions, mapGetters } from 'vuex'
 import { getStorage } from '@/common/js/cache'
 
 export default {
-  mixins: [wxInit],
   data() {
     return {
-      totalFee: 0
+      totalFee: 0,
+      projectId: ''
     }
   },
   computed: {
@@ -40,21 +39,15 @@ export default {
       'user'
     ])
   },
-  beforeMount() {
-    const currentURL = window.location.href
-    if (currentURL.indexOf('?') === -1) {
-      window.location.href = '/?#/pay'
-    }
-    const { params } = this.$route
-    const user = this.user ? this.user : getStorage('user')
-    if (!params.totalPrice || !params.projectId || !user) {
-      this.$router.back()
-    }
-    this.totalFee = params.totalPrice
-    this.projectId = params.projectId
-    const url = encodeURIComponent(currentURL.split('#')[0])
-    console.log(currentURL.split('#')[0])
-    this.wxInit(url)
+  created() {
+    const { payment } = this.$route.query
+    this.getPayment({ payment }).then(res => {
+      res = res.data
+      if (res.success) {
+        this.totalFee = res.data.totalFee
+        this.projectId = res.data.project
+      }
+    })
   },
   methods: {
     async pay() {
@@ -66,104 +59,95 @@ export default {
       }
       let res = await this.wechatPay(params)
       res = res.data
-      console.log(res)
-      console.log(window.location.href)
-      window.wx.chooseWXPay({
-        timestamp: res.data.timeStamp,
-        nonceStr: res.data.nonceStr,
-        package: res.data.package,
-        signType: res.data.signType,
-        paySign: res.data.paySign,
-        success: function (response) {
-          try {
-            window.WeixinJSBridge.log(response.err_msg)
-          } catch (e) {
-            console.error(e)
-          }
-          if (response.err_msg === 'get_brand_wcpay_request:ok') {
-            console.log('支付成功')
-          }
+      console.log(res.data)
+      /* eslint-disable no-undef */
+      WeixinJSBridge.invoke(
+        'getBrandWCPayRequest', {
+          appId: res.data.appId,
+          timeStamp: res.data.timeStamp,
+          nonceStr: res.data.nonceStr,
+          package: res.data.package,
+          signType: res.data.signType,
+          paySign: res.data.paySign
+        },
+        function (res) {
+          if (res.err_msg === 'get_brand_wcpay_request:ok') {}
         }
-      })
+      )
     },
     ...mapActions([
-      'wechatPay'
+      'wechatPay',
+      'getPayment'
     ])
-  },
-  watch: {
-    $route(to, from) {
-      const url = encodeURIComponent(window.location.href.split('#')[0])
-      this.wxInit(url)
-    }
   }
 }
 </script>
 
 <style lang="scss">
 .project-pay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 500;
-  background: #f7f7f7;
-  .totalFee {
-    padding: 15px;
-    background: #fff;
-    font-size: 16px;
-    .color {
-      color: #ff527f;
-      font-weight: 900;
-    }
-  }
-  .pay-type {
-    background: #fff;
-    margin-top: 15px;
-    font-size: 16px;
-    .pay-select {
-      padding: 15px;
-      border-bottom: 1px solid #ddd;
-    }
-    .pay-item {
-      padding: 15px;
-      display: flex;
-      justify-content: space-between;
-      .item-left {
-        font-size: 0;
-        .pay-logo {
-          width: 25px;
-          height: 25px;
-          display: inline-block;
-          vertical-align: middle;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 500;
+    background: #f7f7f7;
+    .totalFee {
+        padding: 15px;
+        background: #fff;
+        font-size: 16px;
+        .color {
+            color: #ff527f;
+            font-weight: 900;
         }
-        .pay-text {
-          font-size: 16px;
-          display: inline-block;
-          vertical-align: middle;
-          margin-left: 5px;
-        }
-      }
-      .item-right {
-        flex: 0 0 25px;
-        width: 25px;
-      }
     }
-  }
-  .tip {
-    padding: 15px 0 15px 15px;
-    color: #777;
-  }
-  .pay-btn {
-    width: 80%;
-    margin: 30px auto 0;
-    background: #ff527f;
-    color: #fff;
-    font-size: 16px;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    border-radius: 5px;
-  }
+    .pay-type {
+        background: #fff;
+        margin-top: 15px;
+        font-size: 16px;
+        .pay-select {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .pay-item {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            .item-left {
+                font-size: 0;
+                .pay-logo {
+                    width: 25px;
+                    height: 25px;
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+                .pay-text {
+                    font-size: 16px;
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-left: 5px;
+                }
+            }
+            .item-right {
+                flex: 0 0 25px;
+                width: 25px;
+            }
+        }
+    }
+    .tip {
+        padding: 15px 0 15px 15px;
+        color: #777;
+    }
+    .pay-btn {
+        width: 80%;
+        margin: 30px auto 0;
+        background: #ff527f;
+        color: #fff;
+        font-size: 16px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        border-radius: 5px;
+    }
 }
 </style>

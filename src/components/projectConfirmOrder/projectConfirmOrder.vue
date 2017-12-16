@@ -128,7 +128,7 @@ export default {
         })
         return
       }
-      this.$router.replace({ name: 'project-pay', params: { totalPrice: data.data.totalFee, projectId: data.data.project } })
+      window.location.href = `/?#/pay?payment=${data.data._id}`
     },
     ...mapActions([
       'saveProjectOrder'

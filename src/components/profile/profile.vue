@@ -4,21 +4,16 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { getStorage } from '@/common/js/cache'
+
 export default {
   data() {
     return {
       userInfo: {}
     }
   },
-  computed: {
-    ...mapGetters([
-      'user'
-    ])
-  },
   created() {
-    this.userInfo = this.user
-    console.log(this.user)
+    this.userInfo = getStorage('user')
   }
 }
 </script>

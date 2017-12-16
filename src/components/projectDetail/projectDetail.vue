@@ -123,11 +123,11 @@ export default {
     },
     confirm(params) {
       params = Object.assign({}, params, { coverImg: this.projectDetail.cover_image[0], title: this.projectDetail.title, projectId: this.projectDetail._id })
-      let { fullPath } = this.$route
-      fullPath = encodeURIComponent(fullPath)
+      let { name } = this.$route
+      name = encodeURIComponent(name)
       let storageUser = getStorage('user')
       if (!this.user && !storageUser) {
-        this.$router.push(`/login?visit=${fullPath}`)
+        this.$router.push({ name: 'login', query: { visit: name } })
       } else {
         this.$router.push({ name: 'project-confirm-order', params: params })
       }

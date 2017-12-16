@@ -31,6 +31,7 @@ export const wxInit = {
               'downloadImage',
               'chooseImage',
               'onMenuShareTimeline',
+              'onMenuShareAppMessage',
               'hideAllNonBaseMenuItem',
               'chooseWXPay'
             ]

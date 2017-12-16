@@ -10,5 +10,8 @@ export default {
   },
   wechatPay(params) {
     return axios.post(`${baseUrl}/wechat-pay`, params)
+  },
+  getPayment(payment) {
+    return axios.post(`${baseUrl}/api/payment`, payment)
   }
 }

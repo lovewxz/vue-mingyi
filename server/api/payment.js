@@ -12,6 +12,16 @@ export async function updatePayment(payment) {
   return payment
 }
 
+export async function getPayment(_id) {
+  const payment = await Payment.findOne({_id}).populate([
+    {
+      path: 'user',
+      select: 'openid'
+    }
+  ]).exec()
+  return payment
+}
+
 export async function getPaymentByProjectId(projectId, userId) {
   const payment = await Payment.findOne({
     success: 0,

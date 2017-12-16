@@ -58,12 +58,12 @@
 import axios from 'axios'
 import Scroll from '@/base/scroll/scroll'
 import Layer from '@/base/layer/layer'
-import { cdnUrlMixin } from '@/common/js/mixin'
+import { cdnUrlMixin, wxInit } from '@/common/js/mixin'
 import { transArticle } from '@/common/js/util'
 import FixRight from '@/base/fixRight/fixRight'
 
 export default {
-  mixins: [cdnUrlMixin],
+  mixins: [cdnUrlMixin, wxInit],
   data() {
     return {
       caseData: {},
@@ -139,7 +139,6 @@ export default {
     }
   },
   async created() {
-    console.log(this.$route.params.artId, this.$route.params.id)
     this.probeType = 3
     await this._getCaseListById(this.$route.params.id)
     await this._getDiaryById(this.$route.params.artId)
@@ -147,6 +146,18 @@ export default {
       this.$refs.caseScroll.refresh()
     }, 20)
     this._onloadImg(this.$refs.sectionTxt.querySelectorAll('img'))
+    console.log(window.location.href.split('#')[0])
+    const url = encodeURIComponent(window.location.href.split('#')[0])
+    this.wxInit(url)
+    window.wx.onMenuShareAppMessage({
+      title: this.caseData.user_name,
+      desc: this.caseData.project.title,
+      link: window.location.href,
+      imgUrl: encodeURIComponent(this.cdnName(this.caseData.project.cover_image, 140)),
+      success: function() {
+        window.alert('分享成功')
+      }
+    })
   },
   components: {
     Scroll,

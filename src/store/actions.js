@@ -17,3 +17,7 @@ export const wechatPay = async function ({ commit }, params) {
 export const saveUser = function ({ commit }, user) {
   commit(type.SET_USER, setStorage('user', user))
 }
+
+export const getPayment = async function ({ commit }, payment) {
+  return await Services.getPayment(payment)
+}
