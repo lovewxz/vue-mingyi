@@ -113,6 +113,7 @@ export default {
         height: 100%;
         overflow: hidden;
         ul {
+            position: relative;
             .case-item {
                 margin-bottom: 10px;
                 box-sizing: border-box;
