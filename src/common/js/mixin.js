@@ -7,13 +7,16 @@ export const cdnUrlMixin = {
       let size = height ? `?imageMogr2/thumbnail/!${width}x${width}r|imageView2/1/w/${width}/h/${height}` : `?imageMogr2/thumbnail/!${width}x${width}r|imageView2/1/w/${width}/h/${width}`
       const completeUrl = width === 0 ? `${config.imgCDN}/${url}` : `${config.imgCDN}/${url}${size}`
       return completeUrl
+    },
+    cdnThumbnail(url, width) {
+      return `${config.imgCDN}/${url}?imageView2/1/w/${width}`
     }
   }
 }
 
 export const wxInit = {
   methods: {
-    wxInit(url) {
+    wxInit(url, message) {
       const wx = window.wx
       this.getWXSignature(url).then(res => {
         res = res.data
@@ -32,12 +35,19 @@ export const wxInit = {
               'chooseImage',
               'onMenuShareTimeline',
               'onMenuShareAppMessage',
+              'onMenuShareQQ',
+              'onMenuShareWeibo',
+              'onMenuShareQZone',
               'hideAllNonBaseMenuItem',
               'chooseWXPay'
             ]
           })
           wx.ready(() => {
-            console.log('success')
+            wx.onMenuShareTimeline(message)
+            wx.onMenuShareAppMessage(message)
+            wx.onMenuShareQQ(message)
+            wx.onMenuShareWeibo(message)
+            wx.onMenuShareQZone(message)
           })
         } else {
           throw new Error('不能获取服务器签名')

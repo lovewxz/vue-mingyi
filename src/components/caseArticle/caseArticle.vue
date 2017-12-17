@@ -148,16 +148,16 @@ export default {
     this._onloadImg(this.$refs.sectionTxt.querySelectorAll('img'))
     console.log(window.location.href.split('#')[0])
     const url = encodeURIComponent(window.location.href.split('#')[0])
-    this.wxInit(url)
-    window.wx.onMenuShareAppMessage({
+    const message = {
       title: this.caseData.user_name,
       desc: this.caseData.project.title,
       link: window.location.href,
-      imgUrl: encodeURIComponent(this.cdnName(this.caseData.project.cover_image, 140)),
+      imgUrl: this.cdnThumbnail(this.caseData.project.cover_image, 140),
       success: function() {
         window.alert('分享成功')
       }
-    })
+    }
+    this.wxInit(url, message)
   },
   components: {
     Scroll,
