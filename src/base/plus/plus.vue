@@ -1,6 +1,6 @@
 <template>
 <div class="plus" @click.stop>
-  <i class="iconfont icon-jian" @click="decrease"></i>
+  <i class="iconfont icon-decrease" @click="decrease"></i>
   <div class="num">{{num}}</div>
   <i class="iconfont icon-plus" @click="plus"></i>
 </div>

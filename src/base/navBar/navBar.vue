@@ -1,7 +1,7 @@
 <template>
   <div class="nav-bar">
     <div class="back" @click="back">
-      <i class="iconfont icon-left"></i>
+      <i class="iconfont icon-arrow-left"></i>
       <span class="text">返回</span>
     </div>
     <div class="title">{{title}}</div>
@@ -33,7 +33,7 @@ export default {
     position: absolute;
     font-size: 0;
     box-sizing: border-box;
-    .icon-left {
+    .icon-arrow-left {
       display: inline-block;
       padding-right: 2px;
       font-size: 20px;

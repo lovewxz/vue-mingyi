@@ -10,7 +10,7 @@
             </swiper-slide>
             <div class="swiper-pagination" slot="pagination"></div>
           </swiper>
-          <i class="iconfont icon-left" @click="back"></i>
+          <i class="iconfont icon-arrow-left" @click="back"></i>
           <i class="iconfont icon-home" @click="backHome"></i>
           <i class="iconfont icon-star"></i>
         </div>
@@ -30,7 +30,7 @@
           <div class="doctor-desc">
             <h2>医生:{{projectDetail.doctor.realname}}</h2>
             <p v-if="projectDetail.doctor.title">职称:{{projectDetail.doctor.title}}</p>
-            <i class="iconfont icon-left"></i>
+            <i class="iconfont icon-arrow-left"></i>
           </div>
         </div>
         <div class="project-service">
@@ -127,7 +127,7 @@ export default {
       name = encodeURIComponent(name)
       let storageUser = getStorage('user')
       if (!this.user && !storageUser) {
-        this.$router.push({ name: 'login', query: { visit: name } })
+        this.$router.push({ name: 'login', query: { visit: name, id: this.projectDetail._id } })
       } else {
         this.$router.push({ name: 'project-confirm-order', params: params })
       }
@@ -212,7 +212,7 @@ export default {
                     border-radius: 50%;
                     text-align: center;
                     background: rgba(0,0,0,.6);
-                    &.icon-left {
+                    &.icon-arrow-left {
                         color: #fff;
                         font-size: 24px;
                         top: 10px;
@@ -396,7 +396,7 @@ export default {
                         color: #949494;
                         @include no-wrap();
                     }
-                    .icon-left {
+                    .icon-arrow-left {
                         position: absolute;
                         top: 10px;
                         font-size: 18px;

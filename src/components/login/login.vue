@@ -7,10 +7,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { getStorage } from '@/common/js/cache'
+import { urlEncode } from '@/common/js/util'
+
 export default {
   data() {
     return {
-      fullPath: ''
+      URLEncode: ''
     }
   },
   computed: {
@@ -22,10 +24,10 @@ export default {
     login() {
       const storageUser = getStorage('user')
       if (!this.user && !storageUser) {
-        window.location.href = `/wechat-redirect?visit=${this.fullPath}`
+        window.location.href = `/wechat-redirect?${this.URLEncode}`
       } else {
         this.saveUser(storageUser)
-        this.fullPath ? this.$router.push(decodeURIComponent(this.fullPath)) : this.$router.push('/')
+        this.$router.push('/')
       }
     },
     ...mapActions([
@@ -33,8 +35,8 @@ export default {
     ])
   },
   beforeMount() {
-    let query = this.$route.query
-    this.fullPath = query.visit ? query.visit : '/'
+    const params = this.$route.query
+    this.URLEncode = params ? urlEncode(params) : this.$router.push('/')
   }
 }
 </script>

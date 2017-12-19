@@ -118,8 +118,9 @@ export default {
         img.src = ''
         img.onload = () => {
           len--
+          this.$refs.caseScroll.refresh()
           if (len === 0) {
-            this.$refs.caseScroll.refresh()
+            return
           }
         }
         img.src = src

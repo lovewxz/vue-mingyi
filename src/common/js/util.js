@@ -53,3 +53,11 @@ export const getImgSrc = (data) => {
   }
   return imgArr
 }
+
+export const urlEncode = (params) => {
+  let str = ''
+  for (let [key, value] of Object.entries(params)) {
+    str += `&${key}=${encodeURIComponent(value)}`
+  }
+  return str.substring(1)
+}

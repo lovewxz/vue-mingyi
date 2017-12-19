@@ -92,10 +92,11 @@ const router = new Router({ routes })
 router.beforeEach((to, from, next) => {
   let user = store.state.user
   let storageUser = getStorage('user')
-  let name = to.name
+  // let name = to.name
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (!user && !storageUser) {
-      next({ name: 'login', query: { visit: name } })
+      // next({ name: 'login', query: { visit: name } })
+      next()
     } else {
       next()
     }

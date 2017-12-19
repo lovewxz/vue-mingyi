@@ -4,15 +4,27 @@
 <script>
 import axios from 'axios'
 import { mapActions } from 'vuex'
+import { getStorage } from '@/common/js/cache'
 
 export default {
   async beforeMount() {
+    const userInfo = getStorage('user')
+    if (userInfo) {
+      this.$router.push('/')
+      return
+    }
     const url = window.location.href
     const { data } = await axios.get(`/wechat-oauth?url=${encodeURIComponent(url)}`)
     if (data.success) {
       this.saveUser(data.data)
-      const visit = this.getUrlParam('state')
-      this.$router.replace({ name: visit })
+      let str = this.getUrlParam('state')
+      const arr = str.split('_')
+      console.log(arr)
+      if (arr.length > 1) {
+        this.$router.replace({ name: arr[0], params: { id: arr[1] } })
+      } else {
+        this.$router.replace({ name: arr[0] })
+      }
     } else {
       throw new Error('用户信息获取失败')
     }

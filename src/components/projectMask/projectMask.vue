@@ -30,7 +30,7 @@
         <p>立即预订</p>
       </div>
       <div class="layer-close" @click.stop="hide">
-        <i class="iconfont icon-ioscloseoutline"></i>
+        <i class="iconfont icon-guanbi"></i>
       </div>
       <div class="cover-image">
         <img v-lazy="cdnName(coverImg[0],200)" alt="">
@@ -198,9 +198,10 @@ export default {
         position: absolute;
         right: 0;
         top: 0;
-        .icon-ioscloseoutline {
+        .icon-guanbi {
             font-size: 30px;
             line-height: 40px;
+            color: #555;
         }
     }
     .cover-image {
