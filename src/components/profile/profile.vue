@@ -12,7 +12,7 @@
         <h3>我的订单</h3>
         <p>
           <span class="order-all">查看全部订单</span>
-          <span class="iconfont icon-down"></span>
+          <span class="iconfont icon-arrow-right"></span>
         </p>
       </div>
       <div class="order-detail">
@@ -41,7 +41,7 @@
       <div class="contact-tel">
         <h3>联系电话</h3>
         <p>
-          <span class="iconfont icon-down"></span>
+          <span class="iconfont icon-arrow-right"></span>
         </p>
       </div>
     </a>
@@ -50,7 +50,7 @@
       <div class="contact-kefu border-bot">
         <h3>联系客服</h3>
         <p>
-          <span class="iconfont icon-down"></span>
+          <span class="iconfont icon-arrow-right"></span>
         </p>
       </div>
     </a>
@@ -72,11 +72,22 @@ export default {
     }
   },
   created() {
-    const userInfo = getStorage('user')
-    if (userInfo) {
-      this.nickname = userInfo.nickname
-      this.headimgurl = userInfo.headimgurl
+    this.getUserInfo()
+  },
+  methods: {
+    getUserInfo() {
+      const userInfo = getStorage('user')
+      if (userInfo) {
+        this.nickname = userInfo.nickname
+        this.headimgurl = userInfo.headimgurl
+      } else {
+        const { name } = this.$route
+        this.$router.push(`/login?visit=${name}`)
+      }
     }
+  },
+  activated() {
+    this.getUserInfo()
   },
   components: {
     bindTel
@@ -138,7 +149,7 @@ export default {
           display: inline-block;
           color: #b5b5b5;
         }
-        .icon-down {
+        .icon-arrow-right {
           font-size: 12px;
           vertical-align: middle;
           display: inline-block;
@@ -185,7 +196,7 @@ export default {
     }
     p {
       font-size: 0;
-      .icon-down {
+      .icon-arrow-right {
         font-size: 12px;
         vertical-align: middle;
         display: inline-block;
