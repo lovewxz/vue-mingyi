@@ -21,3 +21,11 @@ export const saveUser = function ({ commit }, user) {
 export const getPayment = async function ({ commit }, payment) {
   return await Services.getPayment(payment)
 }
+
+export const getPaymentList = async function ({ commit }, params) {
+  params = Object.assign({
+    limit: 10,
+    page: 1
+  }, params)
+  return await Services.getPaymentList(params)
+}

@@ -81,8 +81,8 @@ export default {
         this.nickname = userInfo.nickname
         this.headimgurl = userInfo.headimgurl
       } else {
-        const { name } = this.$route
-        this.$router.push(`/login?visit=${name}`)
+        // const { name } = this.$route
+        // this.$router.push(`/login?visit=${name}`)
       }
     }
   },

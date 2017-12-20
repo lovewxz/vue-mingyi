@@ -13,5 +13,8 @@ export default {
   },
   getPayment(payment) {
     return axios.post(`${baseUrl}/api/payment`, payment)
+  },
+  getPaymentList(params) {
+    return axios.post(`${baseUrl}/api/paymentlist`, params)
   }
 }

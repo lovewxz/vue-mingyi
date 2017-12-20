@@ -11,8 +11,13 @@ const CaseArticle = () => import('@/components/caseArticle/caseArticle')
 const ProjectDetail = () => import('@/components/projectDetail/projectDetail')
 const ProjectConfirmOrder = () => import('@/components/projectConfirmOrder/projectConfirmOrder')
 const ProjectPay = () => import('@/components/projectPay/projectPay')
-const wechatOauth = () => import('@/components/wechatOauth/wechatOauth')
+const WechatOauth = () => import('@/components/wechatOauth/wechatOauth')
 const Login = () => import('@/components/login/login')
+const OrderList = () => import('@/components/orderList/orderList')
+const OrderRefund = () => import('@/components/orderRefund/orderRefund')
+const OrderPaid = () => import('@/components/orderPaid/orderPaid')
+const OrderNonpaid = () => import('@/components/orderNonpaid/orderNonpaid')
+const OrderAll = () => import('@/components/orderAll/orderAll')
 
 Vue.use(Router)
 
@@ -81,9 +86,51 @@ let routes = [
     }
   },
   {
+    name: 'order-list',
+    path: '/orderlist',
+    component: OrderList,
+    meta: {
+      requireAuth: true
+    },
+    children: [
+      {
+        name: 'order-all',
+        path: 'all',
+        component: OrderAll,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        name: 'order-paid',
+        path: 'paid',
+        component: OrderPaid,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        name: 'order-nonpaid',
+        path: 'nonpaid',
+        component: OrderNonpaid,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        name: 'order-refund',
+        path: 'refund',
+        component: OrderRefund,
+        meta: {
+          requireAuth: true
+        }
+      }
+    ]
+  },
+  {
     name: 'loading',
     path: '/oauth',
-    component: wechatOauth
+    component: WechatOauth
   }
 ]
 

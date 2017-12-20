@@ -30,3 +30,40 @@ export async function getPaymentByProjectId(projectId, userId) {
   }).exec()
   return payment
 }
+
+export async function getPaymentList(limit = 10, page = 1, success) {
+  let payment = ''
+  if (success) {
+    payment = await Payment
+    .find({ success })
+    .populate([
+      {
+        path: 'project',
+        select: '_id title description price original_price cover_image'
+      }
+    ])
+    .skip((page - 1) * Number(limit))
+    .limit(Number(limit))
+    .sort({ 'meta.createdAt': -1 })
+    .exec()
+  } else {
+    payment = await Payment.find({})
+    .populate([
+      {
+        path: 'project',
+        select: '_id title description price original_price cover_image'
+      }
+    ])
+    .skip((page - 1) * Number(limit))
+    .limit(Number(limit))
+    .sort({ 'meta.createdAt': -1 })
+    .exec()
+  }
+  return payment
+}
+
+
+export async function getPaymentCount() {
+  const total = await Payment.count()
+  return total
+}
