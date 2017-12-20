@@ -24,14 +24,15 @@ export class caseController {
     const { limit } = ctx.request.body || 10
     const { page } = ctx.request.body || 1
     const { success } = ctx.request.body
+    const { openid } = ctx.request.body
     let payment = ''
     try {
-      const count = await api.payment.getPaymentCount()
-      if (success) {
-        payment = await api.payment.getPaymentList(limit, page, success)
+      if (success < 0) {
+        payment = await api.payment.getPaymentList(limit, page, openid)
       } else {
-        payment = await api.payment.getPaymentList(limit, page)
+        payment = await api.payment.getPaymentList(limit, page, openid, success)
       }
+      const count = await api.payment.getPaymentCount(payment[0].user)
       ctx.body = {
         success: true,
         data: {

@@ -1,6 +1,6 @@
 import Services from './service'
 import * as type from './mutation-types.js'
-import { setStorage } from '@/common/js/cache'
+import { setStorage, getStorage } from '@/common/js/cache'
 
 export const getWXSignature = function ({ commit }, url) {
   return Services.getWXSignature(url)
@@ -22,10 +22,11 @@ export const getPayment = async function ({ commit }, payment) {
   return await Services.getPayment(payment)
 }
 
-export const getPaymentList = async function ({ commit }, params) {
+export const getPaymentList = async function ({ state }, params) {
   params = Object.assign({
     limit: 10,
-    page: 1
+    page: 1,
+    openid: state.user.openid || getStorage('user').openid
   }, params)
   return await Services.getPaymentList(params)
 }
