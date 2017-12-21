@@ -33,7 +33,7 @@ export async function getPaymentByProjectId(projectId, userId) {
   return payment
 }
 
-export async function getPaymentList(limit = 10, page = 1, openid, success) {
+export async function getPaymentList(limit = 10, page = 1, openid, success = -1) {
   const user = await api.user.getUserByOpenid(openid)
   if (!user) {
     throw new Error('用户不存在')

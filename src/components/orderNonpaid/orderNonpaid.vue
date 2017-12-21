@@ -1,11 +1,16 @@
 <template lang="html">
-  <h1>orderNonpaid</h1>
+  <order-detail :success="Number(0)"></order-detail>
 </template>
 
 <script>
+import OrderDetail from '@/base/OrderDetail/OrderDetail'
+
 export default {
+  components: {
+    OrderDetail
+  }
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
 </style>

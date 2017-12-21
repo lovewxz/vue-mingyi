@@ -27,6 +27,10 @@ let routes = [
     redirect: '/case'
   },
   {
+    path: '/orderlist',
+    redirect: '/orderlist/all'
+  },
+  {
     name: 'login',
     path: '/login',
     component: Login

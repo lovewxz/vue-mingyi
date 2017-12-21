@@ -28,6 +28,8 @@
 
 <script>
 import { cdnUrlMixin } from '@/common/js/mixin'
+import config from '@/config'
+
 export default {
   mixins: [cdnUrlMixin],
   props: {
@@ -40,29 +42,18 @@ export default {
   },
   computed: {
     orderStauts() {
-      const success = this.order.success
-      let orderStatusTit = ''
-      switch (success) {
-        case 0:
-          orderStatusTit = '待支付'
-          break
-        case 1:
-          orderStatusTit = '已支付'
-          break
-        case 2:
-          orderStatusTit = '退款中'
-          break
-        case 3:
-          orderStatusTit = '已退款'
-          break
-        default:
-          orderStatusTit = '出错了'
+      if (!this.order._id) {
+        return
+      }
+      const success = this.order.success.toString()
+      let orderStatusTit = '出错了'
+      for (let [key, value] of Object.entries(config.orderCode)) {
+        if (success === key) {
+          orderStatusTit = value
+        }
       }
       return orderStatusTit
     }
-  },
-  created() {
-    console.log(this.order)
   }
 }
 </script>

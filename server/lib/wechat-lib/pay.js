@@ -46,7 +46,7 @@ export const getPayDataAsync = (req) => {
 // 获取notifyUrl数据
 export const getNoticeAsync = (rawbody) => {
   return new Promise((resolve, reject) => {
-    payment.validate(rawBody, (err, message) => {
+    payment.validate(rawbody, (err, message) => {
       if (err) {
         reject(err)
       } else {

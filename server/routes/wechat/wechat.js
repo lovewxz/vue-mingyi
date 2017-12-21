@@ -5,7 +5,7 @@ import reply from '../../lib/wechat/reply'
 import wechatMiddle from '../../lib/wechat-lib/middleware'
 import { signature, redirect, oauth } from '../../controllers/wechatController'
 import { post, get, controller, required } from '../../lib/decorator/router'
-import { getParamsAsync } from '../../lib/wechat-lib/pay'
+import { getParamsAsync, getNoticeAsync, getPayDataAsync } from '../../lib/wechat-lib/pay'
 import uuidv1 from 'uuid/v1'
 import api from '../../api'
 import R from 'ramda'
@@ -41,9 +41,10 @@ export class WechatController {
   async wechatOauth(ctx, next) {
     await oauth(ctx, next)
   }
+
   @post('/wechat-pay')
   @required({ body: [ 'user', 'projectId', 'totalFee' ] })
-  async createOrder(ctx, next) {
+  async payOrder(ctx, next) {
     const ip = ctx.ip.replace('::ffff:', '')
     const {
       user,
@@ -72,10 +73,11 @@ export class WechatController {
       }
     }
     try {
+      const outTradeNo = `Project-${uuidv1().substr(0,18)}`
       let orderParams = {
         body: project.title,
         attach: '深圳铭医医疗美容医院在线支付',
-        out_trade_no: `Project-${uuidv1().substr(0,18)}`,
+        out_trade_no: outTradeNo,
         spbill_create_ip: ip,
         total_fee: 1,
         openid: userInfo.openid,
@@ -83,6 +85,7 @@ export class WechatController {
       }
       const order = await getParamsAsync(orderParams)
       payment.totalFee = 1
+      payment.outTradeNo = outTradeNo
       payment.order = order
       console.log(payment)
       payment = await api.payment.updatePayment(payment)
@@ -95,6 +98,22 @@ export class WechatController {
         success: false,
         err: e
       }
+    }
+  }
+
+  @post('/notify')
+  async payNotify(ctx, next) {
+    try {
+      const data = await getPayDataAsync(ctx.req)
+      const message = await getNoticeAsync(data)
+      if (message.return_code === 'SUCCESS') {
+      }
+      ctx.body = {
+        success: true,
+        data: message
+      }
+    } catch (e) {
+      throw new Error('支付异常')
     }
   }
 }

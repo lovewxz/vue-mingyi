@@ -1,21 +1,23 @@
 <template lang="html">
-  <div class="order-list">
-    <ul class="order-tab">
-      <router-link :to="{ name: 'order-all' }" tag="li">
-        <p>全部订单</p>
-      </router-link>
-      <router-link :to="{ name: 'order-paid' }" tag="li">
-        <p>待付款</p>
-      </router-link>
-      <router-link :to="{ name: 'order-nonpaid' }" tag="li">
-        <p>已付款</p>
-      </router-link>
-      <router-link :to="{ name: 'order-refund' }" tag="li">
-        <p>退款</p>
-      </router-link>
-    </ul>
-    <router-view></router-view>
-  </div>
+  <transition name="moveInLeft">
+    <div class="order-list">
+      <ul class="order-tab">
+        <router-link :to="{ name: 'order-all' }" tag="li">
+          <p>全部订单</p>
+        </router-link>
+        <router-link :to="{ name: 'order-nonpaid' }" tag="li">
+          <p>待付款</p>
+        </router-link>
+        <router-link :to="{ name: 'order-paid' }" tag="li">
+          <p>已付款</p>
+        </router-link>
+        <router-link :to="{ name: 'order-refund' }" tag="li">
+          <p>退款</p>
+        </router-link>
+      </ul>
+      <router-view></router-view>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -23,7 +25,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .order-list {
     position: absolute;
     top: 0;
@@ -32,6 +34,14 @@ export default {
     right: 0;
     z-index: 400;
     background: #e5e5e5;
+    &.moveInLeft-enter-active,
+    &.moveInLeft-leave-active {
+      transition: all 0.3s linear;
+    }
+    &.moveInLeft-enter,
+    &.moveInLeft-leave-to {
+      transform: translate3d(100%,0,0);
+    }
     .order-tab {
       display: flex;
       justify-content: space-between;

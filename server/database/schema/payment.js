@@ -22,6 +22,9 @@ const PaymentSchema = new Schema({
     type: Number,
     default: 1
   },
+  payTime: String,
+  transactionId: String,
+  outTradeNo: String,
   success: {
     type: Number,
     default: 0

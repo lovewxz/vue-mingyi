@@ -8,7 +8,7 @@
     <bind-tel></bind-tel>
     <div class="cut"></div>
     <div class="my-order">
-      <div class="order-title">
+      <div class="order-title" @click="go('order-all')">
         <h3>我的订单</h3>
         <p>
           <span class="order-all">查看全部订单</span>
@@ -17,15 +17,15 @@
       </div>
       <div class="order-detail">
         <ul>
-          <li>
+          <li @click="go('order-nonpaid')">
             <i class="iconfont icon-daifukuan"></i>
             <p>待支付</p>
           </li>
-          <li>
+          <li @click="go('order-paid')">
             <i class="iconfont icon-yifukuan"></i>
             <p>已支付</p>
           </li>
-          <li>
+          <li @click="go('order-all')">
             <i class="iconfont icon-quanbudingdan"></i>
             <p>全部订单</p>
           </li>
@@ -84,6 +84,9 @@ export default {
         // const { name } = this.$route
         // this.$router.push(`/login?visit=${name}`)
       }
+    },
+    go(name) {
+      this.$router.push({ name: name })
     }
   },
   activated() {
@@ -94,7 +97,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .profile {
   position: absolute;
   width: 100%;

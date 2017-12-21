@@ -1,11 +1,16 @@
 <template lang="html">
-  <h1>orderRefund</h1>
+  <order-detail :success="Number(200)"></order-detail>
 </template>
 
 <script>
+import OrderDetail from '@/base/OrderDetail/OrderDetail'
+
 export default {
+  components: {
+    OrderDetail
+  }
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
 </style>
