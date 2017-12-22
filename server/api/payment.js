@@ -33,6 +33,13 @@ export async function getPaymentByProjectId(projectId, userId) {
   return payment
 }
 
+export async function getPaymentByTrade(outTradeNo) {
+  const payment = await Payment.findOne({
+    outTradeNo: outTradeNo
+  }).exec()
+  return payment
+}
+
 export async function getPaymentList(limit = 10, page = 1, openid, success = -1) {
   const user = await api.user.getUserByOpenid(openid)
   if (!user) {

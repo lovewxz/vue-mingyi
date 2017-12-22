@@ -18,13 +18,12 @@ const PaymentSchema = new Schema({
   description: String,
   name: String,
   order: Mixed,
+  notify: Mixed,
+  outTradeNo: String,
   num: {
     type: Number,
     default: 1
   },
-  payTime: String,
-  transactionId: String,
-  outTradeNo: String,
   success: {
     type: Number,
     default: 0

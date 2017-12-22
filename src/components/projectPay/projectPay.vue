@@ -20,18 +20,21 @@
     </div>
     <div class="tip">订单已经生成，请尽快支付</div>
     <div class="pay-btn" @click="pay">确认支付</div>
+    <confirm :text="confirmText" ref="confirmBox"></confirm>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { getStorage } from '@/common/js/cache'
+import Confirm from '@/base/confirm/confirm'
 
 export default {
   data() {
     return {
       totalFee: 0,
-      projectId: ''
+      projectId: '',
+      outTradeNo: ''
     }
   },
   computed: {
@@ -46,6 +49,7 @@ export default {
       if (res.success) {
         this.totalFee = res.data.totalFee
         this.projectId = res.data.project
+        this.outTradeNo = res.data.outTradeNo
       }
     })
   },
@@ -59,26 +63,45 @@ export default {
       }
       let res = await this.wechatPay(params)
       res = res.data
-      console.log(res.data)
+      if (res.success) {
+        this._wxJSPay(res.data)
+      } else {
+        this.confirmBox = res.err
+        setTimeout(() => {
+          this.$refs.confirmBox.show()
+        }, 20)
+      }
+    },
+    _wxJSPay(data) {
+      const vm = this
       /* eslint-disable no-undef */
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
-          appId: res.data.appId,
-          timeStamp: res.data.timeStamp,
-          nonceStr: res.data.nonceStr,
-          package: res.data.package,
-          signType: res.data.signType,
-          paySign: res.data.paySign
+          appId: data.appId,
+          timeStamp: data.timeStamp,
+          nonceStr: data.nonceStr,
+          package: data.package,
+          signType: data.signType,
+          paySign: data.paySign
         },
-        function (res) {
-          if (res.err_msg === 'get_brand_wcpay_request:ok') {}
+        async function (res) {
+          if (res.err_msg === 'get_brand_wcpay_request:ok') {
+            await vm.updatePayment({ success: 100, outTradeNo: vm.outTradeNo })
+            vm.$router.replace({ name: 'order-paid' })
+          } else {
+            vm.$router.replace({ name: 'order-nonpaid' })
+          }
         }
       )
     },
     ...mapActions([
       'wechatPay',
-      'getPayment'
+      'getPayment',
+      'updatePayment'
     ])
+  },
+  components: {
+    Confirm
   }
 }
 </script>

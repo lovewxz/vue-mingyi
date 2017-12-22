@@ -5,8 +5,7 @@ import reply from '../../lib/wechat/reply'
 import wechatMiddle from '../../lib/wechat-lib/middleware'
 import { signature, redirect, oauth } from '../../controllers/wechatController'
 import { post, get, controller, required } from '../../lib/decorator/router'
-import { getParamsAsync, getNoticeAsync, getPayDataAsync } from '../../lib/wechat-lib/pay'
-import uuidv1 from 'uuid/v1'
+import { getParamsAsync, getNoticeAsync, getPayDataAsync, buildSuccessXML } from '../../lib/wechat-lib/pay'
 import api from '../../api'
 import R from 'ramda'
 import xss from 'xss'
@@ -72,12 +71,17 @@ export class WechatController {
         err: '订单不存在'
       }
     }
+    if (payment.success > 0) {
+      return ctx.body = {
+        success: false,
+        err: '不要重复提交订单'
+      }
+    }
     try {
-      const outTradeNo = `Project-${uuidv1().substr(0,18)}`
       let orderParams = {
         body: project.title,
         attach: '深圳铭医医疗美容医院在线支付',
-        out_trade_no: outTradeNo,
+        out_trade_no: payment.outTradeNo,
         spbill_create_ip: ip,
         total_fee: 1,
         openid: userInfo.openid,
@@ -85,7 +89,6 @@ export class WechatController {
       }
       const order = await getParamsAsync(orderParams)
       payment.totalFee = 1
-      payment.outTradeNo = outTradeNo
       payment.order = order
       console.log(payment)
       payment = await api.payment.updatePayment(payment)
@@ -107,13 +110,22 @@ export class WechatController {
       const data = await getPayDataAsync(ctx.req)
       const message = await getNoticeAsync(data)
       if (message.return_code === 'SUCCESS') {
+        let payment = await api.payment.getPaymentByTrade(message.out_trade_no)
+        if (parseInt(message.total_fee) !== parseInt(payment.totalFee)) {
+          payment.success = 500
+        }
+        if (!payment.notify) {
+          payment.notify = message
+          payment.success = 100
+          payment = await api.payment.updatePayment(payment)
+        }
       }
-      ctx.body = {
-        success: true,
-        data: message
-      }
+      ctx.status = 200
+      ctx.type = 'application/xml'
+      ctx.body = buildSuccessXML()
+      return ctx.body
     } catch (e) {
-      throw new Error('支付异常')
+      throw new Error('通知异常')
     }
   }
 }

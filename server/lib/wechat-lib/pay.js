@@ -86,15 +86,15 @@ export const getOrdersAsync = (params) => {
 }
 
 export const buildFailXML = (err) => {
-  return payment.buildXml({
+  return payment._buildXml({
     return_code: 'FAIL',
     return_msg: err.name
   })
 }
 
-export const buildSuccessXML = (err) => {
-  if (err) return buildFailXML(err)
-  return payment.buildXml({
-    return_code: 'SUCCESS'
+export const buildSuccessXML = () => {
+  return payment._buildXml({
+    return_code: 'SUCCESS',
+    return_msg: 'OK'
   })
 }

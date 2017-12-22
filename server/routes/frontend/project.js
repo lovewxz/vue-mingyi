@@ -2,6 +2,7 @@ import { get, post, controller, required } from '../../lib/decorator/router'
 import api from '../../api'
 import xss from 'xss'
 import R from 'ramda'
+import uuidv1 from 'uuid/v1'
 
 @controller('api')
 export class projectController {
@@ -77,7 +78,8 @@ export class projectController {
           name: name,
           totalFee: totalFee,
           num: num,
-          payType: payType
+          payType: payType,
+          outTradeNo: `Project-${uuidv1().substr(0,18)}`
         }
         payment = await api.payment.savePayment(payment)
       }

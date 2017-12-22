@@ -30,3 +30,7 @@ export const getPaymentList = async function ({ state }, params) {
   }, params)
   return await Services.getPaymentList(params)
 }
+
+export const updatePayment = async function ({ commit }, params) {
+  return await Services.updatePayment(params)
+}

@@ -19,6 +19,7 @@ export class caseController {
       }
     }
   }
+
   @post('paymentlist')
   async getPaymenList(ctx, next) {
     const { limit } = ctx.request.body || 10
@@ -44,6 +45,27 @@ export class caseController {
       ctx.body = {
         success: true,
         data: e
+      }
+    }
+  }
+
+  @post('paymentupdate')
+  async updatePayment(ctx, next) {
+    let { success } = ctx.request.body
+    let { outTradeNo } = ctx.request.body
+    success = parseInt(success)
+    let payment = await api.payment.getPaymentByTrade(outTradeNo)
+    if (payment) {
+      payment.success = success
+      payment = await api.payment.savePayment(payment)
+      ctx.body = {
+        success: true,
+        data: payment
+      }
+    } else {
+      ctx.body = {
+        success: false,
+        err: '订单不存在'
       }
     }
   }
