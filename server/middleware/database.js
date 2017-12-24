@@ -41,7 +41,7 @@ export const database = app => {
     const Doctor = mongoose.model('Doctor')
     const Project = mongoose.model('Project')
     const Case = mongoose.model('Case')
-    const User = mongoose.model('User')
+    const Admin = mongoose.model('Admin')
     const Diary = mongoose.model('Diary')
 
     const existDoctor = await Doctor.find({}).exec()
@@ -54,17 +54,20 @@ export const database = app => {
     if (!existCase.length) Case.insertMany(caseData)
     if (!existDiary.length) Diary.insertMany(diaryData)
 
-    console.log('用户写入数据库')
-    let user = await User.findOne({
-      email: 'yaojun@qq.com'
+    let admin = await Admin.findOne({
+      email: 'yaojun@qq.com',
     }).exec()
-    if(!user) {
-      user = new User({
+
+    if(!admin) {
+      console.log('用户写入数据库')
+      admin = new Admin({
         email: 'yaojun@qq.com',
         password: '123456',
-        role: 'admin'
+        role: 'admin',
+        nickname: '豆阿豆阿',
+        headimgurl: 'http://image.0755mingyi.com/100.png'
       })
-      await user.save()
+      await admin.save()
     }
   })
 }

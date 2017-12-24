@@ -1,5 +1,6 @@
 import api from '../../api'
 import { controller, post, required } from '../../lib/decorator/router'
+import jwt from '../../util/jwt'
 
 @controller('admin')
 export class adminController {
@@ -7,16 +8,22 @@ export class adminController {
   @required({ body: ['email', 'password'] })
   async login(ctx, next) {
     const { email, password } = ctx.request.body
-    const data = await api.user.login(email, password)
-    const { match, user } = data
+    let data = await api.admin.login(email, password)
+    const { match, admin } = data
     if (match) {
+      const signParams = {
+        id: data._id,
+        role: data.role
+      }
+      data.token = jwt.createToken(signParams)
+      data = await api.admin.update(data)
       return ctx.body = {
         success: true,
         data: {
-          email: user.email,
-          nickname: user.nickname,
-          avatarUrl: user.avatarUrl,
-          token: user.token
+          email: admin.email,
+          nickname: admin.nickname,
+          avatarUrl: admin.avatarUrl,
+          token: admin.token
         }
       }
     }

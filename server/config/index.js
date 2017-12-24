@@ -15,5 +15,9 @@ export default {
     partnerKey: 'oQdNXSdBMDCPEkaeNl1xTYScp3N8PRGd',
     mchId: '1439054002',
     notifyUrl: 'http://frp.0755mingyi.com/notify',
+  },
+  jwt: {
+    token: 'yaojun',
+    expiredTime: '10h'
   }
 }

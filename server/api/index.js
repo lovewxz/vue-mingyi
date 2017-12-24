@@ -7,6 +7,7 @@ import * as qiniu from './qiniu'
 import * as category from './category'
 import * as wechat from './wechat'
 import * as payment from './payment'
+import * as admin from './admin'
 
 export default {
   pcase,
@@ -17,5 +18,6 @@ export default {
   qiniu,
   category,
   wechat,
-  payment
+  payment,
+  admin
 }
