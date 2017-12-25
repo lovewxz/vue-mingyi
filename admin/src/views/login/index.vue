@@ -3,11 +3,11 @@
     <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
       class="card-box login-form">
       <h3 class="title">深圳铭医系统后台</h3>
-      <el-form-item prop="username">
+      <el-form-item prop="email">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="请输入用户名" />
+        <el-input name="email" type="text" v-model="loginForm.email" autoComplete="on" placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
@@ -48,11 +48,11 @@ export default {
     }
     return {
       loginForm: {
-        username: '',
+        email: '',
         password: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        email: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }]
       },
       loading: false,

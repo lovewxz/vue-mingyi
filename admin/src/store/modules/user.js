@@ -46,7 +46,7 @@ const user = {
         getInfo(state.token).then(response => {
           const data = response.data
           commit('SET_ROLES', data.role)
-          commit('SET_NAME', data.name)
+          commit('SET_NAME', data.nickname)
           commit('SET_AVATAR', data.headimgurl)
           resolve(response)
         }).catch(error => {
@@ -57,16 +57,9 @@ const user = {
 
     // 登出
     LogOut({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          removeToken()
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
+      commit('SET_TOKEN', '')
+      commit('SET_ROLES', [])
+      removeToken()
     },
 
     // 前端 登出
