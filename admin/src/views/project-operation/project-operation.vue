@@ -46,8 +46,8 @@
 </div>
 </template>
 <script>
-import api from 'js/axios'
-import config from 'js/config'
+// import api from 'js/axios'
+// import config from 'js/config'
 import ProjectParams from 'components/project-params/project-params'
 import Upload from 'components/upload/upload'
 import CateCascader from 'components/cate-cascader/cate-cascader'

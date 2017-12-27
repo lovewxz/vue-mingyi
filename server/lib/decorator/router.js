@@ -85,13 +85,11 @@ export const required = rules => convert(async(ctx, next) => {
 })
 
 export const checkToken = () => convert(async(ctx, next) => {
-  const authorization = ctx.get('Authorization')
+  const authorization = ctx.get('X-Token')
   if (!authorization) {
     ctx.throw(401, '没有验证信息')
   }
-  const token = authorization.split(' ')[1]
-  let tokenContent
-  tokenContent = await jwt.verify(token, 'yaojun', (err, decoded) => {
+  let tokenContent = await jwt.verify(authorization, 'yaojun', (err, decoded) => {
     if (err) {
       if (err.name === 'TokenExpiredError') {
         ctx.throw(402, '验证信息过期')

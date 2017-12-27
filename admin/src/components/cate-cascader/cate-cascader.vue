@@ -12,7 +12,7 @@
   </el-cascader>
 </template>
 <script>
-import api from 'js/axios'
+// import api from 'js/axios'
 
 export default {
   data() {

@@ -1,42 +1,43 @@
 import mongoose from 'mongoose'
 const Project = mongoose.model('Project')
 
-export async function getProjectList(limit = 10, page = 1, reg = '') {
-  const data = reg ? await Project
-    .find({})
+export async function getProjectList({ limit = 10, page = 1, keyword = '', ...args}) {
+  let data = ''
+  if (keyword) {
+    console.log(1)
+    data = await Project
+    .find(...args)
     .populate([
       {
         path: 'category',
         select: '_id name'
       }
     ])
-    .where('status')
-    .ne(-1)
     .where('title')
-    .regex(reg)
+    .regex(keyword)
     .skip((page - 1) * Number(limit))
     .limit(Number(limit))
     .sort({ 'meta.createdAt': -1 })
     .exec()
-  : await Project
-    .find({})
-    .populate([
-      {
-        path: 'category',
-        select: '_id name'
-      }
-    ])
-    .where('status')
-    .ne(-1)
-    .skip((page - 1) * Number(limit))
-    .limit(Number(limit))
-    .sort({ 'meta.createdAt': -1 })
-    .exec()
+  } else {
+    data = await Project
+      .find(...args)
+      .populate([
+        {
+          path: 'category',
+          select: '_id name'
+        }
+      ])
+      .skip((page - 1) * Number(limit))
+      .limit(Number(limit))
+      .sort({ 'meta.createdAt': -1 })
+      .exec()
+  }
   return data
 }
 
-export async function getProjectCount(reg) {
-  const total = reg ? await Project.where('status').ne(-1).where('title').regex(reg).count() : await Project.where('status').ne(-1).count()
+export async function getProjectCount({ keyword = '', ...args }) {
+  const total = keyword ? await Project.find(args).where('title').regex(decodeURIComponent(keyword)).count() : await Project.find(args).count()
   return total
 }
 

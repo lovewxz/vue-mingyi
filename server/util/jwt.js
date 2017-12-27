@@ -19,7 +19,13 @@ export const checkToken = (token) => {
   })
 }
 
+export const decodeToken = (token) => {
+  token = jwt.decode(token, config.jwt.token)
+  return token
+}
+
 export default {
   createToken,
-  checkToken
+  checkToken,
+  decodeToken
 }

@@ -14,9 +14,9 @@
   </el-upload>
 </template>
 <script>
-import api from 'js/axios'
+// import api from 'js/axios'
 import randomToken from 'random-token'
-import config from 'js/config'
+// import config from 'js/config'
 
 export default {
   props: {

@@ -9,11 +9,6 @@
         <el-tag v-if="scope.row.category.length > 0">{{getLastCate(scope.row.category)}}</el-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="cover_image" label="图片" align="center" width="150">
-      <template slot-scope="scope">
-        <img :src="`${imgCDN}/${scope.row.cover_image && scope.row.cover_image[0]}?imageView2/0/w/100/h/100`" alt="">
-      </template>
-    </el-table-column>
     <el-table-column prop="time" label="发布时间" align="center" width="200">
       <template slot-scope="scope">
         {{scope.row.meta.createdAt.split('T')[0]}}
@@ -35,17 +30,16 @@
   </el-table>
   <el-col :span="24" class="toolbar">
     <el-button type="danger" :disabled="this.sels.length===0" @click="batchDel">批量删除</el-button>
-    <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="limit" :total="total" style="float:right;">
+    <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="condition.limit" :total="total" style="float:right;">
     </el-pagination>
   </el-col>
 </div>
 </template>
 <script>
-import config from 'js/config'
-import { getProjectList } from '@/api/project'
+import config from '@/config'
+import { getProjectList, delProject } from '@/api/project'
 import ProjectParams from 'components/project-params/project-params'
 import FilterBar from 'components/filter-bar/filter-bar'
-import axios from 'axios'
 import randomToken from 'random-token'
 
 export default {
@@ -65,7 +59,7 @@ export default {
   },
   async created() {
     this.imgCDN = config.imgCDN
-    await this.fetchProject()
+    await this.fetchProject(this.condition)
   },
   methods: {
     //分页
@@ -91,7 +85,7 @@ export default {
         type: 'warning'
       }).then(async() => {
         const options = Object.assign({}, { _id: row._id }, { status: -1 })
-        const data = await api.delProject(options)
+        const data = await delProject(options)
         if (data.success && data.data.ok === 1) {
           await this.fetchProject(this.condition)
         }
@@ -118,17 +112,21 @@ export default {
         this.sels.forEach((item) => {
           options.push(Object.assign({}, { _id: item._id }, { status: -1 }))
         })
-        let promises = options.map((option) => api.delProject(option))
+        let promises = options.map((option) => delProject(option))
         let results = await Promise.all(promises)
         await this.fetchProject(this.condition)
       }
     },
     async fetchProject(condition) {
       this.listLoading = true
-      const list = await getProjectList(condition)
-      this.listLoading = false
-      this.project = list.data
-      this.total = list.total
+      await getProjectList(condition).then(res => {
+        if (res.success) {
+          this.project = res.data.list
+          console.log(this.project)
+          this.total = res.data.total
+          this.listLoading = false
+        }
+      })
     }
   },
   components: {
@@ -139,6 +137,7 @@ export default {
 </script>
 <style lang="scss">
 .project {
+    padding: 20px;
     .now-price {
         display: block;
         font-size: 18px;

@@ -9,14 +9,13 @@ export class adminController {
   async login(ctx, next) {
     const { email, password } = ctx.request.body
     let data = await api.admin.login(email, password)
-    const { match, admin } = data
+    let { match, admin } = data
     if (match) {
       const signParams = {
-        id: data._id,
-        role: data.role
+        id: admin._id
       }
-      data.token = jwt.createToken(signParams)
-      data = await api.admin.update(data)
+      admin.token = jwt.createToken(signParams)
+      admin = await api.admin.update(admin)
       return ctx.body = {
         success: true,
         data: {
@@ -30,6 +29,42 @@ export class adminController {
     return ctx.body = {
       success: false,
       err: '密码或账号错误'
+    }
+  }
+
+  @post('checkToken')
+  @required({ body: ['token'] })
+  async checkToken(ctx, next) {
+    const { token } = ctx.request.body
+    await jwt.checkToken(token).then(data => {
+      return ctx.body = {
+        success: true,
+        data: data
+      }
+    }).catch(e => {
+      return ctx.body = {
+        success: false,
+        err: e.name
+      }
+    })
+  }
+
+  @post('user')
+  @required({ body: ['token'] })
+  async getUserInfo(ctx, next) {
+    const { token } = ctx.request.body
+    try {
+      const data = await jwt.checkToken(token)
+      const admin = await api.admin.getAdminById(data.id)
+      if (admin) {
+        return ctx.body = {
+          success: true,
+          data: admin
+        }
+      }
+      ctx.throw(402)
+    } catch (e) {
+      ctx.throw(402, e)
     }
   }
 }

@@ -30,6 +30,11 @@ export async function getAdminList(limit = 10, page = 1) {
   return admin
 }
 
+export async function getAdminById(id) {
+  const admin = await Admin.findOne({ _id: id }).exec()
+  return admin
+}
+
 export async function update(admin) {
   admin = await admin.save()
   return admin

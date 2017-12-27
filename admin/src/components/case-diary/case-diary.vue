@@ -29,9 +29,9 @@
 </div>
 </template>
 <script>
-import util from 'js/util'
-import config from 'js/config'
-import api from 'js/axios'
+// import util from 'js/util'
+// import config from 'js/config'
+// import api from 'js/axios'
 import Upload from 'components/upload/upload'
 import FilterBar from 'components/filter-bar/filter-bar'
 import Quill from 'quill'

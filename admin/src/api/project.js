@@ -9,3 +9,11 @@ export function getProjectList(condition) {
     }
   })
 }
+
+export function saveProject() {
+
+}
+
+export function delProject() {
+  
+}

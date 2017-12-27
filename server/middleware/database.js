@@ -58,6 +58,10 @@ export const database = app => {
       email: 'yaojun@qq.com',
     }).exec()
 
+    let editor = await Admin.findOne({
+      email: 'editor@qq.com'
+    }).exec()
+
     if(!admin) {
       console.log('用户写入数据库')
       admin = new Admin({
@@ -65,6 +69,18 @@ export const database = app => {
         password: '123456',
         role: 'admin',
         nickname: '豆阿豆阿',
+        headimgurl: 'http://image.0755mingyi.com/100.png'
+      })
+      await admin.save()
+    }
+
+    if(!editor) {
+      console.log('用户写入数据库')
+      admin = new Admin({
+        email: 'editor@qq.com',
+        password: '123456',
+        role: 'editor',
+        nickname: '编辑',
         headimgurl: 'http://image.0755mingyi.com/100.png'
       })
       await admin.save()

@@ -1,7 +1,8 @@
 import {
   GraphQLID,
   GraphQLString,
-  GraphQLObjectType
+  GraphQLObjectType,
+  GraphQLBoolean
 } from 'graphql'
 
 export let AdminType = new GraphQLObjectType({
@@ -24,6 +25,9 @@ export let AdminType = new GraphQLObjectType({
     },
     token: {
       type: GraphQLString
+    },
+    success: {
+      type: GraphQLBoolean
     }
   }
 })

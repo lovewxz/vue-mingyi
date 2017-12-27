@@ -39,9 +39,10 @@ const login = {
       }
       admin.token = jwt.createToken(signParams)
       admin = await api.admin.update(admin)
+      admin.success = true
       return admin
     }
-    return false
+    return match
   }
 }
 
