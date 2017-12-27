@@ -55,10 +55,39 @@ export const constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/projects',
+    component: Layout,
+    name: 'project',
+    meta: { title: '项目产品', icon: 'example' },
+    children: [
+      {
+        path: 'add',
+        name: 'project-add',
+        component: _import('project/project'),
+        meta: { title: '添加项目', icon: 'table' }
+      },
+      {
+        path: 'edit/:id',
+        name: 'project-edit',
+        component: _import('project-operation/project-operation'),
+        meta: { title: '编辑项目', icon: 'tree' }
+      }
+    ]
+  }
+]
 
+export default new Router({
+  // mode: 'history', //后端支持可开
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRouterMap
+})
+
+export const asyncRouterMap = [
   {
     path: '/form',
     component: Layout,
+    meta: { role: ['admin'] },
     children: [
       {
         path: 'index',
@@ -68,13 +97,5 @@ export const constantRouterMap = [
       }
     ]
   },
-
   { path: '*', redirect: '/404', hidden: true }
 ]
-
-export default new Router({
-  // mode: 'history', //后端支持可开
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRouterMap
-})
-
