@@ -102,11 +102,11 @@
 </template>
 <script>
 import config from '@/config'
-import ProjectParams from 'components/project-params/project-params'
-import Upload from 'components/upload/upload'
+import ProjectParams from 'components/ProjectParams/ProjectParams'
+import Upload from 'components/Upload/Upload'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky'
-import CateCascader from 'components/cate-cascader/cate-cascader'
+import CateCascader from 'components/CateCascader/CateCascader'
 import { getDoctorList } from '@/api/doctor'
 import { getProjectById, saveProject, createProject } from '@/api/project'
 

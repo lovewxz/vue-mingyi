@@ -38,8 +38,8 @@
 <script>
 import config from '@/config'
 import { getProjectList, delProject } from '@/api/project'
-import ProjectParams from 'components/project-params/project-params'
-import FilterBar from 'components/filter-bar/filter-bar'
+import ProjectParams from 'components/ProjectParams/ProjectParams'
+import FilterBar from 'components/FilterBar/FilterBar'
 
 export default {
   data() {
