@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 const Doctor = mongoose.model('Doctor')
 
-export async function getDoctorList(limit = 10, page = 1) {
+export async function getDoctorList({ limit = 10, page = 1 }) {
   const data = await Doctor.find({}).skip((page - 1) * Number(limit)).limit(Number(limit)).exec()
   return data
 }

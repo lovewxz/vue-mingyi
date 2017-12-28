@@ -14,9 +14,9 @@
   </el-upload>
 </template>
 <script>
-// import api from 'js/axios'
+import { getQiniuToken, getPrefopStatus } from '@/api/qiniu'
 import randomToken from 'random-token'
-// import config from 'js/config'
+import config from '@/config'
 
 export default {
   props: {
@@ -40,6 +40,7 @@ export default {
   },
   methods: {
     handleSuccess(response, file, filelist) {
+      console.log(file)
       this.fileListLen = filelist.length
     },
     handleChange(file, filelist) {
@@ -48,7 +49,7 @@ export default {
         this.$emit('processing')
         filelist.forEach(async (item) => {
           if (item.response && item.response.persistentId) {
-            await this._loopGetPrefopStatus(item.response.persistentId)
+            await this._loopGetPrefopStatus({ persistentId: item.response.persistentId })
           }
         })
       }
@@ -60,37 +61,36 @@ export default {
       this.fileList.splice(index, 1)
     },
     async beforeUpload(file) {
-      console.log(file)
       let key = randomToken(32)
       let params = { key }
-      if (this.uploadType === 'image') {
-        params = Object.assign({}, params, {type: 'image'})
-      } else if (this.uploadType === 'video') {
-        params = Object.assign({}, params, {type: 'video'})
-      }
-      await api.fetchQiniuToken(params).then(res => {
-        const response = res.data.data
+      params.type = this.uploadType === 'image' ? 'image' : 'video'
+      const res = await getQiniuToken(params)
+      if (res.success) {
         this.imgData = {
           key,
-          token: response.upToken
+          token: res.data.upToken
         }
-      })
+      }
     },
     clearFiles() {
       this.$refs.upload.clearFiles()
     },
     async _loopGetPrefopStatus(persistentId) {
-      let res = await api.prefopStatus(persistentId)
-      res = JSON.parse(res.data.data)
+      let res = await getPrefopStatus(persistentId)
+      if (!res.success) {
+        throw new Error('服务器出错')
+      }
+      res = JSON.parse(res.data)
       if (res.code === 0 && res.items) {
         this.fileList.push({
           name: res.items[0].key,
           url: `${config.imgCDN}/${res.items[0].key}`
         })
+        console.log(this.fileList)
         if (this.fileList.length === this.fileListLen) {
           this.$emit('processed')
         }
-      } else if (res.code === 3){
+      } else if (res.code === 3) {
         this.$message({
           type: 'error',
           message: '上传失败,请刷新重新上传'

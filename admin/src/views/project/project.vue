@@ -28,11 +28,11 @@
         </template>
     </el-table-column>
   </el-table>
-  <el-col :span="24" class="toolbar">
+  <div class="pagination-container">
     <el-button type="danger" :disabled="this.sels.length===0" @click="batchDel">批量删除</el-button>
-    <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="condition.limit" :total="total" style="float:right;">
+    <el-pagination background layout="total, prev, pager, next, jumper" @current-change="handleCurrentChange" :page-size="condition.limit" :total="total" style="float:right;">
     </el-pagination>
-  </el-col>
+  </div>
 </div>
 </template>
 <script>
@@ -40,14 +40,13 @@ import config from '@/config'
 import { getProjectList, delProject } from '@/api/project'
 import ProjectParams from 'components/project-params/project-params'
 import FilterBar from 'components/filter-bar/filter-bar'
-import randomToken from 'random-token'
 
 export default {
   data() {
     return {
       total: 0,
       project: [],
-      sels: [], //选中的数据
+      sels: [], // 选中的数据
       // 分页
       condition: {
         page: 1,
@@ -62,7 +61,7 @@ export default {
     await this.fetchProject(this.condition)
   },
   methods: {
-    //分页
+    // 分页
     async handleCurrentChange(page) {
       this.condition.page = page
       await this.fetchProject(this.condition)
@@ -73,17 +72,17 @@ export default {
     },
     // 增加按钮
     handleAdd() {
-      this.$router.push('/projects/add')
+      this.$router.push('/project/add')
     },
     // 编辑按钮
     handleEdit(index, row) {
-      this.$router.push(`/projects/edit/${row._id}`)
+      this.$router.push(`/project/edit/${row._id}`)
     },
     // 删除按钮
     handleDel(index, row) {
       this.$confirm('确认删除吗?', '提示', {
         type: 'warning'
-      }).then(async() => {
+      }).then(async () => {
         const options = Object.assign({}, { _id: row._id }, { status: -1 })
         const data = await delProject(options)
         if (data.success && data.data.ok === 1) {
@@ -106,16 +105,22 @@ export default {
       await this.fetchProject(this.condition)
     },
     // 批量删除
-    async batchDel() {
-      if (Array.isArray(this.sels)) {
-        const options = []
-        this.sels.forEach((item) => {
-          options.push(Object.assign({}, { _id: item._id }, { status: -1 }))
-        })
-        let promises = options.map((option) => delProject(option))
-        let results = await Promise.all(promises)
-        await this.fetchProject(this.condition)
-      }
+    batchDel() {
+      const sels = this.sels
+      const vm = this
+      this.$confirm('确认删除吗？', '提示', {
+        type: 'warning'
+      }).then(async () => {
+        if (Array.isArray(sels)) {
+          const options = []
+          sels.forEach((item) => {
+            options.push(Object.assign({}, { _id: item._id }, { status: -1 }))
+          })
+          let promises = options.map((option) => delProject(option))
+          await Promise.all(promises)
+          await vm.fetchProject(vm.condition)
+        }
+      })
     },
     async fetchProject(condition) {
       this.listLoading = true
@@ -150,6 +155,9 @@ export default {
     }
     .el-loading-mask {
       z-index: 500;
+    }
+    .pagination-container {
+      margin-top: 20px;
     }
 }
 </style>

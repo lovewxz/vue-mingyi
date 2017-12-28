@@ -3,12 +3,11 @@ import { controller, get, required, checkToken } from '../../lib/decorator/route
 
 @controller('admin')
 export class doctorController {
-  @get('doctors')
+  @get('doctor')
   @checkToken()
   async getDoctorList(ctx, next) {
-    const { limit } = ctx.query || 10
-    const { page } = ctx.query || 1
-    const doctors = await api.doctor.getDoctorList(limit, page)
+    let condition = ctx.query
+    const doctors = await api.doctor.getDoctorList(condition)
     const count = await api.doctor.getDoctorCount()
     ctx.body = {
       success: true,
@@ -18,7 +17,7 @@ export class doctorController {
       }
     }
   }
-  @get('doctors/:_id')
+  @get('doctor/:_id')
   @checkToken()
   async getDoctorById(ctx, next) {
     const { params } = ctx

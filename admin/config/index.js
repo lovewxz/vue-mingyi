@@ -14,6 +14,10 @@ module.exports = {
       '/admin': {
 				target: 'http://localhost:3000',
 				changeOrigin: true
+			},
+      '/qiniu': {
+				target: 'http://localhost:3000',
+				changeOrigin: true
 			}
     },
 

@@ -12,7 +12,7 @@
   </el-cascader>
 </template>
 <script>
-// import api from 'js/axios'
+import { getCategoryList } from '@/api/category'
 
 export default {
   data() {
@@ -43,11 +43,11 @@ export default {
       this.isAllow = true
     },
     async fetchCategory() {
-      const cateList = await api.fetchCategory().then((res) => {
-         if (res.success) {
-           res = this._genResult(res.data)
-           this.cateList = res
-         }
+      await getCategoryList().then((res) => {
+        if (res.success) {
+          res = this._genResult(res.data)
+          this.cateList = res
+        }
       })
     },
     _genResult(arr) {
@@ -67,7 +67,7 @@ export default {
     }
   },
   watch: {
-    selectedCateList (newVal) {
+    selectedCateList(newVal) {
       this.cateData = newVal
     },
     cateData(newVal) {
@@ -77,4 +77,5 @@ export default {
 }
 </script>
 <style lang="scss">
+
 </style>

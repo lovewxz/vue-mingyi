@@ -7,11 +7,11 @@ import { getToken } from '@/utils/auth' // 验权
 
 const whiteList = ['/login'] // 不重定向白名单
 
-function hasPermission(roles, permissionRoles) {
-  if (roles.indexOf('admin') >= 0) return true // admin权限 直接通过
-  if (!permissionRoles) return true
-  return roles.some(role => permissionRoles.indexOf(role) >= 0)
-}
+// function hasPermission(roles, permissionRoles) {
+//   if (roles.indexOf('admin') >= 0) return true // admin权限 直接通过
+//   if (!permissionRoles) return true
+//   return roles.some(role => permissionRoles.indexOf(role) >= 0)
+// }
 
 router.beforeEach((to, from, next) => {
   NProgress.start()

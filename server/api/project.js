@@ -4,9 +4,8 @@ const Project = mongoose.model('Project')
 export async function getProjectList({ limit = 10, page = 1, keyword = '', ...args}) {
   let data = ''
   if (keyword) {
-    console.log(1)
     data = await Project
-    .find(...args)
+    .find(args)
     .populate([
       {
         path: 'category',
@@ -21,7 +20,7 @@ export async function getProjectList({ limit = 10, page = 1, keyword = '', ...ar
     .exec()
   } else {
     data = await Project
-      .find(...args)
+      .find(args)
       .populate([
         {
           path: 'category',

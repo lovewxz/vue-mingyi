@@ -33,45 +33,31 @@ export const constantRouterMap = [
       component: _import('dashboard/index')
     }]
   },
-
   {
-    path: '/example',
+    path: '/project',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: _import('table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: _import('tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-  {
-    path: '/projects',
-    component: Layout,
+    redirect: '/project/index',
     name: 'project',
     meta: { title: '项目产品', icon: 'example' },
     children: [
       {
+        path: 'index',
+        name: 'project-index',
+        component: _import('project/project'),
+        meta: { title: '项目列表', icon: 'table' }
+      },
+      {
         path: 'add',
         name: 'project-add',
-        component: _import('project/project'),
-        meta: { title: '添加项目', icon: 'table' }
+        component: _import('project-operation/project-operation'),
+        meta: { title: '添加项目', icon: 'form' }
       },
       {
         path: 'edit/:id',
         name: 'project-edit',
+        hidden: true,
         component: _import('project-operation/project-operation'),
-        meta: { title: '编辑项目', icon: 'tree' }
+        meta: { title: '编辑项目' }
       }
     ]
   }

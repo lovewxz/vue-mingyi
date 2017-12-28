@@ -6,32 +6,18 @@ import randomToken from 'random-token'
 
 @controller('admin')
 export class projectController {
-  @get('projects')
+  @get('project')
   @checkToken()
   async getProjectList(ctx, next) {
-    let { condition } = ctx.query
+    let condition = ctx.query
     let temp = {}
-    const nonNullCondition = R.filter(item => !!item)(JSON.parse(condition))
-    console.log(nonNullCondition)
+    const nonNullCondition = R.filter(item => !!item && item !== 0)(condition)
     if (nonNullCondition.keyword) {
       nonNullCondition.keyword = new RegExp(xss(decodeURIComponent(nonNullCondition.keyword)), 'i')
     }
     const { limit, page, ...args } = nonNullCondition
     const projects = await api.project.getProjectList(nonNullCondition)
     const count =  await api.project.getProjectCount(args)
-    // let projects = ''
-    // let count = ''
-    // const { limit } = ctx.query || 10
-    // const { page } = ctx.query || 1
-    // let { keyword } = ctx.query || ''
-    // if (keyword) {
-    //   const reg = new RegExp(xss(decodeURIComponent(keyword)), 'i')
-    //   projects = await api.project.getProjectList(limit, page, reg)
-    //   count = await api.project.getProjectCount(reg)
-    // } else {
-    //   projects = await api.project.getProjectList(limit, page)
-    //   count =  await api.project.getProjectCount()
-    // }
     ctx.body = {
       success: true,
       data: {
@@ -40,7 +26,7 @@ export class projectController {
       }
     }
   }
-  @get('projects/:_id')
+  @get('project/:_id')
   @checkToken()
   async getProjectById(ctx, next) {
     const { params } = ctx
@@ -57,7 +43,7 @@ export class projectController {
       data: project
     }
   }
-  @put('projects')
+  @put('project')
   @checkToken()
   async putProject(ctx, next) {
     let body = ctx.request.body
@@ -133,7 +119,7 @@ export class projectController {
       }
     }
   }
-  @post('projects')
+  @post('project')
   @checkToken()
   async createProject(ctx, next) {
     let body = ctx.request.body
