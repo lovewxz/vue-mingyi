@@ -1,6 +1,4 @@
-/**
- * Created by jiachenpan on 16/11/18.
- */
+import config from '@/config'
 
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
@@ -55,4 +53,23 @@ export function formatTime(time, option) {
   } else {
     return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分'
   }
+}
+
+
+export function removeHTMLTag(str) {
+  str = str.replace(/<\/?[^>]*>/g, '') //去除HTML tag
+  str = str.replace(/[ | ]*\n/g, '\n') //去除行尾空白
+  str = str.replace(/ /ig, '') //去掉
+  return str
+}
+
+export function addURLToImage(data) {
+  data = data.replace(/src=(\"|\')/g, `src="${config.imgCDN}/`)
+  return data
+}
+
+export function removeURLToImage(data) {
+  const reg = new RegExp(`${config.imgCDN}\/`, 'ig')
+  data = data.replace(reg, '')
+  return data
 }

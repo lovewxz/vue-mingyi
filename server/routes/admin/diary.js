@@ -6,26 +6,26 @@ import randomToken from 'random-token'
 
 @controller('admin')
 export class diaryController {
-  @get('diaries')
+  @get('diary')
   @checkToken()
   async getDiaryList(ctx, next) {
-    let diaries = ''
+    let diary = ''
     let count = ''
     const { limit } = ctx.query || 10
     const { page } = ctx.query || 1
     let { keyword } = ctx.query || ''
     if (keyword) {
       const reg = new RegExp(xss(decodeURIComponent(keyword)), 'i')
-      diaries = await api.diary.getDiaryList(limit, page, reg)
+      diary = await api.diary.getDiaryList(limit, page, reg)
       count = await api.diary.getDiaryCount(reg)
     } else {
-      diaries = await api.diary.getDiaryList(limit, page)
+      diary = await api.diary.getDiaryList(limit, page)
       count =  await api.diary.getDiaryCount()
     }
     ctx.body = {
       success: true,
       data: {
-        list: diaries,
+        list: diary,
         total: count
       }
     }
@@ -47,7 +47,7 @@ export class diaryController {
       data: diary
     }
   }
-  @get('diaries/:caseId')
+  @get('diary/case/:caseId')
   @checkToken()
   async getDiariesByCaseId(ctx, next) {
     const { params } = ctx
@@ -64,7 +64,7 @@ export class diaryController {
       data: diary
     }
   }
-  @put('diaries')
+  @put('diary')
   @checkToken()
   async putDiary(ctx, next) {
     let body = ctx.request.body
@@ -131,7 +131,7 @@ export class diaryController {
       }
     }
   }
-  @post('diaries')
+  @post('diary')
   @checkToken()
   async createDiary(ctx, next) {
     let body = ctx.request.body

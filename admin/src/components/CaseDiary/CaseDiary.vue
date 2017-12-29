@@ -11,29 +11,28 @@
     </el-table-column>
     <el-table-column label="操作" align="center" width="200">
       <template slot-scope="scope">
-            <el-button
-              size="small"
-              @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button>
-            <el-button
-              size="small"
-              type="danger"
-              @click="handleDel(scope.$index,scope.row)"
-            >删除</el-button>
-          </template>
+        <el-button
+          size="small"
+          @click="handleEdit(scope.$index, scope.row)"
+        >编辑</el-button>
+        <el-button
+          size="small"
+          type="danger"
+          @click="handleDel(scope.$index,scope.row)"
+        >删除</el-button>
+      </template>
     </el-table-column>
   </el-table>
-  <el-col :span="24" class="toolbar">
+  <el-row class="toolbar" style="margin-top: 20px;">
     <el-button type="danger" :disabled="this.sels.length===0" @click="batchDel">批量删除</el-button>
-  </el-col>
+  </el-row>
 </div>
 </template>
 <script>
-// import util from 'js/util'
-// import config from 'js/config'
+import { removeHTMLTag } from '@/utils'
 // import api from 'js/axios'
 import Upload from 'components/upload/upload'
-import FilterBar from 'components/filter-bar/filter-bar'
+import FilterBar from 'components/FilterBar/FilterBar'
 import Quill from 'quill'
 import { quillEditor } from 'vue-quill-editor'
 
@@ -137,7 +136,7 @@ export default {
       if (!str) {
         return
       }
-      str = util.removeHTMLTag(str)
+      str = removeHTMLTag(str)
       return str
     }
   },

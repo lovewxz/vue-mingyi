@@ -2,41 +2,29 @@ import mongoose from 'mongoose'
 const Project = mongoose.model('Project')
 
 export async function getProjectList({ limit = 10, page = 1, keyword = '', ...args}) {
-  let data = ''
   if (keyword) {
-    data = await Project
-    .find(args)
-    .populate([
-      {
-        path: 'category',
-        select: '_id name'
-      }
-    ])
-    .where('title')
-    .regex(keyword)
-    .skip((page - 1) * Number(limit))
-    .limit(Number(limit))
-    .sort({ 'meta.createdAt': -1 })
-    .exec()
-  } else {
-    data = await Project
-      .find(args)
-      .populate([
-        {
-          path: 'category',
-          select: '_id name'
-        }
-      ])
-      .skip((page - 1) * Number(limit))
-      .limit(Number(limit))
-      .sort({ 'meta.createdAt': -1 })
-      .exec()
+    args.title = keyword
   }
+  const data = await Project
+  .find(args)
+  .populate([
+    {
+      path: 'category',
+      select: '_id name'
+    }
+  ])
+  .skip((page - 1) * Number(limit))
+  .limit(Number(limit))
+  .sort({ 'meta.createdAt': -1 })
+  .exec()
   return data
 }
 
 export async function getProjectCount({ keyword = '', ...args }) {
-  const total = keyword ? await Project.find(args).where('title').regex(decodeURIComponent(keyword)).count() : await Project.find(args).count()
+  if (keyword) {
+    args.title = keyword
+  }
+  const total = await Project.find(args).count()
   return total
 }
 

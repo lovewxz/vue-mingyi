@@ -1,33 +1,18 @@
 import mongoose from 'mongoose'
 const Case = mongoose.model('Case')
 
-export async function getPcaseList(limit = 10, page = 1, reg = '') {
-  const data = reg ? await Case
-    .find({})
+export async function getPcaseList({ limit = 10, page = 1, keyword = '', ...args }) {
+  if (keyword) {
+    args.title = keyword
+  }
+  const data = await Case
+    .find(args)
     .populate([
       {
         path: 'category',
         select: '_id name'
       }
     ])
-    .where('status')
-    .ne(-1)
-    .where('title')
-    .regex(reg)
-    .skip((page - 1) * Number(limit))
-    .limit(Number(limit))
-    .sort({ 'meta.createdAt': -1 })
-    .exec()
-  : await Case
-    .find({})
-    .populate([
-      {
-        path: 'category',
-        select: '_id name'
-      }
-    ])
-    .where('status')
-    .ne(-1)
     .skip((page - 1) * Number(limit))
     .limit(Number(limit))
     .sort({ 'meta.createdAt': -1 })
@@ -35,8 +20,11 @@ export async function getPcaseList(limit = 10, page = 1, reg = '') {
   return data
 }
 
-export async function getPcaseCount(reg) {
-  const total = reg ? await Case.where('status').ne(-1).where('title').regex(reg).count() : await Case.where('status').ne(-1).count()
+export async function getPcaseCount({ keyword = '', ...args }) {
+  if (keyword) {
+    args.title = keyword
+  }
+  const total = await Case.find(args).count()
   return total
 }
 

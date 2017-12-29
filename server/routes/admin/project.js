@@ -11,12 +11,12 @@ export class projectController {
   async getProjectList(ctx, next) {
     let condition = ctx.query
     let temp = {}
-    const nonNullCondition = R.filter(item => !!item && item !== 0)(condition)
-    if (nonNullCondition.keyword) {
-      nonNullCondition.keyword = new RegExp(xss(decodeURIComponent(nonNullCondition.keyword)), 'i')
+    condition = R.filter(item => !!item && item !== 0)(condition)
+    if (condition.keyword) {
+      condition.keyword = new RegExp(xss(decodeURIComponent(condition.keyword)), 'i')
     }
-    const { limit, page, ...args } = nonNullCondition
-    const projects = await api.project.getProjectList(nonNullCondition)
+    const { limit, page, ...args } = condition
+    const projects = await api.project.getProjectList(condition)
     const count =  await api.project.getProjectCount(args)
     ctx.body = {
       success: true,
@@ -136,7 +136,8 @@ export class projectController {
         value: xss(item.value)
       }))(body.params),
       detail_images: R.map(xss)(body.detail_images),
-      cover_image: R.map(xss)(body.cover_image)
+      cover_image: R.map(xss)(body.cover_image),
+      isTop: xss(body.isTop)
     }
     try {
       const project = await api.project.save(body)

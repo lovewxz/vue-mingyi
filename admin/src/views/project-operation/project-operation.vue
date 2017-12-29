@@ -13,7 +13,7 @@
             <el-dropdown-menu class="no-padding" slot="dropdown">
               <el-dropdown-item>
                 <el-radio-group style="padding: 10px;" v-model="form.isTop">
-                  <el-radio :label="true">已经置顶</el-radio>
+                  <el-radio :label="true">设置置顶</el-radio>
                   <el-radio :label="false">取消置顶</el-radio>
                 </el-radio-group>
               </el-dropdown-item>

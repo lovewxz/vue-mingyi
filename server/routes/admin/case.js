@@ -6,31 +6,27 @@ import randomToken from 'random-token'
 
 @controller('admin')
 export class pcaseController {
-  @get('pcases')
+  @get('pcase')
   @checkToken()
   async getPcaseList(ctx, next) {
-    let pcases = ''
-    let count = ''
-    const { limit } = ctx.query || 10
-    const { page } = ctx.query || 1
-    let { keyword } = ctx.query || ''
-    if (keyword) {
-      const reg = new RegExp(xss(decodeURIComponent(keyword)), 'i')
-      pcases = await api.pcase.getPcaseList(limit, page, reg)
-      count = await api.pcase.getPcaseCount(reg)
-    } else {
-      pcases = await api.pcase.getPcaseList(limit, page)
-      count =  await api.pcase.getPcaseCount()
+    let condition = ctx.query
+    let temp = {}
+    condition = R.filter(item => !!item && item !== 0)(condition)
+    if (condition.keyword) {
+      condition.keyword = new RegExp(xss(decodeURIComponent(condition.keyword)), 'i')
     }
+    const { limit, page, ...args } = condition
+    const pcase = await api.pcase.getPcaseList(condition)
+    const count = await api.pcase.getPcaseCount(args)
     ctx.body = {
       success: true,
       data: {
-        list: pcases,
+        list: pcase,
         total: count
       }
     }
   }
-  @get('pcases/:_id')
+  @get('pcase/:_id')
   @checkToken()
   async getPcaseById(ctx, next) {
     const { params } = ctx
@@ -47,7 +43,7 @@ export class pcaseController {
       data: pcase
     }
   }
-  @put('pcases')
+  @put('pcase')
   @checkToken()
   async putPcase(ctx, next) {
     let body = ctx.request.body
@@ -121,7 +117,7 @@ export class pcaseController {
       }
     }
   }
-  @post('pcases')
+  @post('pcase')
   @checkToken()
   async createPcase(ctx, next) {
     let body = ctx.request.body

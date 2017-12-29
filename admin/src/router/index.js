@@ -60,6 +60,34 @@ export const constantRouterMap = [
         meta: { title: '编辑项目' }
       }
     ]
+  },
+  {
+    path: '/pcase',
+    component: Layout,
+    redirect: '/pcase/index',
+    name: 'pcase',
+    meta: { title: '真人案例', icon: 'people' },
+    children: [
+      {
+        path: 'index',
+        name: 'pcase-index',
+        component: _import('people-case/people-case'),
+        meta: { title: '案例列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: 'pcase-add',
+        component: _import('people-case-operation/people-case-operation'),
+        meta: { title: '添加项目', icon: 'form' }
+      },
+      {
+        path: 'edit/:id',
+        name: 'pcase-edit',
+        hidden: true,
+        component: _import('people-case-operation/people-case-operation'),
+        meta: { title: '编辑项目' }
+      }
+    ]
   }
 ]
 
