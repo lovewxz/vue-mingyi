@@ -9,19 +9,15 @@ export class diaryController {
   @get('diary')
   @checkToken()
   async getDiaryList(ctx, next) {
-    let diary = ''
-    let count = ''
-    const { limit } = ctx.query || 10
-    const { page } = ctx.query || 1
-    let { keyword } = ctx.query || ''
-    if (keyword) {
-      const reg = new RegExp(xss(decodeURIComponent(keyword)), 'i')
-      diary = await api.diary.getDiaryList(limit, page, reg)
-      count = await api.diary.getDiaryCount(reg)
-    } else {
-      diary = await api.diary.getDiaryList(limit, page)
-      count =  await api.diary.getDiaryCount()
+    let condition = ctx.query
+    let temp = {}
+    condition = R.filter(item => !!item && item !== 0)(condition)
+    if (condition.keyword) {
+      condition.keyword = new RegExp(xss(decodeURIComponent(condition.keyword)), 'i')
     }
+    const { limit, page, ...args } = condition
+    const diary = await api.diary.getDiaryList(condition)
+    const count = await api.diary.getDiaryCount(args)
     ctx.body = {
       success: true,
       data: {

@@ -88,6 +88,21 @@ export const constantRouterMap = [
         meta: { title: '编辑项目' }
       }
     ]
+  },
+  {
+    path: '/diary',
+    component: Layout,
+    redirect: '/diary/index',
+    name: 'diary',
+    meta: { title: '案例日记', icon: 'documentation' },
+    children: [
+      {
+        path: 'index',
+        name: 'diary-index',
+        component: _import('diary/diary'),
+        meta: { title: '日记列表', icon: 'table' }
+      }
+    ]
   }
 ]
 

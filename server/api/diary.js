@@ -1,20 +1,17 @@
 import mongoose from 'mongoose'
 const Diary = mongoose.model('Diary')
-export async function getDiaryList(limit = 10, page = 1, reg = '') {
-  const data = reg ? await Diary
-    .find({})
-    .where('status')
-    .ne(-1)
-    .where('title')
-    .regex(reg)
-    .skip((page - 1) * Number(limit))
-    .limit(Number(limit))
-    .sort({ 'meta.createdAt': -1 })
-    .exec() :
-    await Diary
-    .find({})
-    .where('status')
-    .ne(-1)
+export async function getDiaryList({ limit = 10, page = 1, keyword = '', ...args }) {
+  if (keyword) {
+    args.article = keyword
+  }
+  const data = await Diary
+    .find(args)
+    .populate([
+      {
+        path: 'caseId',
+        select: '_id user_name status'
+      }
+    ])
     .skip((page - 1) * Number(limit))
     .limit(Number(limit))
     .sort({ 'meta.createdAt': -1 })
@@ -22,8 +19,11 @@ export async function getDiaryList(limit = 10, page = 1, reg = '') {
   return data
 }
 
-export async function getDiaryCount(reg) {
-  const total = reg ? await Diary.where('status').ne(-1).where('title').regex(reg).count() : await Diary.where('status').ne(-1).count()
+export async function getDiaryCount({ keyword = '', ...args }) {
+  if (keyword) {
+    args.article = keyword
+  }
+  const total = await Diary.find(args).count()
   return total
 }
 
