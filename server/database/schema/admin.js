@@ -38,7 +38,6 @@ AdminSchema.pre('save', function (next) {
   if (!admin.isModified('password')) {
     return next()
   }
-  console.log(admin.isModified('password'))
   bcrypt.genSalt(saltRounds, function (err, salt) {
     if (err) return next(err)
     bcrypt.hash(admin.password, salt, function (error, hash) {

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 const { Schema } = mongoose
 const Mixed = Schema.Types.Mixed
+const Diary = mongoose.model('Diary')
 
 const CaseSchema = new Schema({
   _id: String,
@@ -50,12 +51,29 @@ const CaseSchema = new Schema({
 })
 
 CaseSchema.pre('save', function (next) {
-  if (this.isNew) {
-    this.meta.createdAt = this.meta.updatedAt = Date.now()
+  const pcase = this
+  console.log(pcase.status)
+  if (pcase.isNew) {
+    pcase.meta.createdAt = pcase.meta.updatedAt = Date.now()
   } else {
-    this.meta.updatedAt = Date.now()
+    pcase.meta.updatedAt = Date.now()
   }
   next()
 })
+
+CaseSchema.pre('update', async function(next) {
+  let idParam = {}
+  const pcase = this
+  const idObj = pcase.getQuery()
+  idParam.caseId = idObj._id
+  const statusObj = pcase.getUpdate()
+  const status = statusObj.$set && statusObj.$set.status
+  if (!status) {
+    return next()
+  }
+  await Diary.updateMany(idParam, statusObj)
+  next()
+})
+
 
 const Case = mongoose.model('Case', CaseSchema)

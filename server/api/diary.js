@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 const Diary = mongoose.model('Diary')
+
 export async function getDiaryList({ limit = 10, page = 1, keyword = '', ...args }) {
   if (keyword) {
     args.article = keyword
@@ -9,7 +10,7 @@ export async function getDiaryList({ limit = 10, page = 1, keyword = '', ...args
     .populate([
       {
         path: 'caseId',
-        select: '_id user_name status'
+        select: '_id user_name'
       }
     ])
     .skip((page - 1) * Number(limit))
