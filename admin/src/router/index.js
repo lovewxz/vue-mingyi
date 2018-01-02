@@ -101,6 +101,19 @@ export const constantRouterMap = [
         name: 'diary-index',
         component: _import('diary/diary'),
         meta: { title: '日记列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: 'diary-add',
+        component: _import('diary-operation/diary-operation'),
+        meta: { title: '添加日记', icon: 'form' }
+      },
+      {
+        path: 'edit/:id',
+        name: 'diary-edit',
+        hidden: true,
+        component: _import('diary-operation/diary-operation'),
+        meta: { title: '编辑日记' }
       }
     ]
   }

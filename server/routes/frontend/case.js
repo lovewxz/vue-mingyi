@@ -7,8 +7,9 @@ export class caseController {
   async getPcase(ctx, next) {
     const { limit } = ctx.query || 10
     const { page } = ctx.query || 1
-    const pcases = await api.pcase.getPcaseList(limit, page)
-    const count = await api.pcase.getPcaseCount()
+    const status = 0
+    const pcases = await api.pcase.getPcaseList({ limit, page, status })
+    const count = await api.pcase.getPcaseCount({})
     ctx.body = {
       success: true,
       data: {

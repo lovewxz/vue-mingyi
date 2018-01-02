@@ -12,9 +12,32 @@ export function getDiaryList(condition) {
   })
 }
 
+export function getDiaryById(id) {
+  return request({
+    url: `${config.adminPrefix}/diary/${id}`,
+    method: 'get'
+  })
+}
+
 export function getDiaryByCaseId(caseId) {
   return request({
     url: `${config.adminPrefix}/diary/case/${caseId}`,
     method: 'get'
+  })
+}
+
+export function saveDiary(params) {
+  return request({
+    url: `${config.adminPrefix}/diary`,
+    method: 'put',
+    data: params
+  })
+}
+
+export function createDiary(params) {
+  return request({
+    url: `${config.adminPrefix}/diary`,
+    method: 'post',
+    data: params
   })
 }

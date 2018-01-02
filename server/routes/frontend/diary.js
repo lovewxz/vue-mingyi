@@ -7,8 +7,9 @@ export class caseController {
   async getDiary(ctx, next) {
     const { limit } = ctx.query || 20
     const { page } = ctx.query || 1
-    const diaries = await api.diary.getDiaryList(limit, page)
-    const count =  await api.diary.getDiaryCount()
+    const status = 0
+    const diaries = await api.diary.getDiaryList({ limit, page, status })
+    const count =  await api.diary.getDiaryCount({})
     ctx.body = {
       success: true,
       data: {

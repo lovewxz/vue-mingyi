@@ -52,7 +52,6 @@ const CaseSchema = new Schema({
 
 CaseSchema.pre('save', function (next) {
   const pcase = this
-  console.log(pcase.status)
   if (pcase.isNew) {
     pcase.meta.createdAt = pcase.meta.updatedAt = Date.now()
   } else {
@@ -68,7 +67,7 @@ CaseSchema.pre('update', async function(next) {
   idParam.caseId = idObj._id
   const statusObj = pcase.getUpdate()
   const status = statusObj.$set && statusObj.$set.status
-  if (!status) {
+  if (!status && status !== 0) {
     return next()
   }
   await Diary.updateMany(idParam, statusObj)

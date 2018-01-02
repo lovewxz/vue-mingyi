@@ -90,11 +90,11 @@ export default {
     },
     // 增加按钮
     handleAdd() {
-      this.$router.push('/pcase/add')
+      this.$router.push('/diary/add')
     },
     // 编辑按钮
     handleEdit(index, row) {
-      this.$router.push(`/pcase/edit/${row._id}`)
+      this.$router.push(`/diary/edit/${row._id}`)
     },
     // 删除按钮
     handleDel(index, row) {
