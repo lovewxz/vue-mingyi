@@ -2,32 +2,31 @@
 <div class="project-handler">
   <el-form :model="form" :rules="formRules" ref="form">
     <sticky>
-        <template v-if="fetchSuccess">
-          <router-link style="margin-right:15px;" v-show='this.$route.params.id' :to="{ path:'project-add' }">
-            <el-button type="info">新建项目</el-button>
-          </router-link>
-          <el-dropdown trigger="click">
-            <el-button plain>{{form.isTop?'已经置顶':'未置顶'}}
-              <i class="el-icon-caret-bottom el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu class="no-padding" slot="dropdown">
-              <el-dropdown-item>
-                <el-radio-group style="padding: 10px;" v-model="form.isTop">
-                  <el-radio :label="true">设置置顶</el-radio>
-                  <el-radio :label="false">取消置顶</el-radio>
-                </el-radio-group>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="save()">发布
+      <template v-if="fetchSuccess">
+        <router-link style="margin-right:15px;" v-show='this.$route.params.id' :to="{ path:'project-add' }">
+          <el-button type="info">新建项目</el-button>
+        </router-link>
+        <el-dropdown trigger="click">
+          <el-button plain>{{form.isTop?'已经置顶':'未置顶'}}
+            <i class="el-icon-caret-bottom el-icon--right"></i>
           </el-button>
-          <el-button v-loading="loading" type="warning" @click="cancelBtn">取消</el-button>
-        </template>
-        <template v-else>
-          <el-tag>发送异常错误,刷新页面,或者联系程序员</el-tag>
-        </template>
-
-      </sticky>
+          <el-dropdown-menu class="no-padding" slot="dropdown">
+            <el-dropdown-item>
+              <el-radio-group style="padding: 10px;" v-model="form.isTop">
+                <el-radio :label="true">设置置顶</el-radio>
+                <el-radio :label="false">取消置顶</el-radio>
+              </el-radio-group>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="save()">发布
+        </el-button>
+        <el-button v-loading="loading" type="warning" @click="cancelBtn">取消</el-button>
+      </template>
+      <template v-else>
+        <el-tag>发送异常错误,刷新页面,或者联系程序员</el-tag>
+      </template>
+    </sticky>
     <div class="createPost-main-container">
       <el-row>
         <el-col :span="21">

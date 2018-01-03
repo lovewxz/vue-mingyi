@@ -65,6 +65,7 @@ export function removeHTMLTag(str) {
 
 export function addURLToImage(data) {
   data = data.replace(/src=(\"|\')/g, `src="${config.imgCDN}/`)
+  data = data.replace(/poster=(\"|\')/g, `poster="${config.imgCDN}/`)
   return data
 }
 

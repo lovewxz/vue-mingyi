@@ -3,7 +3,7 @@
   <filter-bar @filter="filter" @add="handleAdd" style="padding-bottom:0;"></filter-bar>
   <el-table :data="project" @selection-change="selsChange" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row>
     <el-table-column type="selection"></el-table-column>
-    <el-table-column prop="title" label="标题" align="left"></el-table-column>
+    <el-table-column prop="title" label="标题" align="left" :show-overflow-tooltip="true"></el-table-column>
     <el-table-column prop="category" label="分类" align="center" width="120">
       <template slot-scope="scope">
         <el-tag v-if="scope.row.category.length > 0">{{getLastCate(scope.row.category)}}</el-tag>

@@ -126,18 +126,18 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
-  {
-    path: '/form',
-    component: Layout,
-    meta: { role: ['admin'] },
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: _import('form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
+  // {
+  //   path: '/form',
+  //   component: Layout,
+  //   meta: { role: ['admin'] },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'Form',
+  //       component: _import('form/index'),
+  //       meta: { title: 'Form', icon: 'form' }
+  //     }
+  //   ]
+  // },
   { path: '*', redirect: '/404', hidden: true }
 ]

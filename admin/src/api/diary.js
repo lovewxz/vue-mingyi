@@ -41,3 +41,13 @@ export function createDiary(params) {
     data: params
   })
 }
+
+export function delDiary(condition) {
+  return request({
+    url: `${config.adminPrefix}/diary/del`,
+    method: 'put',
+    data: {
+      ...condition
+    }
+  })
+}

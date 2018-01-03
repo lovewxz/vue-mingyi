@@ -40,7 +40,7 @@
 </template>
 <script>
 import config from '@/config'
-import { getDiaryList } from '@/api/diary'
+import { getDiaryList, delDiary } from '@/api/diary'
 import { getPcaseList } from '@/api/pcase'
 import ProjectParams from '@/components/ProjectParams/ProjectParams'
 import FilterBar from '@/components/FilterBar/FilterBar'
@@ -102,7 +102,7 @@ export default {
         type: 'warning'
       }).then(async() => {
         const options = Object.assign({}, { _id: row._id }, { status: -1 })
-        const data = await delPcase(options)
+        const data = await delDiary(options)
         if (data.success && data.data.ok === 1) {
           await this.fetchDiary(this.condition)
         }
@@ -132,7 +132,7 @@ export default {
           this.sels.forEach((item) => {
             options.push(Object.assign({}, { _id: item._id }, { status: -1 }))
           })
-          let promises = options.map((option) => delPcase(option))
+          let promises = options.map((option) => delDiary(option))
           let results = await Promise.all(promises)
           await this.fetchDiary(this.condition)
         }

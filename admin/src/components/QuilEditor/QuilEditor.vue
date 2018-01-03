@@ -58,9 +58,11 @@
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-import Quill from 'quill'
 import { quillEditor } from 'vue-quill-editor'
 import Upload from 'components/upload/upload'
+import Quill from 'quill'
+import { registerBlot } from './blot'
+registerBlot()
 
 export default {
   props: {
@@ -110,15 +112,26 @@ export default {
       }
       const quillHook = this.$refs.editor.quill
       this.fileList[type].forEach((item) => {
-        const url = type === 'video' ? `${item.url}_video` : item.url
-        if (this.editorSelection === 0 || !this.editorSelection) {
-          quillHook.insertEmbed(0, type, url)
-        } else {
-          quillHook.insertEmbed(this.editorSelection, type, url)
-        }
+        this.insertEmbed(type, item.url)
       })
       this.fileList[type] = []
       type === 'video' ? this.uploadVideoShow = false : this.uploadImgShow = false
+    },
+    insertEmbed(type, url) {
+      const quillHook = this.$refs.editor.quill
+      const selection = this.editorSelection > 0 ? this.editorSelection : 0
+      let options = {}
+      if (type === 'video') {
+        options = {
+          url: `${url}_video`,
+          poster: url,
+          controls: true
+        }
+        quillHook.insertEmbed(selection, 'customVideo', options)
+      } else {
+        options = url
+        quillHook.insertEmbed(selection, 'image', options)
+      }
     },
     uploadImgHandler() {
       this.uploadImgShow = true
