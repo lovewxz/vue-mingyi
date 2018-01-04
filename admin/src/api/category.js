@@ -7,3 +7,27 @@ export function getCategoryList() {
     method: 'get'
   })
 }
+
+export function saveCategory(params) {
+  return request({
+    url: `${config.adminPrefix}/category`,
+    method: 'put',
+    data: params
+  })
+}
+
+export function createCategory(params) {
+  return request({
+    url: `${config.adminPrefix}/category`,
+    method: 'post',
+    data: params
+  })
+}
+
+export function delCategory(params) {
+  return request({
+    url: `${config.adminPrefix}/category/del`,
+    method: 'post',
+    data: params
+  })
+}

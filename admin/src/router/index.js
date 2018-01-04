@@ -28,10 +28,26 @@ export const constantRouterMap = [
     redirect: '/dashboard',
     name: 'Dashboard',
     hidden: true,
-    children: [{
-      path: 'dashboard',
-      component: _import('dashboard/index')
-    }]
+    children: [
+      {
+        path: 'dashboard',
+        component: _import('dashboard/index')
+      }
+    ]
+  },
+  {
+    path: '/catelist',
+    component: Layout,
+    redirect: '/category/index',
+    name: 'category',
+    children: [
+      {
+        path: 'index',
+        name: 'category-index',
+        component: _import('category-list/category-list'),
+        meta: { title: '分类目录', icon: 'chart' }
+      }
+    ]
   },
   {
     path: '/project',

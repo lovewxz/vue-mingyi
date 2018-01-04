@@ -324,6 +324,9 @@ export default {
                         margin: 5px auto;
                         display: block;
                     }
+                    video {
+                      width: 100%;
+                    }
                 }
             }
         }

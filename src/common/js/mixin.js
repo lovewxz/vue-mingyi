@@ -18,6 +18,11 @@ export const wxInit = {
   methods: {
     wxInit(url, message) {
       const wx = window.wx
+      const ua = navigator.userAgent.toLowerCase()
+      if (!ua.match(/MicroMessenger/i) || ua.match(/MicroMessenger/i)[0] !== 'micromessenger') {
+        console.log(1)
+        return
+      }
       this.getWXSignature(url).then(res => {
         res = res.data
         if (res.success) {
