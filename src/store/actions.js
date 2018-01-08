@@ -34,3 +34,7 @@ export const getPaymentList = async function ({ state }, params) {
 export const updatePayment = async function ({ commit }, params) {
   return await Services.updatePayment(params)
 }
+
+export const getDoctorList = async function ({ commit }, params) {
+  return await Services.getDoctorList(params)
+}

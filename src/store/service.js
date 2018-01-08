@@ -19,5 +19,8 @@ export default {
   },
   getPaymentList(params) {
     return axios.post(`${baseUrl}/api/paymentlist`, params)
+  },
+  getDoctorList(params) {
+    return axios.get(`${baseUrl}/api/doctor`, { params })
   }
 }
