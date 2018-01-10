@@ -38,3 +38,15 @@ export const updatePayment = async function ({ commit }, params) {
 export const getDoctorList = async function ({ commit }, params) {
   return await Services.getDoctorList(params)
 }
+
+export const getDoctorDetail = async function ({ commit }, id) {
+  return await Services.getDoctorDetail(id)
+}
+
+export const getProjectByDoctorId = async function ({ commit }, params) {
+  return await Services.getProjectByDoctorId(params)
+}
+
+export const getPcaseByDoctorId = async function ({ commit }, params) {
+  return await Services.getProjectByDoctorId(params)
+}

@@ -37,6 +37,22 @@ export class projectController {
       data: project
     }
   }
+  @get('project/doctor')
+  async getProjectByDoctorId(ctx, next) {
+    const { limit, page, id } = ctx.query
+    if (!id) {
+      ctx.body = {
+        success: false,
+        err: 'id不存在'
+      }
+    }
+    const status = 0
+    const project = await api.project.getProjectByDoctorId({ limit, page, id, status })
+    ctx.body = {
+      success: true,
+      data: project
+    }
+  }
   @post('project/order')
   @required({ body: ['user', 'projectId', 'phoneNumber', 'name', 'num', 'payType'] })
   async saveProjectOrder(ctx, next) {

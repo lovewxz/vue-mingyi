@@ -17,4 +17,20 @@ export class doctorController {
       }
     }
   }
+  @get('doctor/:id')
+  async getDoctorById(ctx, next) {
+    const { params } = ctx
+    const { id } = params
+    if (id) {
+      ctx.body = {
+        success: false,
+        err: 'id不存在'
+      }
+    }
+    const doctor = await api.doctor.getDoctorById(id)
+    ctx.body = {
+      success: true,
+      data: doctor
+    }
+  }
 }

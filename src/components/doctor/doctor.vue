@@ -2,7 +2,7 @@
   <div class="doctor">
     <scroll class="doctor-list" :data="doctors" :pullUp="pullUp" @scrollEnd="scrollToEnd">
       <ul>
-        <li class="doctor-item" v-for="item in doctors" :key="item._id">
+        <li class="doctor-item" v-for="item in doctors" :key="item._id" @click="goUrl(item)">
            <div class="head-img">
              <img :src="`${imgCDN}/${item.avatar}`" alt="">
            </div>
@@ -21,6 +21,7 @@
         </div>
       </ul>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -57,6 +58,9 @@ export default {
           this._checkMore(this.doctors)
         }
       })
+    },
+    goUrl(item) {
+      this.$router.push(`/doctor/${item._id}`)
     },
     _checkMore(data) {
       if (data.length >= this.total) {

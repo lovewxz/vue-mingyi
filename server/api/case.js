@@ -42,6 +42,20 @@ export async function getPcaseById(_id) {
   return data
 }
 
+export async function getPcaseByDoctorId({ limit = 10, page = 1, ...args}) {
+  const { status, id } = args
+  const data = await Case
+    .find({
+      doctor: id,
+      status: status
+    })
+    .skip((page - 1) * Number(limit))
+    .limit(Number(limit))
+    .sort({ 'meta.createdAt': -1 })
+    .exec()
+  return data
+}
+
 export async function update(pcase) {
   pcase = await pcase.save()
   return pcase

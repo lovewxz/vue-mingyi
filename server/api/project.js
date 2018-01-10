@@ -38,6 +38,16 @@ export async function getProjectById(_id) {
   return data
 }
 
+export async function getProjectByDoctorId({ limit = 10, page = 1, ...args}) {
+  const { id, status } = args
+  const data = await Project
+    .find({ doctor : id, status: status })
+    .skip((page - 1) * Number(limit))
+    .limit(Number(limit))
+    .exec()
+  return data
+}
+
 export async function update(project) {
   project = await project.save()
   return project

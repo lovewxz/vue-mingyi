@@ -4,6 +4,7 @@ import store from '@/store'
 import { getStorage } from '@/common/js/cache'
 const Case = () => import('@/components/case/case')
 const Doctor = () => import('@/components/doctor/doctor')
+const DoctorDetail = () => import('@/components/doctorDetail/doctorDetail')
 const Profile = () => import('@/components/profile/profile')
 const Project = () => import('@/components/project/project')
 const CaseList = () => import('@/components/caseList/caseList')
@@ -79,7 +80,14 @@ let routes = [
   {
     name: 'doctor',
     path: '/doctor',
-    component: Doctor
+    component: Doctor,
+    children: [
+      {
+        name: 'doctor-detail',
+        path: ':id',
+        component: DoctorDetail
+      }
+    ]
   },
   {
     name: 'profile',

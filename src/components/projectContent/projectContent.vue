@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="project-content" @click="goUrl(project)">
+  <div class="project-content">
     <div class="project-cover-image">
       <img v-lazy="cdnName(project.cover_image,200)" alt="">
     </div>
@@ -28,7 +28,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .project-content {
     display: flex;
     overflow: hidden;

@@ -2,19 +2,8 @@
 <div class="project">
   <scroll :data="projects" class="project-wrapper" :pullUp="pullUp" @scrollEnd="scrollToEnd">
     <ul>
-      <li v-for="item in projects" class="project-item">
-        <div class="project-content" @click="goUrl(item)">
-          <div class="project-cover-image">
-            <img v-lazy="cdnName(item.cover_image,200)" alt="">
-          </div>
-          <div class="project-desc">
-            <h2 class="title" v-html="item.title"></h2>
-            <div class="price">
-              <span class="now-price">¥{{item.price}}</span>
-              <span class="or-price">¥{{item.original_price}}</span>
-            </div>
-          </div>
-        </div>
+      <li v-for="item in projects" class="project-item" :key="item._id" @click="goUrl(item)">
+        <project-content :project="item"></project-content>
       </li>
       <div class="loading-wrapper">
         <loading title="" v-show="hasMore"></loading>
@@ -31,6 +20,7 @@ import { cdnUrlMixin } from '@/common/js/mixin'
 import axios from 'axios'
 import Scroll from '@/base/scroll/scroll'
 import Loading from '@/base/loading/loading'
+import ProjectContent from '@/components/projectContent/projectContent'
 
 export default {
   mixins: [cdnUrlMixin],
@@ -76,7 +66,8 @@ export default {
   },
   components: {
     Scroll,
-    Loading
+    Loading,
+    ProjectContent
   }
 }
 </script>
@@ -104,48 +95,6 @@ export default {
             border-bottom: 1px solid #e5e5e5;
             &:last-child {
                 border-bottom: 0;
-            }
-            .project-content {
-                display: flex;
-                overflow: hidden;
-                align-items: center;
-                .project-cover-image {
-                    flex: 0 0 105px;
-                    width: 105px;
-                }
-                .project-desc {
-                    flex: 1;
-                    margin-left: 10px;
-                    .title {
-                        color: #444;
-                        margin: 2px 0 5px;
-                        font-size: 14px;
-                        line-height: 20px;
-                        -webkit-line-clamp: 2;
-                        -webkit-box-orient: vertical;
-                        display: -webkit-box;
-                        text-overflow: ellipsis;
-                        overflow: hidden;
-                    }
-                    .price {
-                        font-size: 0;
-                        margin-top: 10px;
-                        .now-price {
-                            display: inline-block;
-                            vertical-align: bottom;
-                            font-size: 20px;
-                            color: #ff5c77;
-                        }
-                        .or-price {
-                            display: inline-block;
-                            vertical-align: bottom;
-                            font-size: 12px;
-                            color: #bbb;
-                            text-decoration: line-through;
-                            margin-left: 5px;
-                        }
-                    }
-                }
             }
         }
         .loading-wrapper {

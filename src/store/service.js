@@ -22,5 +22,14 @@ export default {
   },
   getDoctorList(params) {
     return axios.get(`${baseUrl}/api/doctor`, { params })
+  },
+  getDoctorDetail(id) {
+    return axios.get(`${baseUrl}/api/doctor/${id}`)
+  },
+  getProjectByDoctorId(params) {
+    return axios.get(`${baseUrl}/api/project/doctor`, { params })
+  },
+  getPcaseByDoctorId(params) {
+    return axios.get(`${baseUrl}/api/pcase/doctor`, { params })
   }
 }
