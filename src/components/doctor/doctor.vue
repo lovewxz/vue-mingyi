@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="doctor">
+  <div class="doctor-tab">
     <scroll class="doctor-list" :data="doctors" :pullUp="pullUp" @scrollEnd="scrollToEnd">
       <ul>
         <li class="doctor-item" v-for="item in doctors" :key="item._id" @click="goUrl(item)">
@@ -80,8 +80,16 @@ export default {
 </script>
 
 <style lang="scss">
-.doctor {
+.doctor-tab {
+  position: absolute;
+  top: 0;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  z-index: 100;
   .doctor-list {
+    height: 100%;
+    overflow: hidden;
     ul {
       .doctor-item {
         padding: 22px 15px 10px;
@@ -132,6 +140,7 @@ export default {
               padding: 0 8px;
               display: inline-block;
               margin-right: 5px;
+              margin-bottom: 5px;
             }
           }
         }

@@ -23,7 +23,7 @@
             <span class="sale">{{sale}}折</span>
           </div>
         </div>
-        <div class="project-doctor" v-if="projectDetail.doctor">
+        <div class="project-doctor" v-if="projectDetail.doctor" @click="goDoctor(projectDetail.doctor._id)">
           <div class="doctor-img">
             <img v-lazy="cdnName(projectDetail.doctor.avatar,120)" alt="">
           </div>
@@ -104,6 +104,9 @@ export default {
     ])
   },
   methods: {
+    goDoctor(id) {
+      this.$router.push(`/doctor/${id}`)
+    },
     showMask() {
       this.$refs.mask.show()
     },
@@ -188,14 +191,6 @@ export default {
     }
     &.moveInLeft-enter,
     &.moveInLeft-leave-to {
-        transform: translate3d(-100%,0,0);
-    }
-    .moveInLeft-enter-active,
-    .moveInLeft-leave-active {
-        transition: all 0.3s linear;
-    }
-    .moveInLeft-enter,
-    .moveInLeft-leave-to {
         transform: translate3d(-100%,0,0);
     }
     .project-detail-scroll {

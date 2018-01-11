@@ -48,5 +48,5 @@ export const getProjectByDoctorId = async function ({ commit }, params) {
 }
 
 export const getPcaseByDoctorId = async function ({ commit }, params) {
-  return await Services.getProjectByDoctorId(params)
+  return await Services.getPcaseByDoctorId(params)
 }

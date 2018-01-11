@@ -1,5 +1,6 @@
 <template>
-  <div class="doctor">
+  <transition name="moveInLeft">
+    <div class="doctor-detail">
     <div class="doctor-top">
       <div class="doctor-avatar">
         <div class="doctor-avatar-img">
@@ -25,30 +26,32 @@
         <i class="iconfont icon-arrow-right"></i>
       </div>
     </div>
-    <div class="doctor-project">
+    <div class="doctor-project" v-show="projects.length > 0">
       <h2>热门预约</h2>
       <div class="doctor-project-detail">
         <ul>
-          <li class="doctor-project-item" v-for="item in projects" :key="item._id">
+          <li class="doctor-project-item" v-for="item in projects" :key="item._id" @click="goProject(item)">
             <project-content :project="item"></project-content>
           </li>
         </ul>
       </div>
     </div>
-    <div class="doctor-case">
+    <div class="doctor-case" v-show="pcases.length > 0">
       <h2>热门案例</h2>
       <div class="doctor-case-detail">
         <ul>
-          <li class="doctor-case-item" v-for="item in projects" :key="item._id">
-            <project-content :project="item"></project-content>
+          <li class="doctor-case-item" v-for="item in pcases" :key="item._id" @click="goPcase(item)">
+            <case-content :pcase="item"></case-content>
           </li>
         </ul>
       </div>
     </div>
   </div>
+  </transition>
 </template>
 <script>
 import ProjectContent from '@/components/projectContent/projectContent'
+import CaseContent from '@/components/caseContent/caseContent'
 import config from '@/config'
 
 export default {
@@ -57,6 +60,14 @@ export default {
       doctor: {},
       projects: [],
       pcases: []
+    }
+  },
+  methods: {
+    goProject(item) {
+      this.$router.push(`/project/${item._id}`)
+    },
+    goPcase(item) {
+      this.$router.push(`/case/list/${item._id}`)
     }
   },
   created() {
@@ -80,23 +91,36 @@ export default {
       }
     })
     this.$store.dispatch('getPcaseByDoctorId', params).then(res => {
-      console.log(res.data)
+      res = res.data
+      if (res.success) {
+        this.pcases = res.data
+      }
     })
   },
   components: {
-    ProjectContent
+    ProjectContent,
+    CaseContent
   }
 }
 </script>
 <style lang="scss" scoped>
-.doctor {
+.doctor-detail {
   background: #f3f7f7;
   z-index: 500;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+  height: auto;
+  &.moveInLeft-enter-active,
+  &.moveInLeft-leave-active {
+      transition: all 0.3s linear;
+  }
+  &.moveInLeft-enter,
+  &.moveInLeft-leave-to {
+      transform: translate3d(-100%,0,0);
+  }
   .doctor-top {
     background: url('./bg_expert.jpg') no-repeat center;
     background-size: cover;
@@ -206,6 +230,7 @@ export default {
     background: #fff;
     box-sizing: border-box;
     margin-top: 10px;
+    padding-bottom: 15px;
     h2 {
       margin: 0 15px;
       font-size: 14px;
@@ -213,6 +238,11 @@ export default {
       height: 40px;
       line-height: 41px;
       border-bottom: 1px solid #e5e5e5;
+    }
+    .doctor-case-detail {
+      .doctor-case-item {
+        padding: 15px 15px 0 15px;
+      }
     }
   }
 }
