@@ -156,6 +156,17 @@ export default {
         this.$refs.layer.hide()
       }
       Math.abs(newVal) > winHeight ? this.$refs.fixRight.show() : this.$refs.fixRight.hide()
+    },
+    async '$route'(to, from) {
+      const reg = /\/case\/list\//
+      if (reg.test(to.path)) {
+        await this._getCaseListById(this.$route.params.id)
+        await this._getDiaryListById(this.$route.params.id)
+        setTimeout(() => {
+          this.$refs.caseListScroll.refresh()
+          this.$refs.caseListScroll.scrollTo(0, 0)
+        }, 20)
+      }
     }
   },
   components: {

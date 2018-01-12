@@ -12,7 +12,7 @@ export class projectController {
     const { page } = ctx.query || 1
     const status = 0
     const projects = await api.project.getProjectList({ limit, page, status })
-    const count = await api.project.getProjectCount({})
+    const count = await api.project.getProjectCount({ status })
     ctx.body = {
       success: true,
       data: {

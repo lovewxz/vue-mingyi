@@ -68,34 +68,48 @@ export default {
     },
     goPcase(item) {
       this.$router.push(`/case/list/${item._id}`)
+    },
+    getDoctorProfile() {
+      this.imgCDN = config.imgCDN
+      const { id } = this.$route.params
+      if (!id) {
+        this.$router.back()
+      }
+      const params = {
+        limit: 3,
+        page: 1,
+        id
+      }
+      this.$store.dispatch('getDoctorDetail', id).then(res => {
+        res = res.data
+        if (res.success) {
+          this.doctor = res.data
+        }
+      })
+      this.$store.dispatch('getProjectByDoctorId', params).then(res => {
+        res = res.data
+        if (res.success) {
+          this.projects = res.data
+        }
+      })
+      this.$store.dispatch('getPcaseByDoctorId', params).then(res => {
+        res = res.data
+        if (res.success) {
+          this.pcases = res.data
+        }
+      })
     }
   },
   created() {
-    this.imgCDN = config.imgCDN
-    const { id } = this.$route.params
-    const params = {
-      limit: 3,
-      page: 1,
-      id
+    this.getDoctorProfile()
+  },
+  watch: {
+    '$route'(to, from) {
+      const reg = /\/doctor\//
+      if (reg.test(to.path)) {
+        this.getDoctorProfile()
+      }
     }
-    this.$store.dispatch('getDoctorDetail', id).then(res => {
-      res = res.data
-      if (res.success) {
-        this.doctor = res.data
-      }
-    })
-    this.$store.dispatch('getProjectByDoctorId', params).then(res => {
-      res = res.data
-      if (res.success) {
-        this.projects = res.data
-      }
-    })
-    this.$store.dispatch('getPcaseByDoctorId', params).then(res => {
-      res = res.data
-      if (res.success) {
-        this.pcases = res.data
-      }
-    })
   },
   components: {
     ProjectContent,

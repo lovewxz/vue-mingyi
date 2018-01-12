@@ -1,5 +1,5 @@
 export const setStorage = (name, data) => {
-  return data ? window.localStorage.setItem(name, JSON.stringify(data)) : null
+  return data ? window.localStorage.setItem(name, JSON.stringify(data)) : window.localStorage.setItem(name, null)
 }
 
 export const getStorage = (name) => {

@@ -54,21 +54,25 @@
         </p>
       </div>
     </a>
-    <div class="btn-logout">退出登录</div>
+    <div class="btn-logout" @click="confirmShow">退出登录</div>
     <div class="profile-logo">
       <img :src="require('@/common/images/logo.png')" alt="">
     </div>
+    <confirm :text="confirmText" @confirm="logout" ref="confirmWrapper"></confirm>
   </div>
 </template>
 <script>
 import bindTel from '@/base/bindTel/bindTel'
-import { getStorage } from '@/common/js/cache'
+import { getStorage, setStorage } from '@/common/js/cache'
+import Confirm from '@/base/confirm/confirm'
+import { mapMutations } from 'vuex'
 
 export default {
   data() {
     return {
       nickname: '默认用户',
-      headimgurl: require('./avatar.jpg')
+      headimgurl: require('./avatar.jpg'),
+      confirmText: ''
     }
   },
   created() {
@@ -81,19 +85,34 @@ export default {
         this.nickname = userInfo.nickname
         this.headimgurl = userInfo.headimgurl
       } else {
-        // const { name } = this.$route
-        // this.$router.push(`/login?visit=${name}`)
+        const { name } = this.$route
+        this.$router.push(`/login?visit=${name}`)
       }
     },
     go(name) {
       this.$router.push({ name: name })
-    }
+    },
+    confirmShow() {
+      this.confirmText = '确定要退出吗'
+      this.$nextTick(() => {
+        this.$refs.confirmWrapper.show()
+      })
+    },
+    logout() {
+      this.setUser(null)
+      setStorage('user', null)
+      this.$router.push('/')
+    },
+    ...mapMutations({
+      setUser: 'SET_USER'
+    })
   },
   activated() {
     this.getUserInfo()
   },
   components: {
-    bindTel
+    bindTel,
+    Confirm
   }
 }
 </script>

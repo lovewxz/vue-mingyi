@@ -9,7 +9,7 @@ export class caseController {
     const { page } = ctx.query || 1
     const status = 0
     const diaries = await api.diary.getDiaryList({ limit, page, status })
-    const count =  await api.diary.getDiaryCount({})
+    const count =  await api.diary.getDiaryCount({ status })
     ctx.body = {
       success: true,
       data: {

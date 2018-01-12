@@ -3,18 +3,6 @@
     <div class="confirm-title">
       <h1>确认订单</h1>
     </div>
-    <div class="order-detail">
-      <div class="order-pic">
-        <img :src="cdnName(confirmInfo.coverImg, 200)" alt="">
-      </div>
-      <div class="order-project">
-        <h1 class="order-title">{{confirmInfo.title}}</h1>
-        <div class="order-desc">
-          <span class="order-type">{{confirmInfo.type}}:</span>
-          <span class="order-price">¥{{confirmInfo.singlePrice}}</span>
-        </div>
-      </div>
-    </div>
     <div class="order-other">
       <ul>
         <li @click="inputFocus('inputName')">
@@ -40,6 +28,18 @@
           <span class="order-right-price">¥{{totalPrice}}</span>
         </li>
       </ul>
+    </div>
+    <div class="order-detail">
+      <div class="order-pic">
+        <img :src="cdnName(confirmInfo.coverImg, 200)" alt="">
+      </div>
+      <div class="order-project">
+        <h1 class="order-title">{{confirmInfo.title}}</h1>
+        <div class="order-desc">
+          <span class="order-type">{{confirmInfo.type}}:</span>
+          <span class="order-price">¥{{confirmInfo.singlePrice}}</span>
+        </div>
+      </div>
     </div>
     <div class="order-bottom">
       <div class="order-left">
@@ -205,7 +205,6 @@ export default {
   }
   .order-other {
     background: #fff;
-    margin-top: 15px;
     ul {
       padding: 0 15px;
       li {
