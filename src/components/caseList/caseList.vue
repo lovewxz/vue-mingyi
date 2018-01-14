@@ -173,10 +173,10 @@ export default {
     Layer,
     fixRight
   },
-  async created() {
+  created() {
     this.probeType = 3
-    await this._getCaseListById(this.$route.params.id)
-    await this._getDiaryListByCaseId(this.$route.params.id)
+    this._getCaseListById(this.$route.params.id)
+    this._getDiaryListByCaseId(this.$route.params.id)
     setTimeout(() => {
       this.$refs.caseListScroll.refresh()
     }, 20)

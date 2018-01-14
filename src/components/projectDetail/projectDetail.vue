@@ -147,10 +147,10 @@ export default {
     }
   },
   watch: {
-    async '$route' (to, from) {
+    '$route' (to, from) {
       const reg = /\/project\//
       if (reg.test(to.path)) {
-        await this._getProjectDeatil()
+        this._getProjectDeatil()
         this.checkLoaded = false
         setTimeout(() => {
           this.$refs.projectDetailScroll.refresh()
@@ -159,8 +159,8 @@ export default {
       }
     }
   },
-  async created() {
-    await this._getProjectDeatil()
+  created() {
+    this._getProjectDeatil()
     setTimeout(() => {
       this.$refs.projectDetailScroll.refresh()
     }, 20)

@@ -64,8 +64,8 @@ export default {
       }
     }
   },
-  async created() {
-    await this._getCases()
+  created() {
+    this._getCases()
   },
   components: {
     Scroll,

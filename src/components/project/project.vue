@@ -60,8 +60,8 @@ export default {
       })
     }
   },
-  async created() {
-    await this._getProjectList(this.limit, this.page)
+  created() {
+    this._getProjectList(this.limit, this.page)
   },
   components: {
     Scroll,

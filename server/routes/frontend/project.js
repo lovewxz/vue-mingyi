@@ -21,7 +21,7 @@ export class projectController {
       }
     }
   }
-  @get('project/:_id')
+  @get('project/list/:_id')
   async getProjectById(ctx, next) {
     const { params } = ctx
     const { _id } = params

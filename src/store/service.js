@@ -42,12 +42,12 @@ export default {
     return axios.get(`${baseUrl}/api/diary/id/${id}`)
   },
   getDiaryListByCaseId(caseId) {
-    return axios.get(`${baseUrl}/api/diary/${caseId}`)
+    return axios.get(`${baseUrl}/api/diary/pcase/${caseId}`)
   },
   getProjectList(params) {
     return axios.get(`${baseUrl}/api/project`, { params })
   },
   getProjectById(id) {
-    return axios.get(`${baseUrl}/api/project/${id}`)
+    return axios.get(`${baseUrl}/api/project/list/${id}`)
   }
 }

@@ -18,7 +18,7 @@ export class caseController {
       }
     }
   }
-  @get('diary/:caseId')
+  @get('diary/pcase/:caseId')
   async getDiariesByCaseId(ctx, next) {
     const { params } = ctx
     const { caseId } = params

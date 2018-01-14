@@ -93,22 +93,20 @@ export default {
     backTop() {
       this.$refs.caseScroll.scrollTo(0, 0, 300)
     },
-    _getPcaseListById(id) {
-      this.$store.dispatch('getPcaseListById', id).then(res => {
-        res = res.data
-        if (res.success) {
-          this.caseData = res.data
-        }
-      })
+    async _getPcaseListById(id) {
+      let res = await this.$store.dispatch('getPcaseListById', id)
+      res = res.data
+      if (res.success) {
+        this.caseData = res.data
+      }
     },
-    _getDiaryById(id) {
-      this.$store.dispatch('getDiaryById', id).then(res => {
-        res = res.data
-        if (res.success) {
-          this.casePost = res.data
-          this.casePost.article = transArticle(this.casePost.article)
-        }
-      })
+    async _getDiaryById(id) {
+      let res = await this.$store.dispatch('getDiaryById', id)
+      res = res.data
+      if (res.success) {
+        this.casePost = res.data
+        this.casePost.article = transArticle(this.casePost.article)
+      }
     },
     _onloadImg(imgs) {
       let len = imgs.length
@@ -144,8 +142,8 @@ export default {
     await this._getDiaryById(this.$route.params.artId)
     setTimeout(() => {
       this.$refs.caseScroll.refresh()
+      this._onloadImg(this.$refs.sectionTxt.querySelectorAll('img'))
     }, 20)
-    this._onloadImg(this.$refs.sectionTxt.querySelectorAll('img'))
     const url = encodeURIComponent(window.location.href.split('#')[0])
     const message = {
       title: this.caseData.user_name,
