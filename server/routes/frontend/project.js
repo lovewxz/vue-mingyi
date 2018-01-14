@@ -6,7 +6,7 @@ import uuidv1 from 'uuid/v1'
 
 @controller('api')
 export class projectController {
-  @get('projects')
+  @get('project')
   async getProjectList(ctx, next) {
     const { limit } = ctx.query || 10
     const { page } = ctx.query || 1
@@ -21,7 +21,7 @@ export class projectController {
       }
     }
   }
-  @get('projects/:_id')
+  @get('project/:_id')
   async getProjectById(ctx, next) {
     const { params } = ctx
     const { _id } = params

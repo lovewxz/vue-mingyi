@@ -3,7 +3,7 @@ import api from '../../api'
 
 @controller('api')
 export class caseController {
-  @get('cases')
+  @get('pcase')
   async getPcase(ctx, next) {
     const { limit } = ctx.query || 10
     const { page } = ctx.query || 1
@@ -18,7 +18,7 @@ export class caseController {
       }
     }
   }
-  @get('cases/list/:_id')
+  @get('pcase/list/:_id')
   async getPcaseById(ctx, next) {
     const { params } = ctx
     const { _id } = params

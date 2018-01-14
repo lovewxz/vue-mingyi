@@ -73,7 +73,6 @@
 </transition>
 </template>
 <script>
-import axios from 'axios'
 import Scroll from '@/base/scroll/scroll'
 import ProjectMask from '@/components/projectMask/projectMask'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
@@ -135,11 +134,11 @@ export default {
         this.$router.push({ name: 'project-confirm-order', params: params })
       }
     },
-    async _getProjectDeatil() {
+    _getProjectDeatil() {
       if (!this.$route.params.id) {
         return
       }
-      await axios.get(`/api/projects/${this.$route.params.id}`).then(res => {
+      this.$store.dispatch('getProjectById', this.$route.params.id).then(res => {
         res = res.data
         if (res.success) {
           this.projectDetail = res.data

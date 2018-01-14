@@ -17,7 +17,6 @@
 </template>
 <script>
 import { cdnUrlMixin } from '@/common/js/mixin'
-import axios from 'axios'
 import Scroll from '@/base/scroll/scroll'
 import Loading from '@/base/loading/loading'
 import ProjectContent from '@/components/projectContent/projectContent'
@@ -50,8 +49,8 @@ export default {
         this.hasMore = false
       }
     },
-    async _getProjectList(limit, page) {
-      await axios.get(`/api/projects?limit=${limit}&page=${page}`).then(res => {
+    _getProjectList(limit, page) {
+      this.$store.dispatch('getProjectList', { limit: this.limit, page: this.page }).then(res => {
         res = res.data
         if (res.success) {
           this.projects = this.projects.concat(res.data.list)

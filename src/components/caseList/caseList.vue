@@ -82,7 +82,6 @@
 </template>
 <script>
 import navBar from '@/base/navBar/navBar'
-import axios from 'axios'
 import Scroll from '@/base/scroll/scroll'
 import Layer from '@/base/layer/layer'
 import { cdnUrlMixin } from '@/common/js/mixin'
@@ -118,20 +117,19 @@ export default {
     scroll(pos) {
       this.scrollY = pos.y
     },
-    async _getCaseListById(id) {
-      await axios.get(`/api/cases/list/${id}`).then(res => {
+    _getCaseListById(id) {
+      this.$store.dispatch('getPcaseListById', id).then(res => {
         res = res.data
         if (res.success) {
           this.caseData = res.data
         }
       })
     },
-    async _getDiaryListById(id) {
-      await axios.get(`/api/diary/${id}`).then(res => {
+    _getDiaryListByCaseId(id) {
+      this.$store.dispatch('getDiaryListByCaseId', id).then(res => {
         res = res.data
         if (res.success) {
           this.diaryData = this._genDiary(res.data)
-          console.log(this.diaryData)
         }
       })
     },
@@ -161,7 +159,7 @@ export default {
       const reg = /\/case\/list\//
       if (reg.test(to.path)) {
         await this._getCaseListById(this.$route.params.id)
-        await this._getDiaryListById(this.$route.params.id)
+        await this._getDiaryListByCaseId(this.$route.params.id)
         setTimeout(() => {
           this.$refs.caseListScroll.refresh()
           this.$refs.caseListScroll.scrollTo(0, 0)
@@ -178,7 +176,7 @@ export default {
   async created() {
     this.probeType = 3
     await this._getCaseListById(this.$route.params.id)
-    await this._getDiaryListById(this.$route.params.id)
+    await this._getDiaryListByCaseId(this.$route.params.id)
     setTimeout(() => {
       this.$refs.caseListScroll.refresh()
     }, 20)

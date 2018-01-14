@@ -50,3 +50,27 @@ export const getProjectByDoctorId = async function ({ commit }, params) {
 export const getPcaseByDoctorId = async function ({ commit }, params) {
   return await Services.getPcaseByDoctorId(params)
 }
+
+export const getPcaseList = async function ({ commit }, params) {
+  return await Services.getPcaseList(params)
+}
+
+export const getPcaseListById = async function ({ commit }, id) {
+  return await Services.getPcaseListById(id)
+}
+
+export const getDiaryById = async function ({ commit }, id) {
+  return await Services.getDiaryById(id)
+}
+
+export const getDiaryListByCaseId = async function ({ commit }, caseId) {
+  return await Services.getDiaryListByCaseId(caseId)
+}
+
+export const getProjectList = async function ({ commit }, params) {
+  return await Services.getProjectList(params)
+}
+
+export const getProjectById = async function ({ commit }, id) {
+  return await Services.getProjectById(id)
+}

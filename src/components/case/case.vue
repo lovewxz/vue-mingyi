@@ -16,7 +16,6 @@
 </div>
 </template>
 <script>
-import axios from 'axios'
 import Scroll from '@/base/scroll/scroll'
 import Loading from '@/base/loading/loading'
 import caseContent from '@/components/caseContent/caseContent'
@@ -36,12 +35,12 @@ export default {
     goUrl(item) {
       this.$router.push(`/case/list/${item._id}`)
     },
-    async scrollToEnd() {
+    scrollToEnd() {
       if (!this.hasMore) {
         return
       }
       this.page = this.page + 1
-      await axios(`/api/cases?limit=${this.limit}&page=${this.page}`).then(res => {
+      this.$store.dispatch('getPcaseList', { limit: this.limit, page: this.page }).then(res => {
         res = res.data
         if (res.success) {
           this.cases = this.cases.concat(res.data.list)
@@ -49,8 +48,8 @@ export default {
         }
       })
     },
-    async _getCases() {
-      await axios('/api/cases').then(res => {
+    _getCases() {
+      this.$store.dispatch('getPcaseList', { limit: this.limit, page: this.page }).then(res => {
         res = res.data
         if (res.success) {
           this.cases = res.data.list

@@ -55,7 +55,6 @@
 </div>
 </template>
 <script>
-import axios from 'axios'
 import Scroll from '@/base/scroll/scroll'
 import Layer from '@/base/layer/layer'
 import { cdnUrlMixin, wxInit } from '@/common/js/mixin'
@@ -94,16 +93,16 @@ export default {
     backTop() {
       this.$refs.caseScroll.scrollTo(0, 0, 300)
     },
-    async _getCaseListById(id) {
-      await axios.get(`/api/cases/list/${id}`).then(res => {
+    _getPcaseListById(id) {
+      this.$store.dispatch('getPcaseListById', id).then(res => {
         res = res.data
         if (res.success) {
           this.caseData = res.data
         }
       })
     },
-    async _getDiaryById(id) {
-      await axios.get(`/api/diary/id/${id}`).then(res => {
+    _getDiaryById(id) {
+      this.$store.dispatch('getDiaryById', id).then(res => {
         res = res.data
         if (res.success) {
           this.casePost = res.data
@@ -141,13 +140,12 @@ export default {
   },
   async created() {
     this.probeType = 3
-    await this._getCaseListById(this.$route.params.id)
+    await this._getPcaseListById(this.$route.params.id)
     await this._getDiaryById(this.$route.params.artId)
     setTimeout(() => {
       this.$refs.caseScroll.refresh()
     }, 20)
     this._onloadImg(this.$refs.sectionTxt.querySelectorAll('img'))
-    console.log(window.location.href.split('#')[0])
     const url = encodeURIComponent(window.location.href.split('#')[0])
     const message = {
       title: this.caseData.user_name,

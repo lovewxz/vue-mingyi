@@ -21,7 +21,9 @@ const UserSchema = new Schema({
       type: Date,
       default: Date.now()
     }
-  }
+  },
+  favorDoctor: [String],
+  favorProject: [String]
 })
 
 UserSchema.pre('save', function (next) {

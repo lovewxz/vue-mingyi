@@ -31,5 +31,23 @@ export default {
   },
   getPcaseByDoctorId(params) {
     return axios.get(`${baseUrl}/api/pcase/doctor`, { params })
+  },
+  getPcaseList(params) {
+    return axios.get(`${baseUrl}/api/pcase`, { params })
+  },
+  getPcaseListById(id) {
+    return axios.get(`${baseUrl}/api/pcase/list/${id}`)
+  },
+  getDiaryById(id) {
+    return axios.get(`${baseUrl}/api/diary/id/${id}`)
+  },
+  getDiaryListByCaseId(caseId) {
+    return axios.get(`${baseUrl}/api/diary/${caseId}`)
+  },
+  getProjectList(params) {
+    return axios.get(`${baseUrl}/api/project`, { params })
+  },
+  getProjectById(id) {
+    return axios.get(`${baseUrl}/api/project/${id}`)
   }
 }
