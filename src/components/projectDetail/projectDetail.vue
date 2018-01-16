@@ -12,7 +12,7 @@
           </swiper>
           <i class="iconfont icon-arrow-left" @click="back"></i>
           <i class="iconfont icon-home" @click="backHome"></i>
-          <i class="iconfont icon-star"></i>
+          <i class="iconfont" :class="favorStatus ? 'icon-star-full' : 'icon-star'" @click="favor"></i>
         </div>
         <div class="project-content">
           <h2 v-html="projectDetail.title"></h2>
@@ -54,7 +54,7 @@
           <span class="text">电话</span>
         </li>
         <li class="size-s">
-          <i class="iconfont icon-star"></i>
+          <i class="iconfont" :class="favorStatus ? 'icon-star-full' : 'icon-star'"></i>
           <span class="text">收藏</span>
         </li>
         <li class="zx-wrapper">
@@ -91,12 +91,25 @@ export default {
         autoplay: 5000,
         pagination: '.swiper-pagination'
       },
-      checkLoaded: false
+      checkLoaded: false,
+      favorStatus: false,
+      storageUser: getStorage('user') || {}
     }
   },
   computed: {
     sale() {
       return (Number(this.projectDetail.price) / Number(this.projectDetail.original_price) * 10).toFixed(1)
+    },
+    isFavorite() {
+      if (!this.storageUser) {
+        this.favorStatus = false
+        return
+      }
+      let favorArr = this.storageUser.favorProject || []
+      const index = favorArr.findIndex(item => {
+        return item === this.$route.params.id
+      })
+      this.favorStatus = (index > -1)
     },
     ...mapGetters([
       'user'
@@ -114,6 +127,21 @@ export default {
     },
     backHome() {
       this.$router.push('/')
+    },
+    favor() {
+      // if (!this.user && !this.storageUser) {
+      //   this.$router.push({ name: 'login', query: { visit: name, id: this.projectDetail._id } })
+      // }
+      let favorArr = this.storageUser.favorProject || []
+      this.favorStatus = !this.favorStatus
+      if (this.favorStatus) {
+        favorArr.push(this.$route.params.id)
+      } else {
+        const index = favorArr.findIndex(item => {
+          return item === this.$route.params.id
+        })
+        favorArr.splice(index, 1)
+      }
     },
     loadImage() {
       if (!this.checkLoaded) {
@@ -148,7 +176,7 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      const reg = /\/project\//
+      const reg = /\/project\/\d+/
       if (reg.test(to.path)) {
         this._getProjectDeatil()
         this.checkLoaded = false
@@ -242,6 +270,21 @@ export default {
                         right: 50px;
                         top: 10px;
                         line-height: 47px;
+                        display: block;
+                        &:before {
+                            position: absolute;
+                            top: -10px;
+                            left: -10px;
+                            right: -10px;
+                            bottom: -10px;
+                        }
+                    }
+                    &.icon-star-full {
+                        color: #ff5c77;
+                        font-size: 18px;
+                        right: 50px;
+                        top: 10px;
+                        line-height: 50px;
                         display: block;
                         &:before {
                             position: absolute;
@@ -471,6 +514,9 @@ export default {
                     flex: 0 0 15%;
                     width: 15%;
                     border-right: 1px solid #e5e5e5;
+                    .icon-star-full {
+                      color: #ff5c77;
+                    }
                 }
                 &.zx-wrapper {
                     background: #ffa89d;
