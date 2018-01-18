@@ -4,11 +4,11 @@
 <script>
 import axios from 'axios'
 import { mapActions } from 'vuex'
-import { getStorage } from '@/common/js/cache'
+import { getUserStorage } from '@/common/js/cache'
 
 export default {
   async beforeMount() {
-    const userInfo = getStorage('user')
+    const userInfo = getUserStorage()
     if (userInfo) {
       this.$router.push('/')
       return
@@ -19,7 +19,6 @@ export default {
       this.saveUser(data.data)
       let str = this.getUrlParam('state')
       const arr = str.split('_')
-      console.log(arr)
       if (arr.length > 1) {
         this.$router.replace({ name: arr[0], params: { id: arr[1] } })
       } else {

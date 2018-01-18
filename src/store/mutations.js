@@ -6,6 +6,9 @@ const mutations = {
   },
   [types.SET_USER](state, user) {
     state.user = user
+  },
+  [types.SET_FAVORITEPROJECT](state, favorProject) {
+    state.favorProject = favorProject
   }
 }
 

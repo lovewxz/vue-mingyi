@@ -63,7 +63,7 @@
 </template>
 <script>
 import bindTel from '@/base/bindTel/bindTel'
-import { getStorage, setStorage } from '@/common/js/cache'
+import { getUserStorage } from '@/common/js/cache'
 import Confirm from '@/base/confirm/confirm'
 import { mapMutations } from 'vuex'
 
@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     getUserInfo() {
-      const userInfo = getStorage('user')
+      const userInfo = getUserStorage()
       if (userInfo) {
         this.nickname = userInfo.nickname
         this.headimgurl = userInfo.headimgurl
@@ -100,7 +100,6 @@ export default {
     },
     logout() {
       this.setUser(null)
-      setStorage('user', null)
       this.$router.push('/')
     },
     ...mapMutations({

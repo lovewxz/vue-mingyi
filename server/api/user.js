@@ -21,3 +21,10 @@ export async function saveUser(user) {
   user = await user.save()
   return user
 }
+
+export async function getFavorProjectById(id) {
+  let user = await User.findOne({
+    _id: id
+  })
+  return user.favorProject
+}

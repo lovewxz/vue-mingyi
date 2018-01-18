@@ -1,5 +1,5 @@
-import { getStorage } from '@/common/js/cache'
-let user = getStorage('user')
+import { getUserStorage } from '@/common/js/cache'
+let user = getUserStorage()
 
 const state = {
   tabDisplay: false,

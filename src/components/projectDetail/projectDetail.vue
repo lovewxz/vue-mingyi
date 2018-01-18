@@ -78,7 +78,7 @@ import ProjectMask from '@/components/projectMask/projectMask'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import { cdnUrlMixin } from '@/common/js/mixin'
 import { mapGetters } from 'vuex'
-import { getStorage } from '@/common/js/cache'
+import { getUserStorage } from '@/common/js/cache'
 
 export default {
   mixins: [cdnUrlMixin],
@@ -93,7 +93,7 @@ export default {
       },
       checkLoaded: false,
       favorStatus: false,
-      storageUser: getStorage('user') || {}
+      storageUser: getUserStorage() || {}
     }
   },
   computed: {
@@ -155,7 +155,7 @@ export default {
       params = Object.assign({}, params, { coverImg: this.projectDetail.cover_image[0], title: this.projectDetail.title, projectId: this.projectDetail._id })
       let { name } = this.$route
       name = encodeURIComponent(name)
-      let storageUser = getStorage('user')
+      let storageUser = getUserStorage()
       if (!this.user && !storageUser) {
         this.$router.push({ name: 'login', query: { visit: name, id: this.projectDetail._id } })
       } else {

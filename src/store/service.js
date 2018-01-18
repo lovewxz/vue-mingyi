@@ -49,5 +49,8 @@ export default {
   },
   getProjectById(id) {
     return axios.get(`${baseUrl}/api/project/list/${id}`)
+  },
+  getFavorProjectById(id) {
+    return axios.get(`${baseUrl}/api/user/project/${id}`)
   }
 }

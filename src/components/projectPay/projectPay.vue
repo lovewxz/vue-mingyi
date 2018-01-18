@@ -26,7 +26,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { getStorage } from '@/common/js/cache'
+import { getUserStorage } from '@/common/js/cache'
 import Confirm from '@/base/confirm/confirm'
 
 export default {
@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     async pay() {
-      const storageUser = getStorage('user')
+      const storageUser = getUserStorage()
       const params = {
         totalFee: this.totalFee,
         projectId: this.projectId,

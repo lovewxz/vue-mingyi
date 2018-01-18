@@ -6,7 +6,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { getStorage } from '@/common/js/cache'
+import { getUserStorage } from '@/common/js/cache'
 import { urlEncode } from '@/common/js/util'
 
 export default {
@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     login() {
-      const storageUser = getStorage('user')
+      const storageUser = getUserStorage()
       if (!this.user && !storageUser) {
         window.location.href = `/wechat-redirect?${this.URLEncode}`
       } else {

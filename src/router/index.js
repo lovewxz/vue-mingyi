@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from '@/store'
-import { getStorage } from '@/common/js/cache'
+// import store from '@/store'
+import { getUserStorage } from '@/common/js/cache'
 const Case = () => import('@/components/case/case')
 const Doctor = () => import('@/components/doctor/doctor')
 const DoctorDetail = () => import('@/components/doctorDetail/doctorDetail')
@@ -149,11 +149,11 @@ let routes = [
 const router = new Router({ routes })
 
 router.beforeEach((to, from, next) => {
-  let user = store.state.user
-  let storageUser = getStorage('user')
+  let user = getUserStorage()
+  console.log(user)
   let name = to.name
   if (to.matched.some(record => record.meta.requireAuth)) {
-    if (!user && !storageUser) {
+    if (!user) {
       next({ name: 'login', query: { visit: name } })
     } else {
       next()

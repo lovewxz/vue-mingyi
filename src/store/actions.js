@@ -1,6 +1,6 @@
 import Services from './service'
 import * as type from './mutation-types.js'
-import { setStorage, getStorage } from '@/common/js/cache'
+import { setFavorProject, setUserStorage, getUserStorage } from '@/common/js/cache'
 
 export const getWXSignature = function ({ commit }, url) {
   return Services.getWXSignature(url)
@@ -15,7 +15,7 @@ export const wechatPay = async function ({ commit }, params) {
 }
 
 export const saveUser = function ({ commit }, user) {
-  commit(type.SET_USER, setStorage('user', user))
+  commit(type.SET_USER, setUserStorage(user))
 }
 
 export const getPayment = async function ({ commit }, payment) {
@@ -26,7 +26,7 @@ export const getPaymentList = async function ({ state }, params) {
   params = Object.assign({
     limit: 10,
     page: 1,
-    openid: state.user.openid || getStorage('user').openid
+    openid: state.user.openid || getUserStorage().openid
   }, params)
   return await Services.getPaymentList(params)
 }
@@ -73,4 +73,15 @@ export const getProjectList = async function ({ commit }, params) {
 
 export const getProjectById = async function ({ commit }, id) {
   return await Services.getProjectById(id)
+}
+
+export const setFavorProjectAction = async function ({ commit }, projectId) {
+  let user = getUserStorage()
+  let res = await Services.getFavorProjectById(user._id)
+  res = res.data
+  if (res.success) {
+    setFavorProject(res.data.favorProject)
+    commit(type.SET_FAVORITEPROJECT, res.data.favorProject)
+  }
+  return
 }

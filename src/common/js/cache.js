@@ -2,8 +2,8 @@ import storage from 'good-storage'
 
 const FAVOURITE_PROJECT_KEY = '__favorite_project__'
 const FAVOURITE_DOCTOR_KEY = '__favorite_doctor__'
+const USER_KEY = '__user__'
 const MAX_FAVOURITE_KEY_LEN = 200
-
 
 /**
  * 使用storage库处理历史记录
@@ -35,13 +35,22 @@ function _delete(arr, compare) {
   }
 }
 
+// export const setStorage = (name, data) => {
+//   return data ? window.localStorage.setItem(name, JSON.stringify(data)) : window.localStorage.setItem(name, null)
+// }
+//
+// export const getStorage = (name) => {
+//   return window.localStorage.getItem(name) ? JSON.parse(window.localStorage.getItem(name)) : null
+// }
 
-export const setStorage = (name, data) => {
-  return data ? window.localStorage.setItem(name, JSON.stringify(data)) : window.localStorage.setItem(name, null)
+export const setUserStorage = (user) => {
+  storage.set(USER_KEY, user)
+  return user
 }
 
-export const getStorage = (name) => {
-  return window.localStorage.getItem(name) ? JSON.parse(window.localStorage.getItem(name)) : null
+export const getUserStorage = () => {
+  const user = storage.get(USER_KEY, null)
+  return user
 }
 
 export const setFavorProject = (project) => {
