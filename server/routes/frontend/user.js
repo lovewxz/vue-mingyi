@@ -1,22 +1,24 @@
-import { get, controller } from '../../lib/decorator/router'
+import { post, get, controller } from '../../lib/decorator/router'
 import api from '../../api'
 
 @controller('api')
 export class userController {
-  @get('user/project/:_id')
-  async getProjectById(ctx, next) {
-    const { params } = ctx
-    const { _id } = params
-    if (_id) {
-      ctx.body = {
-        success: false,
-        err: 'id不存在'
-      }
-    }
-    const favorProject = await api.user.getFavorProjectById(_id)
+  @post('user/favorproject')
+  async setFavorProject(ctx, next) {
+    const { _id, project } = ctx.request.body
+    const res = await api.user.updateFavorProjectById(_id, project)
     ctx.body = {
       success: true,
-      data: favorProject
+      data: res
+    }
+  }
+  @get('user/favorproject/list')
+  async getFavorList(ctx, next) {
+    const { _id } = ctx.request.query
+    const res = await api.user.getFavorList(_id)
+    ctx.body = {
+      success: true,
+      data: res
     }
   }
 }

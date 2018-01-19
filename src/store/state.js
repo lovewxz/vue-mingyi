@@ -1,9 +1,10 @@
-import { getUserStorage } from '@/common/js/cache'
-let user = getUserStorage()
+import { getUserStorage, loadFavorDoctor, loadFavorProject } from '@/common/js/cache'
 
 const state = {
   tabDisplay: false,
-  user: user
+  user: getUserStorage(),
+  favorProject: loadFavorProject(),
+  favorDoctor: loadFavorDoctor()
 }
 
 export default state

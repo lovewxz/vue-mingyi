@@ -22,9 +22,17 @@ export async function saveUser(user) {
   return user
 }
 
-export async function getFavorProjectById(id) {
+export async function getFavorList(id) {
   let user = await User.findOne({
     _id: id
   })
-  return user.favorProject
+  return {
+    favorProject: user.favorProject,
+    favorDoctor: user.favorDoctor
+  }
+}
+
+export async function updateFavorProjectById(_id, favorProject) {
+  const data = await User.update({ _id }, { $set: { favorProject } })
+  return data
 }

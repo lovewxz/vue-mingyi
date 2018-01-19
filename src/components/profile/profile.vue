@@ -65,7 +65,7 @@
 import bindTel from '@/base/bindTel/bindTel'
 import { getUserStorage } from '@/common/js/cache'
 import Confirm from '@/base/confirm/confirm'
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   data() {
@@ -99,12 +99,12 @@ export default {
       })
     },
     logout() {
-      this.setUser(null)
+      this.saveUser(null)
       this.$router.push('/')
     },
-    ...mapMutations({
-      setUser: 'SET_USER'
-    })
+    ...mapActions([
+      'saveUser'
+    ])
   },
   activated() {
     this.getUserInfo()

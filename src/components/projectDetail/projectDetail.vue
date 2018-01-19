@@ -12,7 +12,7 @@
           </swiper>
           <i class="iconfont icon-arrow-left" @click="back"></i>
           <i class="iconfont icon-home" @click="backHome"></i>
-          <i class="iconfont" :class="favorStatus ? 'icon-star-full' : 'icon-star'" @click="favor"></i>
+          <i class="iconfont" :class="isFavorite ? 'icon-star-full' : 'icon-star'" @click="favor"></i>
         </div>
         <div class="project-content">
           <h2 v-html="projectDetail.title"></h2>
@@ -54,7 +54,7 @@
           <span class="text">电话</span>
         </li>
         <li class="size-s">
-          <i class="iconfont" :class="favorStatus ? 'icon-star-full' : 'icon-star'"></i>
+          <i class="iconfont" :class="isFavorite ? 'icon-star-full' : 'icon-star'"></i>
           <span class="text">收藏</span>
         </li>
         <li class="zx-wrapper">
@@ -78,7 +78,6 @@ import ProjectMask from '@/components/projectMask/projectMask'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import { cdnUrlMixin } from '@/common/js/mixin'
 import { mapGetters } from 'vuex'
-import { getUserStorage } from '@/common/js/cache'
 
 export default {
   mixins: [cdnUrlMixin],
@@ -92,8 +91,7 @@ export default {
         pagination: '.swiper-pagination'
       },
       checkLoaded: false,
-      favorStatus: false,
-      storageUser: getUserStorage() || {}
+      favorStatus: false
     }
   },
   computed: {
@@ -101,18 +99,20 @@ export default {
       return (Number(this.projectDetail.price) / Number(this.projectDetail.original_price) * 10).toFixed(1)
     },
     isFavorite() {
-      if (!this.storageUser) {
+      if (!this.favorProject || this.favorProject.length === 0) {
         this.favorStatus = false
-        return
+        return false
       }
-      let favorArr = this.storageUser.favorProject || []
+      let favorArr = this.favorProject
       const index = favorArr.findIndex(item => {
         return item === this.$route.params.id
       })
       this.favorStatus = (index > -1)
+      return index > -1
     },
     ...mapGetters([
-      'user'
+      'user',
+      'favorProject'
     ])
   },
   methods: {
@@ -132,15 +132,11 @@ export default {
       // if (!this.user && !this.storageUser) {
       //   this.$router.push({ name: 'login', query: { visit: name, id: this.projectDetail._id } })
       // }
-      let favorArr = this.storageUser.favorProject || []
       this.favorStatus = !this.favorStatus
       if (this.favorStatus) {
-        favorArr.push(this.$route.params.id)
+        this.$store.dispatch('setFavorProjectAction', this.projectDetail._id)
       } else {
-        const index = favorArr.findIndex(item => {
-          return item === this.$route.params.id
-        })
-        favorArr.splice(index, 1)
+        this.$store.dispatch('cancelFavorProjectAction', this.projectDetail._id)
       }
     },
     loadImage() {
@@ -155,8 +151,7 @@ export default {
       params = Object.assign({}, params, { coverImg: this.projectDetail.cover_image[0], title: this.projectDetail.title, projectId: this.projectDetail._id })
       let { name } = this.$route
       name = encodeURIComponent(name)
-      let storageUser = getUserStorage()
-      if (!this.user && !storageUser) {
+      if (!this.user) {
         this.$router.push({ name: 'login', query: { visit: name, id: this.projectDetail._id } })
       } else {
         this.$router.push({ name: 'project-confirm-order', params: params })

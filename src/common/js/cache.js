@@ -35,14 +35,6 @@ function _delete(arr, compare) {
   }
 }
 
-// export const setStorage = (name, data) => {
-//   return data ? window.localStorage.setItem(name, JSON.stringify(data)) : window.localStorage.setItem(name, null)
-// }
-//
-// export const getStorage = (name) => {
-//   return window.localStorage.getItem(name) ? JSON.parse(window.localStorage.getItem(name)) : null
-// }
-
 export const setUserStorage = (user) => {
   storage.set(USER_KEY, user)
   return user
@@ -53,7 +45,15 @@ export const getUserStorage = () => {
   return user
 }
 
+export const loadFavorProject = () => {
+  return storage.get(FAVOURITE_PROJECT_KEY, [])
+}
+
 export const setFavorProject = (project) => {
+  if (Array.isArray(project)) {
+    storage.set(FAVOURITE_PROJECT_KEY, project)
+    return
+  }
   let list = storage.get(FAVOURITE_PROJECT_KEY, [])
   _insert(list, project, (item) => {
     return item === project
@@ -71,7 +71,15 @@ export const cancelFavorProject = (project) => {
   return list
 }
 
+export const loadFavorDoctor = () => {
+  return storage.get(FAVOURITE_DOCTOR_KEY, [])
+}
+
 export const setFavorDoctor = (doctor) => {
+  if (Array.isArray(doctor)) {
+    storage.set(FAVOURITE_DOCTOR_KEY, doctor)
+    return
+  }
   let list = storage.get(FAVOURITE_DOCTOR_KEY, [])
   _insert(list, doctor, (item) => {
     return item === doctor

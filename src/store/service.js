@@ -50,7 +50,10 @@ export default {
   getProjectById(id) {
     return axios.get(`${baseUrl}/api/project/list/${id}`)
   },
-  getFavorProjectById(id) {
-    return axios.get(`${baseUrl}/api/user/project/${id}`)
+  getFavorListById(params) {
+    return axios.get(`${baseUrl}/api/user/favorproject/list`, { params })
+  },
+  setFavorProjectById(params) {
+    return axios.post(`${baseUrl}/api/user/favorproject`, params)
   }
 }

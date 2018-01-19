@@ -24,7 +24,7 @@ export async function getUserInfoByCode(code) {
   const data = await OAuth.fetchAccessToken(code)
 
   const userInfo = await OAuth.getUserInfo(data.access_token, data.openid)
-  const existUser = await User.findOne({
+  let existUser = await User.findOne({
     openid: data.openid
   }).exec()
   if (!existUser) {
@@ -38,8 +38,7 @@ export async function getUserInfoByCode(code) {
       sex: userInfo.sex,
       headimgurl: userInfo.headimgurl
     })
-    await newUser.save()
+    existUser = await newUser.save()
   }
-
-  return userInfo
+  return existUser
 }

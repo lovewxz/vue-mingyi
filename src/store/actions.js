@@ -1,6 +1,34 @@
 import Services from './service'
 import * as type from './mutation-types.js'
-import { setFavorProject, setUserStorage, getUserStorage } from '@/common/js/cache'
+import { setFavorProject, cancelFavorProject, setUserStorage, setFavorDoctor } from '@/common/js/cache'
+
+function _insert(arr, val, compare) {
+  let index = arr.findIndex(compare)
+  // 如果索引为0
+  if (index === 0) {
+    return
+  }
+  if (index > 0) {
+    arr.splice(index, 1)
+  }
+  arr.unshift(val)
+}
+
+function _delete(arr, compare) {
+  let index = arr.findIndex(compare)
+  if (index > -1) {
+    arr.splice(index, 1)
+  }
+}
+
+export const getFavorList = async function ({ state }, id) {
+  let res = await Services.getFavorListById({ _id: id })
+  res = res.data
+  if (!res.success) {
+    return
+  }
+  return res.data
+}
 
 export const getWXSignature = function ({ commit }, url) {
   return Services.getWXSignature(url)
@@ -14,8 +42,13 @@ export const wechatPay = async function ({ commit }, params) {
   return await Services.wechatPay(params)
 }
 
-export const saveUser = function ({ commit }, user) {
+export const saveUser = async function ({ commit, dispatch }, user) {
   commit(type.SET_USER, setUserStorage(user))
+  if (!user) return
+  const list = await dispatch('getFavorList', user._id)
+  if (!list) return
+  commit(type.SET_FAVORITEPROJECT, setFavorProject(list.favorProject))
+  commit(type.SET_FAVORITEDOCTOR, setFavorDoctor(list.favorDoctor))
 }
 
 export const getPayment = async function ({ commit }, payment) {
@@ -26,7 +59,7 @@ export const getPaymentList = async function ({ state }, params) {
   params = Object.assign({
     limit: 10,
     page: 1,
-    openid: state.user.openid || getUserStorage().openid
+    openid: state.user.openid
   }, params)
   return await Services.getPaymentList(params)
 }
@@ -75,13 +108,40 @@ export const getProjectById = async function ({ commit }, id) {
   return await Services.getProjectById(id)
 }
 
-export const setFavorProjectAction = async function ({ commit }, projectId) {
-  let user = getUserStorage()
-  let res = await Services.getFavorProjectById(user._id)
+export const setFavorProjectAction = async function ({ dispatch, commit, state }, projectId) {
+  const id = state.user._id
+  const list = await dispatch('getFavorList', id)
+  let favorProject = list.favorProject || []
+  _insert(favorProject, projectId, (item) => {
+    return item === projectId
+  })
+  const params = {
+    _id: id,
+    project: favorProject
+  }
+  let res = await Services.setFavorProjectById(params)
   res = res.data
   if (res.success) {
-    setFavorProject(res.data.favorProject)
-    commit(type.SET_FAVORITEPROJECT, res.data.favorProject)
+    commit(type.SET_FAVORITEPROJECT, setFavorProject(projectId))
+  }
+  return
+}
+
+export const cancelFavorProjectAction = async function ({ dispatch, commit, state }, projectId) {
+  const id = state.user._id
+  const list = dispatch('getFavorList', id)
+  let favorProject = list.favorProject || []
+  _delete(favorProject, (item) => {
+    return item === projectId
+  })
+  const params = {
+    _id: id,
+    project: favorProject
+  }
+  let res = await Services.setFavorProjectById(params)
+  res = res.data
+  if (res.success) {
+    commit(type.SET_FAVORITEPROJECT, cancelFavorProject(projectId))
   }
   return
 }

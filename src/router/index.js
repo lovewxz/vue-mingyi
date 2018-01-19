@@ -150,7 +150,6 @@ const router = new Router({ routes })
 
 router.beforeEach((to, from, next) => {
   let user = getUserStorage()
-  console.log(user)
   let name = to.name
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (!user) {
