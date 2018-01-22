@@ -9,6 +9,9 @@ const mutations = {
   },
   [types.SET_FAVORITEPROJECT](state, favorProject) {
     state.favorProject = favorProject
+  },
+  [types.SET_FAVORITEDOCTOR](state, favorDoctor) {
+    state.favorDoctor = favorDoctor
   }
 }
 

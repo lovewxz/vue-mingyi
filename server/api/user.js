@@ -36,3 +36,8 @@ export async function updateFavorProjectById(_id, favorProject) {
   const data = await User.update({ _id }, { $set: { favorProject } })
   return data
 }
+
+export async function updateFavorDoctorById(_id, favorDoctor) {
+  const data = await User.update({ _id }, { $set: { favorDoctor } })
+  return data
+}

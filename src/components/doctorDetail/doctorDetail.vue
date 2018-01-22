@@ -10,7 +10,7 @@
       <h1 class="name">{{doctor.realname}}</h1>
       <p class="job-title">{{doctor.title}}</p>
       <div class="subscribe">
-        <p class="sub-btn">关注</p>
+        <p class="sub-btn" @click="favor">{{isFavor ? "已关注" : "关注"}}</p>
       </div>
       <div class="doctor-other">
         <p class="other-item">案例 21</p>
@@ -53,16 +53,49 @@
 import ProjectContent from '@/components/projectContent/projectContent'
 import CaseContent from '@/components/caseContent/caseContent'
 import config from '@/config'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
     return {
       doctor: {},
       projects: [],
-      pcases: []
+      pcases: [],
+      favorStatus: false
     }
   },
+  computed: {
+    isFavor() {
+      if (!this.favorDoctor || this.favorDoctor.length === 0) {
+        this.favorStatus = false
+        return false
+      }
+      let favorArr = this.favorDoctor
+      const index = favorArr.findIndex(item => {
+        return item === this.$route.params.id
+      })
+      this.favorStatus = (index > -1)
+      return index > -1
+    },
+    ...mapGetters([
+      'favorDoctor',
+      'user'
+    ])
+  },
   methods: {
+    favor() {
+      const { name } = this.$route
+      if (!this.user) {
+        this.$router.push({ name: 'login', query: { visit: name, id: this.doctor._id } })
+        return
+      }
+      this.favorStatus = !this.favorStatus
+      if (this.favorStatus) {
+        this.$store.dispatch('setFavorDoctorAction', this.doctor._id)
+      } else {
+        this.$store.dispatch('cancelFavorDoctorAction', this.doctor._id)
+      }
+    },
     goProject(item) {
       this.$router.push(`/project/${item._id}`)
     },

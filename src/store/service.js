@@ -55,5 +55,8 @@ export default {
   },
   setFavorProjectById(params) {
     return axios.post(`${baseUrl}/api/user/favorproject`, params)
+  },
+  setFavorDoctorById(params) {
+    return axios.post(`${baseUrl}/api/user/favordoctor`, params)
   }
 }

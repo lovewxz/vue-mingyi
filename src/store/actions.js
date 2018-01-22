@@ -1,6 +1,6 @@
 import Services from './service'
 import * as type from './mutation-types.js'
-import { setFavorProject, cancelFavorProject, setUserStorage, setFavorDoctor } from '@/common/js/cache'
+import { setFavorProject, cancelFavorProject, setUserStorage, setFavorDoctor, cancelFavorDoctor } from '@/common/js/cache'
 
 function _insert(arr, val, compare) {
   let index = arr.findIndex(compare)
@@ -142,6 +142,44 @@ export const cancelFavorProjectAction = async function ({ dispatch, commit, stat
   res = res.data
   if (res.success) {
     commit(type.SET_FAVORITEPROJECT, cancelFavorProject(projectId))
+  }
+  return
+}
+
+export const setFavorDoctorAction = async function ({ dispatch, commit, state }, doctorId) {
+  const id = state.user._id
+  const list = await dispatch('getFavorList', id)
+  let favorDoctor = list.favorDoctor || []
+  _insert(favorDoctor, doctorId, (item) => {
+    return item === doctorId
+  })
+  const params = {
+    _id: id,
+    doctor: favorDoctor
+  }
+  let res = await Services.setFavorDoctorById(params)
+  res = res.data
+  if (res.success) {
+    commit(type.SET_FAVORITEDOCTOR, setFavorDoctor(doctorId))
+  }
+  return
+}
+
+export const cancelFavorDoctorAction = async function ({ dispatch, commit, state }, doctorId) {
+  const id = state.user._id
+  const list = dispatch('getFavorList', id)
+  let favorDoctor = list.favorDoctor || []
+  _delete(favorDoctor, (item) => {
+    return item === doctorId
+  })
+  const params = {
+    _id: id,
+    doctor: favorDoctor
+  }
+  let res = await Services.setFavorDoctorById(params)
+  res = res.data
+  if (res.success) {
+    commit(type.SET_FAVORITEDOCTOR, cancelFavorDoctor(doctorId))
   }
   return
 }

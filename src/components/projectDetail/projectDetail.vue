@@ -129,9 +129,11 @@ export default {
       this.$router.push('/')
     },
     favor() {
-      // if (!this.user && !this.storageUser) {
-      //   this.$router.push({ name: 'login', query: { visit: name, id: this.projectDetail._id } })
-      // }
+      const { name } = this.$route
+      if (!this.user) {
+        this.$router.push({ name: 'login', query: { visit: name, id: this.projectDetail._id } })
+        return
+      }
       this.favorStatus = !this.favorStatus
       if (this.favorStatus) {
         this.$store.dispatch('setFavorProjectAction', this.projectDetail._id)
