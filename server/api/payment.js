@@ -40,8 +40,8 @@ export async function getPaymentByTrade(outTradeNo) {
   return payment
 }
 
-export async function getPaymentList(limit = 10, page = 1, openid, success = -1) {
-  const user = await api.user.getUserByOpenid(openid)
+export async function getPaymentList(limit = 10, page = 1, _id, success = -1) {
+  const user = await api.user.getUserById(_id)
   if (!user) {
     throw new Error('用户不存在')
     return

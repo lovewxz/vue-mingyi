@@ -59,7 +59,7 @@ export const getPaymentList = async function ({ state }, params) {
   params = Object.assign({
     limit: 10,
     page: 1,
-    openid: state.user.openid
+    _id: state.user._id
   }, params)
   return await Services.getPaymentList(params)
 }

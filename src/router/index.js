@@ -19,6 +19,7 @@ const OrderRefund = () => import('@/components/orderRefund/orderRefund')
 const OrderPaid = () => import('@/components/orderPaid/orderPaid')
 const OrderNonpaid = () => import('@/components/orderNonpaid/orderNonpaid')
 const OrderAll = () => import('@/components/orderAll/orderAll')
+const Favor = () => import('@/components/favor/favor')
 
 Vue.use(Router)
 
@@ -143,6 +144,11 @@ let routes = [
     name: 'loading',
     path: '/oauth',
     component: WechatOauth
+  },
+  {
+    name: 'favor',
+    path: '/favor',
+    component: Favor
   }
 ]
 

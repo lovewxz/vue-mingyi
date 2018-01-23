@@ -8,6 +8,13 @@ export async function getUserByOpenid(openid) {
   return user
 }
 
+export async function getUserById(_id) {
+  const user = await User.findOne({
+    _id: _id
+  })
+  return user
+}
+
 export async function saveUser(user) {
   user = new User({
     openid: [user.openid],
