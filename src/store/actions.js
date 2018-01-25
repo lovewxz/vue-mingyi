@@ -72,8 +72,16 @@ export const getDoctorList = async function ({ commit }, params) {
   return await Services.getDoctorList(params)
 }
 
+export const getFavorDoctorList = async function ({ commit }, params) {
+  return await Services.getFavorDoctorList(params)
+}
+
 export const getDoctorDetail = async function ({ commit }, id) {
   return await Services.getDoctorDetail(id)
+}
+
+export const getFavorProjectList = async function ({ commit }, params) {
+  return await Services.getFavorProjectList(params)
 }
 
 export const getProjectByDoctorId = async function ({ commit }, params) {
@@ -129,7 +137,7 @@ export const setFavorProjectAction = async function ({ dispatch, commit, state }
 
 export const cancelFavorProjectAction = async function ({ dispatch, commit, state }, projectId) {
   const id = state.user._id
-  const list = dispatch('getFavorList', id)
+  const list = await dispatch('getFavorList', id)
   let favorProject = list.favorProject || []
   _delete(favorProject, (item) => {
     return item === projectId
@@ -167,7 +175,7 @@ export const setFavorDoctorAction = async function ({ dispatch, commit, state },
 
 export const cancelFavorDoctorAction = async function ({ dispatch, commit, state }, doctorId) {
   const id = state.user._id
-  const list = dispatch('getFavorList', id)
+  const list = await dispatch('getFavorList', id)
   let favorDoctor = list.favorDoctor || []
   _delete(favorDoctor, (item) => {
     return item === doctorId

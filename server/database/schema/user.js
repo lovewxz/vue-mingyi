@@ -22,8 +22,14 @@ const UserSchema = new Schema({
       default: Date.now()
     }
   },
-  favorDoctor: [String],
-  favorProject: [String]
+  favorDoctor: [{
+    type: String,
+    ref: 'Doctor'
+  }],
+  favorProject: [{
+    type: String,
+    ref: 'Project'
+  }]
 })
 
 UserSchema.pre('save', function (next) {

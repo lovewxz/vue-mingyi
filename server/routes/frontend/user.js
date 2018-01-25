@@ -13,7 +13,7 @@ export class userController {
     }
   }
   @post('user/favordoctor')
-  async setFavorProject(ctx, next) {
+  async setFavorDoctor(ctx, next) {
     const { _id, doctor } = ctx.request.body
     const res = await api.user.updateFavorDoctorById(_id, doctor)
     ctx.body = {
@@ -21,13 +21,53 @@ export class userController {
       data: res
     }
   }
-  @get('user/favorproject/list')
+  @get('user/favorlist')
   async getFavorList(ctx, next) {
     const { _id } = ctx.request.query
     const res = await api.user.getFavorList(_id)
     ctx.body = {
       success: true,
       data: res
+    }
+  }
+  @get('user/favordoctor')
+  async getFavorDoctorList(ctx, next) {
+    const { limit, page, _id } = ctx.request.query
+    const user = await api.user.getUserById(_id)
+    if (!user) {
+      ctx.body = {
+        success: false,
+        err: '用户不存在'
+      }
+    }
+    const list = await api.user.getFavorDoctorList({ limit, page, _id })
+    const total = user.favorDoctor.length
+    ctx.body = {
+      success: true,
+      data: {
+        list: list.favorDoctor,
+        total: total
+      }
+    }
+  }
+  @get('user/favorproject')
+  async getFavorProjectList(ctx, next) {
+    const { limit, page, _id } = ctx.request.query
+    const user = await api.user.getUserById(_id)
+    if (!user) {
+      ctx.body = {
+        success: false,
+        err: '用户不存在'
+      }
+    }
+    const list = await api.user.getFavorProjectList({ limit, page, _id })
+    const total = user.favorProject.length
+    ctx.body = {
+      success: true,
+      data: {
+        list: list.favorProject,
+        total: total
+      }
     }
   }
 }

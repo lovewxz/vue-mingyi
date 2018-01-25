@@ -26,8 +26,15 @@
 import config from '@/config'
 import Scroll from '@/base/scroll/scroll'
 import Loading from '@/base/loading/loading'
+import { mapGetters } from 'vuex'
 
 export default {
+  props: {
+    isFavor: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       limit: 10,
@@ -37,6 +44,11 @@ export default {
       hasMore: true,
       pullUp: true
     }
+  },
+  computed: {
+    ...mapGetters([
+      'user'
+    ])
   },
   methods: {
     scrollToEnd() {
@@ -48,6 +60,16 @@ export default {
     },
     getDoctorList() {
       this.$store.dispatch('getDoctorList', { limit: this.limit, page: this.page }).then(res => {
+        res = res.data
+        if (res.success) {
+          this.doctors = this.doctors.concat(res.data.list)
+          this.total = res.data.total
+          this._checkMore(this.doctors)
+        }
+      })
+    },
+    getFavorDoctorList() {
+      this.$store.dispatch('getFavorDoctorList', { limit: this.limit, page: this.page, _id: this.user._id }).then(res => {
         res = res.data
         if (res.success) {
           this.doctors = this.doctors.concat(res.data.list)
@@ -72,7 +94,7 @@ export default {
   },
   created() {
     this.imgCDN = config.imgCDN
-    this.getDoctorList()
+    this.isFavor ? this.getFavorDoctorList() : this.getDoctorList()
   },
   components: {
     Scroll,
@@ -81,7 +103,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .doctor-list {
   height: 100%;
   overflow: hidden;

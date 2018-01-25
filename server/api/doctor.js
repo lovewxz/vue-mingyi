@@ -15,12 +15,7 @@ export async function getDoctorCount({ keyword = '', ...args }) {
 }
 
 export async function getDoctorById(_id) {
-  const data = await Doctor.findOne({_id}).populate([
-    {
-      path: 'doctor',
-      select: '_id avatar realname title'
-    }
-  ]).exec()
+  const data = await Doctor.findOne({_id}).exec()
   return data
 }
 

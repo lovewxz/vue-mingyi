@@ -51,12 +51,18 @@ export default {
     return axios.get(`${baseUrl}/api/project/list/${id}`)
   },
   getFavorListById(params) {
-    return axios.get(`${baseUrl}/api/user/favorproject/list`, { params })
+    return axios.get(`${baseUrl}/api/user/favorlist`, { params })
   },
   setFavorProjectById(params) {
     return axios.post(`${baseUrl}/api/user/favorproject`, params)
   },
   setFavorDoctorById(params) {
     return axios.post(`${baseUrl}/api/user/favordoctor`, params)
+  },
+  getFavorDoctorList(params) {
+    return axios.get(`${baseUrl}/api/user/favordoctor`, { params })
+  },
+  getFavorProjectList(params) {
+    return axios.get(`${baseUrl}/api/user/favorproject`, { params })
   }
 }

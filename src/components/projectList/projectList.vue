@@ -15,12 +15,19 @@
 
 <script>
 import { cdnUrlMixin } from '@/common/js/mixin'
+import { mapGetters } from 'vuex'
 import Scroll from '@/base/scroll/scroll'
 import Loading from '@/base/loading/loading'
 import ProjectContent from '@/components/projectContent/projectContent'
 
 export default {
   mixins: [cdnUrlMixin],
+  props: {
+    isFavor: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       projects: [],
@@ -30,6 +37,12 @@ export default {
       page: 1,
       limit: 10
     }
+  },
+  computed: {
+    ...mapGetters([
+      'user',
+      'favorProject'
+    ])
   },
   methods: {
     goUrl(item) {
@@ -47,8 +60,18 @@ export default {
         this.hasMore = false
       }
     },
-    _getProjectList(limit, page) {
+    _getProjectList() {
       this.$store.dispatch('getProjectList', { limit: this.limit, page: this.page }).then(res => {
+        res = res.data
+        if (res.success) {
+          this.projects = this.projects.concat(res.data.list)
+          this.total = res.data.total
+          this._checkMore(this.projects)
+        }
+      })
+    },
+    _getFavorProjectList() {
+      this.$store.dispatch('getFavorProjectList', { limit: this.limit, page: this.page, _id: this.user._id }).then(res => {
         res = res.data
         if (res.success) {
           this.projects = this.projects.concat(res.data.list)
@@ -63,8 +86,17 @@ export default {
       }, 20)
     }
   },
+  watch: {
+    favorProject(newVal) {
+      if (this.isFavor && newVal) {
+        console.log(1)
+        this.projects = []
+        this._getFavorProjectList()
+      }
+    }
+  },
   created() {
-    this._getProjectList(this.limit, this.page)
+    this.isFavor ? this._getFavorProjectList() : this._getProjectList()
   },
   components: {
     Scroll,
@@ -74,7 +106,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .project-wrapper {
     height: 100%;
     overflow: hidden;

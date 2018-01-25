@@ -3,8 +3,8 @@
     <nav-bar :title="title" @back="back"></nav-bar>
     <switches :switches="switches" class="switches" @switch="tab" :currentIndex="currentIndex"></switches>
     <div class="favor-content">
-      <project-list class="project-list" v-show="currentIndex === 0" ref="project"></project-list>
-      <doctor-list class="doctor-list" v-show="currentIndex === 1" ref="doctor"></doctor-list>
+      <project-list class="project-list" v-show="currentIndex === 0" :isFavor="isFavor" ref="project"></project-list>
+      <doctor-list class="doctor-list" v-show="currentIndex === 1" :isFavor="isFavor" ref="doctor"></doctor-list>
     </div>
   </div>
 </template>
@@ -20,7 +20,8 @@ export default {
     return {
       title: '我的收藏',
       switches: [{ name: '项目列表' }, { name: '专家列表' }],
-      currentIndex: 0
+      currentIndex: 0,
+      isFavor: true
     }
   },
   methods: {

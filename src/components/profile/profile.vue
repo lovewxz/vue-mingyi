@@ -29,7 +29,7 @@
             <i class="iconfont icon-quanbudingdan"></i>
             <p>全部订单</p>
           </li>
-          <li>
+          <li @click="go('favor')">
             <i class="iconfont icon-shoucang"></i>
             <p>我的收藏</p>
           </li>
