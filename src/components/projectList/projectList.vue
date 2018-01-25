@@ -89,7 +89,6 @@ export default {
   watch: {
     favorProject(newVal) {
       if (this.isFavor && newVal) {
-        console.log(1)
         this.projects = []
         this._getFavorProjectList()
       }

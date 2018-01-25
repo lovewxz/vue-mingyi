@@ -47,7 +47,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user'
+      'user',
+      'favorDoctor'
     ])
   },
   methods: {
@@ -95,6 +96,14 @@ export default {
   created() {
     this.imgCDN = config.imgCDN
     this.isFavor ? this.getFavorDoctorList() : this.getDoctorList()
+  },
+  watch: {
+    favorDoctor(newVal) {
+      if (this.isFavor && newVal) {
+        this.doctors = []
+        this.getFavorDoctorList()
+      }
+    }
   },
   components: {
     Scroll,
