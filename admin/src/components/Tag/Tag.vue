@@ -1,16 +1,31 @@
 <template>
-<div class="tag-operation">
-  <el-col>
-    <el-tag :key="tag" type="primary" v-for="(tag,index) in tagList" :closable="true" :close-transition="false" @close="handleClose(tag,index)" class="tag-item">
-      {{tag}}
-    </el-tag>
-  </el-col>
-  <el-col :span="2">
-    <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
-    </el-input>
-    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加标签</el-button>
-  </el-col>
-</div>
+  <div class="tag-operation">
+    <el-col>
+      <el-tag :key="tag"
+              type="primary"
+              v-for="(tag,index) in tagList"
+              :closable="true"
+              :close-transition="false"
+              @close="handleClose(tag,index)"
+              class="tag-item">
+        {{tag}}
+      </el-tag>
+    </el-col>
+    <el-col :span="2">
+      <el-input class="input-new-tag"
+                v-if="inputVisible"
+                v-model="inputValue"
+                ref="saveTagInput"
+                size="small"
+                @keyup.enter.native="handleInputConfirm"
+                @blur="handleInputConfirm">
+      </el-input>
+      <el-button v-else
+                 class="button-new-tag"
+                 size="small"
+                 @click="showInput">+ 添加标签</el-button>
+    </el-col>
+  </div>
 </template>
 <script>
 export default {
@@ -52,8 +67,8 @@ export default {
 <style lang="scss">
 .tag-operation {
   .tag-item {
-      margin-right: 10px;
-      display: inline-block;
+    margin-right: 10px;
+    display: inline-block;
   }
 }
 </style>

@@ -1,14 +1,12 @@
 <template>
-  <el-cascader
-    expand-trigger="hover"
-    :options="cateList"
-    :props="defaultProps"
-    v-model="cateData"
-    style="width: 40%"
-    placeholder="留空即为根组件"
-    :disabled="isAllow"
-    :change-on-select="true"
-  >
+  <el-cascader expand-trigger="hover"
+               :options="cateList"
+               :props="defaultProps"
+               v-model="cateData"
+               style="width: 40%"
+               placeholder="留空即为根组件"
+               :disabled="isAllow"
+               :change-on-select="true">
   </el-cascader>
 </template>
 <script>
@@ -43,7 +41,7 @@ export default {
       this.isAllow = true
     },
     async fetchCategory() {
-      await getCategoryList().then((res) => {
+      await getCategoryList().then(res => {
         if (res.success) {
           res = this._genResult(res.data)
           this.cateList = res
@@ -51,8 +49,8 @@ export default {
       })
     },
     _genResult(arr) {
-      arr.sort((a, b) => a.parentId > b.parentId ? 1 : -1)
-      for (let i = arr.length; i--;) {
+      arr.sort((a, b) => (a.parentId > b.parentId ? 1 : -1))
+      for (let i = arr.length; i--; ) {
         if (arr[i].parentId > 0) {
           let obj = arr.pop()
           arr.forEach(item => {

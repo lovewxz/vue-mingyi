@@ -1,7 +1,7 @@
 <template>
-<div ref="wrapper">
-  <slot></slot>
-</div>
+  <div ref="wrapper">
+    <slot></slot>
+  </div>
 </template>
 <script>
 import BScroll from 'better-scroll'
@@ -39,14 +39,14 @@ export default {
       })
       if (this.listenScroll) {
         let me = this
-        this.scroll.on('scroll', (pos) => {
+        this.scroll.on('scroll', pos => {
           me.$emit('scroll', pos)
         })
       }
       if (this.pullUp) {
         let me = this
         this.scroll.on('scrollEnd', () => {
-          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+          if (this.scroll.y <= this.scroll.maxScrollY + 50) {
             me.$emit('scrollEnd')
           }
         })
@@ -83,5 +83,6 @@ export default {
 }
 </script>
 <style lang="scss">
-div {}
+div {
+}
 </style>

@@ -1,15 +1,15 @@
 <template>
   <el-upload list-type="picture-card"
-    :on-success="handleSuccess"
-    :on-remove="handleRemove"
-    :on-change="handleChange"
-    :before-upload="beforeUpload"
-    action="//up-z2.qiniu.com/"
-    :data="imgData"
-    :file-list="fileList"
-    class="upload"
-    ref="upload"
-    multiple>
+             :on-success="handleSuccess"
+             :on-remove="handleRemove"
+             :on-change="handleChange"
+             :before-upload="beforeUpload"
+             action="//up-z2.qiniu.com/"
+             :data="imgData"
+             :file-list="fileList"
+             class="upload"
+             ref="upload"
+             multiple>
     <i class="el-icon-plus"></i>
   </el-upload>
 </template>
@@ -47,15 +47,17 @@ export default {
       const checkAllSuccess = filelist.every(item => item.status === 'success')
       if (checkAllSuccess) {
         this.$emit('processing')
-        filelist.forEach(async (item) => {
+        filelist.forEach(async item => {
           if (item.response && item.response.persistentId) {
-            await this._loopGetPrefopStatus({ persistentId: item.response.persistentId })
+            await this._loopGetPrefopStatus({
+              persistentId: item.response.persistentId
+            })
           }
         })
       }
     },
     handleRemove(file, filelist) {
-      const index = this.fileList.findIndex((item) => {
+      const index = this.fileList.findIndex(item => {
         return item.uid === file.uid
       })
       this.fileList.splice(index, 1)
@@ -106,5 +108,6 @@ export default {
 }
 </script>
 <style lang="scss">
-.upload {}
+.upload {
+}
 </style>

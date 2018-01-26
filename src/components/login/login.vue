@@ -16,9 +16,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'user'
-    ])
+    ...mapGetters(['user'])
   },
   methods: {
     login() {
@@ -30,9 +28,7 @@ export default {
         this.$router.push('/')
       }
     },
-    ...mapActions([
-      'saveUser'
-    ])
+    ...mapActions(['saveUser'])
   },
   beforeMount() {
     const params = this.$route.query

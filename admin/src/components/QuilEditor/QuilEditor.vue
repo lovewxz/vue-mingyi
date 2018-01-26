@@ -83,7 +83,7 @@ export default {
       uploadVideoShow: false,
       uploadImgShow: false,
       uploadType: 'image',
-      fileList : {
+      fileList: {
         image: [],
         video: []
       },
@@ -111,11 +111,13 @@ export default {
         return
       }
       const quillHook = this.$refs.editor.quill
-      this.fileList[type].forEach((item) => {
+      this.fileList[type].forEach(item => {
         this.insertEmbed(type, item.url)
       })
       this.fileList[type] = []
-      type === 'video' ? this.uploadVideoShow = false : this.uploadImgShow = false
+      type === 'video'
+        ? (this.uploadVideoShow = false)
+        : (this.uploadImgShow = false)
     },
     insertEmbed(type, url) {
       const quillHook = this.$refs.editor.quill
@@ -162,4 +164,5 @@ export default {
 </script>
 
 <style lang="scss">
+
 </style>

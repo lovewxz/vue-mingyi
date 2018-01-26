@@ -69,7 +69,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { getUserStorage } from '@/common/js/cache'
 
 export default {
-  mixins: [ cdnUrlMixin ],
+  mixins: [cdnUrlMixin],
   data() {
     return {
       confirmInfo: {},
@@ -81,11 +81,13 @@ export default {
       return this.confirmInfo.singlePrice * this.confirmInfo.num
     },
     restPay() {
-      return (parseInt(this.confirmInfo.price) - parseInt(this.confirmInfo.singlePrice)) * parseInt(this.confirmInfo.num)
+      return (
+        (parseInt(this.confirmInfo.price) -
+          parseInt(this.confirmInfo.singlePrice)) *
+        parseInt(this.confirmInfo.num)
+      )
     },
-    ...mapGetters([
-      'user'
-    ])
+    ...mapGetters(['user'])
   },
   methods: {
     getNum(num) {
@@ -113,13 +115,17 @@ export default {
         return
       }
       const storageUser = getUserStorage()
-      const params = Object.assign({}, {user: this.user || storageUser}, {
-        name: name,
-        phoneNumber: phone,
-        projectId: this.confirmInfo.projectId,
-        num: parseInt(this.confirmInfo.num),
-        payType: this.confirmInfo.type
-      })
+      const params = Object.assign(
+        {},
+        { user: this.user || storageUser },
+        {
+          name: name,
+          phoneNumber: phone,
+          projectId: this.confirmInfo.projectId,
+          num: parseInt(this.confirmInfo.num),
+          payType: this.confirmInfo.type
+        }
+      )
       const { data } = await this.saveProjectOrder(params)
       if (!data.success) {
         this.confirmText = '订单保存错误'
@@ -130,9 +136,7 @@ export default {
       }
       window.location.href = `/?#/pay?payment=${data.data._id}`
     },
-    ...mapActions([
-      'saveProjectOrder'
-    ])
+    ...mapActions(['saveProjectOrder'])
   },
   created() {
     if (!this.$route.params.coverImg) {
@@ -197,7 +201,7 @@ export default {
         }
         .order-price {
           font-size: 14px;
-          color: #FF527F;
+          color: #ff527f;
           margin-left: 4px;
         }
       }
@@ -212,16 +216,16 @@ export default {
         justify-content: space-between;
         height: 50px;
         line-height: 50px;
-        border-bottom: 1px solid #F0F0F0;
+        border-bottom: 1px solid #f0f0f0;
         &:last-child {
           border-bottom: none;
         }
         .order-left {
-          font-size: 14px
+          font-size: 14px;
         }
         .order-right-price {
           font-size: 16px;
-          color: #FF527F;
+          color: #ff527f;
         }
         .order-right {
           flex: 1;

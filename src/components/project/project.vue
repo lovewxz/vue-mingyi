@@ -17,22 +17,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 .project {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 50px;
-    width: 100%;
-    .moveInLeft-enter-active,
-    .moveInLeft-leave-active {
-        transition: all 0.3s linear;
-    }
-    .moveInLeft-enter,
-    .moveInLeft-leave-to {
-        transform: translate3d(100%,0,0);
-    }
-    .project-list {
-      height: 100%;
-      overflow: hidden;
-    }
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 50px;
+  width: 100%;
+  .moveInLeft-enter-active,
+  .moveInLeft-leave-active {
+    transition: all 0.3s linear;
+  }
+  .moveInLeft-enter,
+  .moveInLeft-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .project-list {
+    height: 100%;
+    overflow: hidden;
+  }
 }
 </style>

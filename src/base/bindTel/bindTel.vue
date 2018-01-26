@@ -11,8 +11,7 @@
 </template>
 
 <script>
-export default {
-}
+export default {}
 </script>
 
 <style lang="scss">
@@ -46,7 +45,7 @@ export default {
     }
     .text {
       display: inline-block;
-      vertical-align: middle;;
+      vertical-align: middle;
       font-size: 14px;
     }
   }

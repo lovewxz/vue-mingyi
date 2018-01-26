@@ -46,10 +46,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'user',
-      'favorDoctor'
-    ])
+    ...mapGetters(['user', 'favorDoctor'])
   },
   methods: {
     scrollToEnd() {
@@ -60,24 +57,32 @@ export default {
       this.getDoctorList()
     },
     getDoctorList() {
-      this.$store.dispatch('getDoctorList', { limit: this.limit, page: this.page }).then(res => {
-        res = res.data
-        if (res.success) {
-          this.doctors = this.doctors.concat(res.data.list)
-          this.total = res.data.total
-          this._checkMore(this.doctors)
-        }
-      })
+      this.$store
+        .dispatch('getDoctorList', { limit: this.limit, page: this.page })
+        .then(res => {
+          res = res.data
+          if (res.success) {
+            this.doctors = this.doctors.concat(res.data.list)
+            this.total = res.data.total
+            this._checkMore(this.doctors)
+          }
+        })
     },
     getFavorDoctorList() {
-      this.$store.dispatch('getFavorDoctorList', { limit: this.limit, page: this.page, _id: this.user._id }).then(res => {
-        res = res.data
-        if (res.success) {
-          this.doctors = this.doctors.concat(res.data.list)
-          this.total = res.data.total
-          this._checkMore(this.doctors)
-        }
-      })
+      this.$store
+        .dispatch('getFavorDoctorList', {
+          limit: this.limit,
+          page: this.page,
+          _id: this.user._id
+        })
+        .then(res => {
+          res = res.data
+          if (res.success) {
+            this.doctors = this.doctors.concat(res.data.list)
+            this.total = res.data.total
+            this._checkMore(this.doctors)
+          }
+        })
     },
     goUrl(item) {
       this.$router.push(`/doctor/${item._id}`)
@@ -128,7 +133,7 @@ export default {
       .head-img {
         width: 66px;
         height: 66px;
-        position:relative;
+        position: relative;
         &::before {
           content: '';
           position: absolute;
@@ -174,10 +179,10 @@ export default {
   }
 }
 .loading-wrapper {
-    width: 24px;
-    height: 24px;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
 }
 </style>

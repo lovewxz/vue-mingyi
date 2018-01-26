@@ -1,6 +1,7 @@
 <template>
   <div class="nav-bar">
-    <div class="back" @click="back">
+    <div class="back"
+         @click="back">
       <i class="iconfont icon-arrow-left"></i>
       <span class="text">返回</span>
     </div>

@@ -50,14 +50,16 @@ export default {
       await this._getPayments(this.limit, this.page)
     },
     async _getPayments(limit, page) {
-      await this.$store.dispatch('getPaymentList', { limit, page, success: this.success }).then(res => {
-        res = res.data
-        if (res.success) {
-          this.orders = this.orders.concat(res.data.list)
-          this.total = res.data.total
-          this._checkMore(this.orders)
-        }
-      })
+      await this.$store
+        .dispatch('getPaymentList', { limit, page, success: this.success })
+        .then(res => {
+          res = res.data
+          if (res.success) {
+            this.orders = this.orders.concat(res.data.list)
+            this.total = res.data.total
+            this._checkMore(this.orders)
+          }
+        })
     },
     _checkMore(data) {
       if (data.length >= this.total) {

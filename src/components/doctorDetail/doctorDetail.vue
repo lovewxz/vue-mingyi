@@ -1,52 +1,61 @@
 <template>
   <transition name="moveInLeft">
     <div class="doctor-detail">
-    <div class="doctor-top">
-      <div class="doctor-avatar">
-        <div class="doctor-avatar-img">
-          <img :src="`${imgCDN}/${doctor.avatar}`">
+      <div class="doctor-top">
+        <div class="doctor-avatar">
+          <div class="doctor-avatar-img">
+            <img :src="`${imgCDN}/${doctor.avatar}`">
+          </div>
+        </div>
+        <h1 class="name">{{doctor.realname}}</h1>
+        <p class="job-title">{{doctor.title}}</p>
+        <div class="subscribe">
+          <p class="sub-btn"
+             @click="favor">{{isFavor ? "已关注" : "关注"}}</p>
+        </div>
+        <div class="doctor-other">
+          <p class="other-item">案例 21</p>
+          <p class="other-item">项目 63</p>
         </div>
       </div>
-      <h1 class="name">{{doctor.realname}}</h1>
-      <p class="job-title">{{doctor.title}}</p>
-      <div class="subscribe">
-        <p class="sub-btn" @click="favor">{{isFavor ? "已关注" : "关注"}}</p>
+      <div class="doctor-profile">
+        <div class="doctor-profile-title">
+          <i class="iconfont icon-doctor"></i>
+          <span class="text">医生资料</span>
+        </div>
+        <div class="doctor-profile-arrow">
+          <i class="iconfont icon-arrow-right"></i>
+        </div>
       </div>
-      <div class="doctor-other">
-        <p class="other-item">案例 21</p>
-        <p class="other-item">项目 63</p>
+      <div class="doctor-project"
+           v-show="projects.length > 0">
+        <h2>热门预约</h2>
+        <div class="doctor-project-detail">
+          <ul>
+            <li class="doctor-project-item"
+                v-for="item in projects"
+                :key="item._id"
+                @click="goProject(item)">
+              <project-content :project="item"></project-content>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="doctor-case"
+           v-show="pcases.length > 0">
+        <h2>热门案例</h2>
+        <div class="doctor-case-detail">
+          <ul>
+            <li class="doctor-case-item"
+                v-for="item in pcases"
+                :key="item._id"
+                @click="goPcase(item)">
+              <case-content :pcase="item"></case-content>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-    <div class="doctor-profile">
-      <div class="doctor-profile-title">
-        <i class="iconfont icon-doctor"></i>
-        <span class="text">医生资料</span>
-      </div>
-      <div class="doctor-profile-arrow">
-        <i class="iconfont icon-arrow-right"></i>
-      </div>
-    </div>
-    <div class="doctor-project" v-show="projects.length > 0">
-      <h2>热门预约</h2>
-      <div class="doctor-project-detail">
-        <ul>
-          <li class="doctor-project-item" v-for="item in projects" :key="item._id" @click="goProject(item)">
-            <project-content :project="item"></project-content>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="doctor-case" v-show="pcases.length > 0">
-      <h2>热门案例</h2>
-      <div class="doctor-case-detail">
-        <ul>
-          <li class="doctor-case-item" v-for="item in pcases" :key="item._id" @click="goPcase(item)">
-            <case-content :pcase="item"></case-content>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
   </transition>
 </template>
 <script>
@@ -74,19 +83,19 @@ export default {
       const index = favorArr.findIndex(item => {
         return item === this.$route.params.id
       })
-      this.favorStatus = (index > -1)
+      this.favorStatus = index > -1
       return index > -1
     },
-    ...mapGetters([
-      'favorDoctor',
-      'user'
-    ])
+    ...mapGetters(['favorDoctor', 'user'])
   },
   methods: {
     favor() {
       const { name } = this.$route
       if (!this.user) {
-        this.$router.push({ name: 'login', query: { visit: name, id: this.doctor._id } })
+        this.$router.push({
+          name: 'login',
+          query: { visit: name, id: this.doctor._id }
+        })
         return
       }
       this.favorStatus = !this.favorStatus
@@ -137,7 +146,7 @@ export default {
     this.getDoctorProfile()
   },
   watch: {
-    '$route'(to, from) {
+    $route(to, from) {
       const reg = /\/doctor\//
       if (reg.test(to.path)) {
         this.getDoctorProfile()
@@ -162,11 +171,11 @@ export default {
   height: auto;
   &.moveInLeft-enter-active,
   &.moveInLeft-leave-active {
-      transition: all 0.3s linear;
+    transition: all 0.3s linear;
   }
   &.moveInLeft-enter,
   &.moveInLeft-leave-to {
-      transform: translate3d(-100%,0,0);
+    transform: translate3d(-100%, 0, 0);
   }
   .doctor-top {
     background: url('./bg_expert.jpg') no-repeat center;

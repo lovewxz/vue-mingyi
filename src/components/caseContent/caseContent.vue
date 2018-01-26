@@ -40,69 +40,69 @@ export default {
 
 <style lang="scss">
 .case-detail {
-    .case-top {
-        display: flex;
-        align-items: center;
-        .head-img {
-            flex: 0 0 40px;
-            width: 40px;
-            height: 40px;
-            display: block;
-            img {
-                border-radius: 50%;
-                width: 100%;
-                height: 100%;
-            }
-        }
-        .head-name {
-            flex: 1;
-            margin-left: 5px;
-            font-size: 14px;
-            color: #777;
-        }
+  .case-top {
+    display: flex;
+    align-items: center;
+    .head-img {
+      flex: 0 0 40px;
+      width: 40px;
+      height: 40px;
+      display: block;
+      img {
+        border-radius: 50%;
+        width: 100%;
+        height: 100%;
+      }
     }
-    .case-photo {
-        display: flex;
-        justify-content: space-between;
-        margin: 10px 0;
-        overflow: hidden;
-        .case-after,
-        .case-before {
-            position: relative;
-            flex: 1;
-            em {
-                font-size: 12px;
-                background: rgba(51,51,51,.7);
-                color: #fff;
-                position: absolute;
-                padding: 2px 5px;
-                font-style: normal;
-            }
-            img {
-                border-radius: 10px;
-            }
-        }
-        .case-before {
-            margin-right: 5px;
-            em {
-                border-radius: 6px 0 10px 0;
-                right: 0;
-                bottom: 2px;
-            }
-        }
-        .case-after {
-            em {
-                border-radius: 0 6px 0 10px;
-                left: 0;
-                bottom: 2px;
-                background: rgba(44,199,197,.7);
-            }
-        }
+    .head-name {
+      flex: 1;
+      margin-left: 5px;
+      font-size: 14px;
+      color: #777;
     }
-    .case-text {
-        font-size: 14px;
-        line-height: 1.5;
-        color: #777;
+  }
+  .case-photo {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    overflow: hidden;
+    .case-after,
+    .case-before {
+      position: relative;
+      flex: 1;
+      em {
+        font-size: 12px;
+        background: rgba(51, 51, 51, 0.7);
+        color: #fff;
+        position: absolute;
+        padding: 2px 5px;
+        font-style: normal;
+      }
+      img {
+        border-radius: 10px;
+      }
     }
+    .case-before {
+      margin-right: 5px;
+      em {
+        border-radius: 6px 0 10px 0;
+        right: 0;
+        bottom: 2px;
+      }
+    }
+    .case-after {
+      em {
+        border-radius: 0 6px 0 10px;
+        left: 0;
+        bottom: 2px;
+        background: rgba(44, 199, 197, 0.7);
+      }
+    }
+  }
+  .case-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #777;
+  }
 }
 </style>

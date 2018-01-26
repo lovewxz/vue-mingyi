@@ -39,10 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'user',
-      'favorProject'
-    ])
+    ...mapGetters(['user', 'favorProject'])
   },
   methods: {
     goUrl(item) {
@@ -61,24 +58,32 @@ export default {
       }
     },
     _getProjectList() {
-      this.$store.dispatch('getProjectList', { limit: this.limit, page: this.page }).then(res => {
-        res = res.data
-        if (res.success) {
-          this.projects = this.projects.concat(res.data.list)
-          this.total = res.data.total
-          this._checkMore(this.projects)
-        }
-      })
+      this.$store
+        .dispatch('getProjectList', { limit: this.limit, page: this.page })
+        .then(res => {
+          res = res.data
+          if (res.success) {
+            this.projects = this.projects.concat(res.data.list)
+            this.total = res.data.total
+            this._checkMore(this.projects)
+          }
+        })
     },
     _getFavorProjectList() {
-      this.$store.dispatch('getFavorProjectList', { limit: this.limit, page: this.page, _id: this.user._id }).then(res => {
-        res = res.data
-        if (res.success) {
-          this.projects = this.projects.concat(res.data.list)
-          this.total = res.data.total
-          this._checkMore(this.projects)
-        }
-      })
+      this.$store
+        .dispatch('getFavorProjectList', {
+          limit: this.limit,
+          page: this.page,
+          _id: this.user._id
+        })
+        .then(res => {
+          res = res.data
+          if (res.success) {
+            this.projects = this.projects.concat(res.data.list)
+            this.total = res.data.total
+            this._checkMore(this.projects)
+          }
+        })
     },
     refresh() {
       setTimeout(() => {
@@ -107,22 +112,22 @@ export default {
 
 <style lang="scss" scoped>
 .project-wrapper {
-    height: 100%;
-    overflow: hidden;
-    .project-item {
-        padding: 13px 10px 13px 0;
-        margin-left: 10px;
-        border-bottom: 1px solid #e5e5e5;
-        &:last-child {
-            border-bottom: 0;
-        }
+  height: 100%;
+  overflow: hidden;
+  .project-item {
+    padding: 13px 10px 13px 0;
+    margin-left: 10px;
+    border-bottom: 1px solid #e5e5e5;
+    &:last-child {
+      border-bottom: 0;
     }
-    .loading-wrapper {
-        width: 24px;
-        height: 24px;
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%);
-    }
+  }
+  .loading-wrapper {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+  }
 }
 </style>

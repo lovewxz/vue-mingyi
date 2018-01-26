@@ -60,7 +60,7 @@ export default {
   }
   .favor-content {
     position: absolute;
-    width:100%;
+    width: 100%;
     top: 88px;
     left: 0;
     bottom: 0px;

@@ -8,7 +8,8 @@
     <bind-tel></bind-tel>
     <div class="cut"></div>
     <div class="my-order">
-      <div class="order-title" @click="go('order-all')">
+      <div class="order-title"
+           @click="go('order-all')">
         <h3>我的订单</h3>
         <p>
           <span class="order-all">查看全部订单</span>
@@ -54,11 +55,15 @@
         </p>
       </div>
     </a>
-    <div class="btn-logout" @click="confirmShow">退出登录</div>
+    <div class="btn-logout"
+         @click="confirmShow">退出登录</div>
     <div class="profile-logo">
-      <img :src="require('@/common/images/logo.png')" alt="">
+      <img :src="require('@/common/images/logo.png')"
+           alt="">
     </div>
-    <confirm :text="confirmText" @confirm="logout" ref="confirmWrapper"></confirm>
+    <confirm :text="confirmText"
+             @confirm="logout"
+             ref="confirmWrapper"></confirm>
   </div>
 </template>
 <script>
@@ -102,9 +107,7 @@ export default {
       this.saveUser(null)
       this.$router.push('/')
     },
-    ...mapActions([
-      'saveUser'
-    ])
+    ...mapActions(['saveUser'])
   },
   activated() {
     this.getUserInfo()
@@ -133,7 +136,7 @@ export default {
       height: 50px;
       border-radius: 50%;
       border: 2px solid #fff;
-      box-shadow: 0 0 5px rgba(0,0,0,.5);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     }
     .name {
       font-size: 14px;
@@ -202,7 +205,8 @@ export default {
       }
     }
   }
-  .contact-tel, .contact-kefu {
+  .contact-tel,
+  .contact-kefu {
     background: #fff;
     padding: 10px;
     display: flex;

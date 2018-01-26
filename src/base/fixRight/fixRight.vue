@@ -3,10 +3,13 @@
     <div class="ask">
       <i class="iconfont icon-kefu"></i>
     </div>
-    <div class="back-top" v-show="showFlag" @click="backTop">
+    <div class="back-top"
+         v-show="showFlag"
+         @click="backTop">
       <i class="iconfont icon-huidaodingbu"></i>
     </div>
-    <div class="back-left" @click="back">
+    <div class="back-left"
+         @click="back">
       <i class="iconfont icon-huidaodingbu"></i>
     </div>
   </div>
@@ -45,7 +48,7 @@ export default {
     width: 40px;
     height: 40px;
     display: block;
-    background: rgba(0,0,0,.6);
+    background: rgba(0, 0, 0, 0.6);
     border-radius: 5px;
     text-align: center;
     .icon-kefu {
@@ -59,7 +62,7 @@ export default {
     width: 40px;
     height: 40px;
     display: block;
-    background: rgba(0,0,0,.6);
+    background: rgba(0, 0, 0, 0.6);
     border-radius: 5px;
     text-align: center;
     margin-top: 10px;
@@ -74,7 +77,7 @@ export default {
     width: 40px;
     height: 40px;
     display: block;
-    background: rgba(0,0,0,.6);
+    background: rgba(0, 0, 0, 0.6);
     border-radius: 5px;
     text-align: center;
     margin-top: 10px;
@@ -83,7 +86,7 @@ export default {
       line-height: 40px;
       color: #fff;
       display: inline-block;
-      transform: rotate(-90deg)
+      transform: rotate(-90deg);
     }
   }
 }
