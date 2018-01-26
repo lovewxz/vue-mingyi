@@ -18,7 +18,7 @@ const TicketSchema = new Schema({
   }
 })
 
-TicketSchema.pre('save', function (next) {
+TicketSchema.pre('save', function(next) {
   if (this.isNew) {
     this.meta.createdAt = this.meta.updatedAt = Date.now()
   } else {
@@ -52,6 +52,5 @@ TicketSchema.statics = {
     return ticket
   }
 }
-
 
 const Ticket = mongoose.model('Ticket', TicketSchema)

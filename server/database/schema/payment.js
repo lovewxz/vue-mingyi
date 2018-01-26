@@ -40,7 +40,7 @@ const PaymentSchema = new Schema({
   }
 })
 
-PaymentSchema.pre('save', function (next) {
+PaymentSchema.pre('save', function(next) {
   if (this.isNew) {
     this.meta.createdAt = this.meta.updatedAt = Date.now()
   } else {

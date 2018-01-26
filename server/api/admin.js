@@ -21,8 +21,7 @@ export async function login(email, password) {
 }
 
 export async function getAdminList(limit = 10, page = 1) {
-  let admin = await Admin
-    .find({})
+  let admin = await Admin.find({})
     .skip((page - 1) * Number(limit))
     .limit(Number(limit))
     .sort({ 'meta.createdAt': -1 })

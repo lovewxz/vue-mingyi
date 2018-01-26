@@ -18,7 +18,6 @@ export function getAuthorizeURL(...args) {
   return OAuth.getAuthorizeURL(...args)
 }
 
-
 export async function getUserInfoByCode(code) {
   const OAuth = getOAuth()
   const data = await OAuth.fetchAccessToken(code)

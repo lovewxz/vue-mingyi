@@ -29,32 +29,36 @@ const user = {
     Login({ commit }, userInfo) {
       const email = userInfo.email.trim()
       return new Promise((resolve, reject) => {
-        login(email, userInfo.password).then(response => {
-          if (response.success) {
-            setToken(response.data.token)
-            commit('SET_TOKEN', response.data.token)
-            resolve()
-          } else {
-            reject(response.err)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+        login(email, userInfo.password)
+          .then(response => {
+            if (response.success) {
+              setToken(response.data.token)
+              commit('SET_TOKEN', response.data.token)
+              resolve()
+            } else {
+              reject(response.err)
+            }
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
 
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(response => {
-          const data = response.data
-          commit('SET_ROLES', data.role)
-          commit('SET_NAME', data.nickname)
-          commit('SET_AVATAR', data.headimgurl)
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        getInfo(state.token)
+          .then(response => {
+            const data = response.data
+            commit('SET_ROLES', data.role)
+            commit('SET_NAME', data.nickname)
+            commit('SET_AVATAR', data.headimgurl)
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
 

@@ -16,7 +16,7 @@ const Payment = wechatPay.Payment
 const payment = new Payment(paymentConfig || {})
 
 // 获取预支付订单
-export const getParamsAsync = (order) => {
+export const getParamsAsync = order => {
   return new Promise((resolve, reject) => {
     payment.getBrandWCPayRequestParams(order, (err, payargs) => {
       if (err) {
@@ -29,7 +29,7 @@ export const getParamsAsync = (order) => {
 }
 
 // 获取订单数据
-export const getPayDataAsync = (req) => {
+export const getPayDataAsync = req => {
   return new Promise((resolve, reject) => {
     let data = ''
     req.setEncoding('utf8')
@@ -44,7 +44,7 @@ export const getPayDataAsync = (req) => {
 }
 
 // 获取notifyUrl数据
-export const getNoticeAsync = (rawbody) => {
+export const getNoticeAsync = rawbody => {
   return new Promise((resolve, reject) => {
     payment.validate(rawbody, (err, message) => {
       if (err) {
@@ -57,23 +57,26 @@ export const getNoticeAsync = (rawbody) => {
 }
 
 // 获取所有的账单列表
-export const getBillAsync = (date) => {
+export const getBillAsync = date => {
   return new Promise((resolve, reject) => {
-    payment.downloadBill({
-      bill_date: date,
-      bill_type: 'ALL'
-    }, (err, data) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(data)
+    payment.downloadBill(
+      {
+        bill_date: date,
+        bill_type: 'ALL'
+      },
+      (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(data)
+        }
       }
-    })
+    )
   })
 }
 
 // 获取所有的支付订单列表
-export const getOrdersAsync = (params) => {
+export const getOrdersAsync = params => {
   return new Promise((resolve, reject) => {
     payment.orderQuery(params, (err, data) => {
       if (err) {
@@ -85,7 +88,7 @@ export const getOrdersAsync = (params) => {
   })
 }
 
-export const buildFailXML = (err) => {
+export const buildFailXML = err => {
   return payment._buildXml({
     return_code: 'FAIL',
     return_msg: err.name

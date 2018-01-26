@@ -43,7 +43,6 @@ const api = {
   ticket: `${base}ticket/getticket?`
 }
 
-
 export default class Wechat {
   constructor(opts) {
     this.opts = Object.assign({}, opts)
@@ -66,7 +65,6 @@ export default class Wechat {
     }
   }
 
-
   async fetchAccessToken() {
     let data = await this.getAccessToken()
     if (!data || !this.isVailToken(data, 'access_token')) {
@@ -77,7 +75,9 @@ export default class Wechat {
   }
 
   async updateAccessToken() {
-    const url = `${api.accessToken}&appid=${this.appID}&secret=${this.appSecret}`
+    const url = `${api.accessToken}&appid=${this.appID}&secret=${
+      this.appSecret
+    }`
     const data = await this.request({ url: url })
     const now = new Date().getTime()
     const expiresIn = now + (parseInt(data.expires_in) - 20) * 1000
@@ -156,7 +156,7 @@ export default class Wechat {
     // 是否为永久素材
     if (permanent) {
       url = api.permanent.upload
-      //合并传入的永久素材的参数
+      // 合并传入的永久素材的参数
       Object.assign(form, permanent)
     }
     switch (type) {
@@ -436,7 +436,9 @@ export default class Wechat {
    * @return Object       [用户信息]
    */
   getUserInfo(token, openId, lang) {
-    let url = `${api.user.info}access_token=${token}&openid=${openId}&lang=${lang || 'zh_cn'}`
+    let url = `${
+      api.user.info
+    }access_token=${token}&openid=${openId}&lang=${lang || 'zh_cn'}`
     return { url: url }
   }
   /**
@@ -449,7 +451,7 @@ export default class Wechat {
     let url = `${api.user.batchInfoList}access_token=${token}`
     let form = {}
     let arr = []
-    userList.forEach((item) => {
+    userList.forEach(item => {
       const obj = {
         openid: item,
         lang: lang || 'zh-cn'
@@ -466,7 +468,9 @@ export default class Wechat {
    * @return {Object}            [json数据包]
    */
   getSubscribeList(token, nextOpenId) {
-    let url = `${api.user.getSubscribeList}access_token=${token}&next_openid=${nextOpenId || ''}`
+    let url = `${
+      api.user.getSubscribeList
+    }access_token=${token}&next_openid=${nextOpenId || ''}`
     return { url: url }
   }
   /**

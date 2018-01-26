@@ -18,7 +18,7 @@ const TokenSchema = new Schema({
   }
 })
 
-TokenSchema.pre('save', function (next) {
+TokenSchema.pre('save', function(next) {
   if (this.isNew) {
     this.meta.createdAt = this.meta.updatedAt = Date.now()
   } else {

@@ -27,7 +27,7 @@ function formateMessage(result) {
         if (typeof item === 'object') {
           message[key] = formateMessage(item)
         } else {
-          message[key] = (item || '')
+          message[key] = item || ''
         }
       } else {
         message[key] = []
@@ -78,7 +78,7 @@ function _signIt(ticket, url, noncestr, timestamp) {
   let keys = Object.keys(ret).sort()
   let newObj = {}
   // 遍历key得到一个新的有序的Obj
-  keys.forEach((item) => {
+  keys.forEach(item => {
     newObj[item.toLowerCase()] = ret[item]
   })
   let str = ''
@@ -91,7 +91,9 @@ function _signIt(ticket, url, noncestr, timestamp) {
 }
 
 function _createNonceStr() {
-  return Math.random().toString(30).substr(2, 11)
+  return Math.random()
+    .toString(30)
+    .substr(2, 11)
 }
 
 function _createTimeStamp() {
@@ -115,9 +117,4 @@ function sign(ticket, url) {
   }
 }
 
-export {
-  parseXML,
-  formateMessage,
-  tpl,
-  sign
-}
+export { parseXML, formateMessage, tpl, sign }

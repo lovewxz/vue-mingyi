@@ -46,6 +46,6 @@ let tpl = `
     </xml>
  `
 
- const compiled = ejs.compile(tpl)
+const compiled = ejs.compile(tpl)
 
- export default compiled
+export default compiled

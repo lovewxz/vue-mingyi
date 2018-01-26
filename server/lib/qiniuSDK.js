@@ -24,10 +24,17 @@ export default class QiniuSDK {
    * @param  {String} filename [文件名称]
    * @return {[type]}          [description]
    */
-  _policy(name, filename, type='image') {
-    const saveJpgEntry = qiniu.util.urlsafeBase64Encode(`${this.bucket}:${filename}`)
-    const saveVideoEntry = qiniu.util.urlsafeBase64Encode(`${this.bucket}:${filename}_video`)
-    const videoFops = [`vframe/jpg/offset/1|saveas/${saveJpgEntry}`, `avthumb/mp4|saveas/${saveVideoEntry}`]
+  _policy(name, filename, type = 'image') {
+    const saveJpgEntry = qiniu.util.urlsafeBase64Encode(
+      `${this.bucket}:${filename}`
+    )
+    const saveVideoEntry = qiniu.util.urlsafeBase64Encode(
+      `${this.bucket}:${filename}_video`
+    )
+    const videoFops = [
+      `vframe/jpg/offset/1|saveas/${saveJpgEntry}`,
+      `avthumb/mp4|saveas/${saveVideoEntry}`
+    ]
     const imgFops = `imageView2/0/w/640/q/75|watermark/3/image/aHR0cDovL293M3B0N3gyMy5ia3QuY2xvdWRkbi5jb20vbG9nby5wbmc=/dissolve/45/gravity/Center/dx/100/dy/100|imageslim|saveas/${saveJpgEntry}`
     let persist
     if (pipeline !== '') {
@@ -66,7 +73,7 @@ export default class QiniuSDK {
     }
     const cdnManager = new qiniu.cdn.CdnManager(this.mac)
     return new Promise((resolve, reject) => {
-      cdnManager.refreshUrls(url, function (err, respBody) {
+      cdnManager.refreshUrls(url, function(err, respBody) {
         if (err) {
           reject(err)
         } else {
@@ -92,44 +99,66 @@ export default class QiniuSDK {
   waterMarkImage(filename) {
     const config = new qiniu.conf.Config()
     config.zone = qiniu.zone.Zone_z2
-    const operManager = new qiniu.fop.OperationManager(this.mac, config);
-    const saveJpgEntry = qiniu.util.urlsafeBase64Encode(`${this.bucket}:${filename}`)
-    const watrMarkJpgFop = [`imageView2/0/q/75|watermark/3/image/aHR0cDovL293M3B0N3gyMy5ia3QuY2xvdWRkbi5jb20vbG9nby5wbmc=/dissolve/45/gravity/Center/dx/100/dy/100|imageslim|saveas/${saveJpgEntry}`]
+    const operManager = new qiniu.fop.OperationManager(this.mac, config)
+    const saveJpgEntry = qiniu.util.urlsafeBase64Encode(
+      `${this.bucket}:${filename}`
+    )
+    const watrMarkJpgFop = [
+      `imageView2/0/q/75|watermark/3/image/aHR0cDovL293M3B0N3gyMy5ia3QuY2xvdWRkbi5jb20vbG9nby5wbmc=/dissolve/45/gravity/Center/dx/100/dy/100|imageslim|saveas/${saveJpgEntry}`
+    ]
     const options = {
-      force: true //覆盖
+      force: true // 覆盖
     }
     return new Promise((resolve, reject) => {
-      operManager.pfop(this.bucket, filename, watrMarkJpgFop, 'jpg-pipe', options, (err, ret) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(ret)
+      operManager.pfop(
+        this.bucket,
+        filename,
+        watrMarkJpgFop,
+        'jpg-pipe',
+        options,
+        (err, ret) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(ret)
+          }
         }
-      })
+      )
     })
   }
   // 视频截图
   videoThumbnail(filename) {
     const config = new qiniu.conf.Config()
     config.zone = qiniu.zone.Zone_z2
-    const operManager = new qiniu.fop.OperationManager(this.mac, config);
-    const saveVideoEntry = qiniu.util.urlsafeBase64Encode(`${this.bucket}:${filename}`)
-    const saveVideoThumbEntry = qiniu.util.urlsafeBase64Encode(`${this.bucket}:${filename}_thumb`)
+    const operManager = new qiniu.fop.OperationManager(this.mac, config)
+    const saveVideoEntry = qiniu.util.urlsafeBase64Encode(
+      `${this.bucket}:${filename}`
+    )
+    const saveVideoThumbEntry = qiniu.util.urlsafeBase64Encode(
+      `${this.bucket}:${filename}_thumb`
+    )
     const videoThumbnailpFop = [
       `avthumb/mp4|saveas/${saveVideoEntry}`,
       `vframe/jpg/offset/10|saveas/${saveVideoThumbEntry}`
     ]
     const options = {
-      force: true //覆盖
+      force: true // 覆盖
     }
     return new Promise((resolve, reject) => {
-      operManager.pfop(this.bucket, filename, videoThumbnailpFop, 'jpg-pipe', options, (err, ret) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(ret)
+      operManager.pfop(
+        this.bucket,
+        filename,
+        videoThumbnailpFop,
+        'jpg-pipe',
+        options,
+        (err, ret) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(ret)
+          }
         }
-      })
+      )
     })
   }
 }

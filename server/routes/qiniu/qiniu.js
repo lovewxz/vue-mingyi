@@ -1,4 +1,3 @@
-import mongoose from 'mongoose'
 import { controller, get, post, checkToken } from '../../lib/decorator/router'
 import QiniuSDK from '../../lib/qiniuSDK'
 import xss from 'xss'
@@ -33,48 +32,57 @@ export class QiniuController {
   async qiniuWaterMark(ctx, next) {
     let body = ctx.request.body
     const key = xss(body.key)
-    await qiniu.waterMarkImage(key).then(ret => {
-      ctx.body = {
-        success: true,
-        data: ret
-      }
-    }).catch(e => {
-      ctx.body = {
-        success: false,
-        data: e
-      }
-    })
+    await qiniu
+      .waterMarkImage(key)
+      .then(ret => {
+        ctx.body = {
+          success: true,
+          data: ret
+        }
+      })
+      .catch(e => {
+        ctx.body = {
+          success: false,
+          data: e
+        }
+      })
   }
   @post('/video')
   async qiniuVideoThumbnail(ctx, next) {
     let body = ctx.request.body
     const key = xss(body.key)
-    await qiniu.videoThumbnail(key).then(ret => {
-      ctx.body = {
-        success: true,
-        data: ret
-      }
-    }).catch(e => {
-      ctx.body = {
-        success: false,
-        err: e
-      }
-    })
+    await qiniu
+      .videoThumbnail(key)
+      .then(ret => {
+        ctx.body = {
+          success: true,
+          data: ret
+        }
+      })
+      .catch(e => {
+        ctx.body = {
+          success: false,
+          err: e
+        }
+      })
   }
   @post('/refresh')
   async qiniuRefreshUrl(ctx, next) {
     let body = ctx.request.body
     const url = decodeURIComponent(body.url)
-    await qiniu.refresh(url).then(ret => {
-      ctx.body = {
-        success: true,
-        data: ret
-      }
-    }).catch(e => {
-      ctx.body = {
-        success: false,
-        err: e
-      }
-    })
+    await qiniu
+      .refresh(url)
+      .then(ret => {
+        ctx.body = {
+          success: true,
+          data: ret
+        }
+      })
+      .catch(e => {
+        ctx.body = {
+          success: false,
+          err: e
+        }
+      })
   }
 }

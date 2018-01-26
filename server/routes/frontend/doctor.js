@@ -8,7 +8,7 @@ export class doctorController {
     const { limit } = ctx.query || 20
     const { page } = ctx.query || 1
     const doctors = await api.doctor.getDoctorList({ limit, page })
-    const count =  await api.doctor.getDoctorCount({})
+    const count = await api.doctor.getDoctorCount({})
     ctx.body = {
       success: true,
       data: {

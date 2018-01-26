@@ -25,10 +25,9 @@ export function delPcase(condition) {
 export function getPcaseById(id) {
   return request({
     url: `${config.adminPrefix}/pcase/${id}`,
-    method: 'get',
+    method: 'get'
   })
 }
-
 
 export function savePcase(params) {
   return request({

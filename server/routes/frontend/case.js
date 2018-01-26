@@ -23,10 +23,10 @@ export class caseController {
     const { params } = ctx
     const { _id } = params
     if (!_id) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: 'id不存在'
-      }
+      })
     }
     const Pcase = await api.pcase.getPcaseById(_id)
     ctx.body = {
@@ -39,10 +39,10 @@ export class caseController {
   async getPcaseByDoctorId(ctx, next) {
     const { limit, page, id } = ctx.query
     if (!id) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: 'id不存在'
-      }
+      })
     }
     const params = {
       limit,
@@ -51,9 +51,9 @@ export class caseController {
       status: 0
     }
     const Pcase = await api.pcase.getPcaseByDoctorId(params)
-    ctx.body = {
+    return (ctx.body = {
       success: true,
       data: Pcase
-    }
+    })
   }
 }

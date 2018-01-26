@@ -16,7 +16,7 @@ export class adminController {
       }
       admin.token = jwt.createToken(signParams)
       admin = await api.admin.update(admin)
-      return ctx.body = {
+      return (ctx.body = {
         success: true,
         data: {
           email: admin.email,
@@ -24,29 +24,32 @@ export class adminController {
           avatarUrl: admin.avatarUrl,
           token: admin.token
         }
-      }
+      })
     }
-    return ctx.body = {
+    return (ctx.body = {
       success: false,
       err: '密码或账号错误'
-    }
+    })
   }
 
   @post('checkToken')
   @required({ body: ['token'] })
   async checkToken(ctx, next) {
     const { token } = ctx.request.body
-    await jwt.checkToken(token).then(data => {
-      return ctx.body = {
-        success: true,
-        data: data
-      }
-    }).catch(e => {
-      return ctx.body = {
-        success: false,
-        err: e.name
-      }
-    })
+    await jwt
+      .checkToken(token)
+      .then(data => {
+        return (ctx.body = {
+          success: true,
+          data: data
+        })
+      })
+      .catch(e => {
+        return (ctx.body = {
+          success: false,
+          err: e.name
+        })
+      })
   }
 
   @post('user')
@@ -57,10 +60,10 @@ export class adminController {
       const data = await jwt.checkToken(token)
       const admin = await api.admin.getAdminById(data.id)
       if (admin) {
-        return ctx.body = {
+        return (ctx.body = {
           success: true,
           data: admin
-        }
+        })
       }
       ctx.throw(402)
     } catch (e) {

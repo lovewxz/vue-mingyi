@@ -10,5 +10,8 @@
       "wrap_line_length": 120
     }
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "javascript.implicitProjectConfig.experimentalDecorators": true,
+  "px2rem.isNeedNotes": false,
+  "px2rem.rootFontSize": 64
 }

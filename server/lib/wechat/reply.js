@@ -1,14 +1,14 @@
 import { getWechat } from '../wechat'
 
 export default async (ctx, next) => {
-  const message = ctx.weixin  // 获取微信的回复的消息
+  const message = ctx.weixin // 获取微信的回复的消息
   let type = message.MsgType // 判断微信回复的类型
   let eventType = message.Event // 判断微信事件回复的类型
 
   switch (type) {
     case 'text':
       ctx.body = message.Content
-      if (message.Content === "1") {
+      if (message.Content === '1') {
         let wechat = getWechat()
         const data = await wechat.handlerOperation('getBlackList')
         ctx.body = '你好'

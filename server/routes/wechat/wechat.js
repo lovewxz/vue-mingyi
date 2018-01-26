@@ -1,14 +1,15 @@
-import Router from 'koa-router'
 import config from '../../config'
-import { getWechat } from '../../lib/wechat'
 import reply from '../../lib/wechat/reply'
 import wechatMiddle from '../../lib/wechat-lib/middleware'
 import { signature, redirect, oauth } from '../../controllers/wechatController'
 import { post, get, controller, required } from '../../lib/decorator/router'
-import { getParamsAsync, getNoticeAsync, getPayDataAsync, buildSuccessXML } from '../../lib/wechat-lib/pay'
+import {
+  getParamsAsync,
+  getNoticeAsync,
+  getPayDataAsync,
+  buildSuccessXML
+} from '../../lib/wechat-lib/pay'
 import api from '../../api'
-import R from 'ramda'
-import xss from 'xss'
 
 @controller('')
 export class WechatController {
@@ -16,14 +17,14 @@ export class WechatController {
   async wechatHear(ctx, next) {
     const middle = wechatMiddle(config.wechat, reply)
     const body = await middle(ctx, next)
-    return ctx.body = body
+    return (ctx.body = body)
   }
 
   @post('/wechat-hear')
   async wechatPostHear(ctx, next) {
     const middle = wechatMiddle(config.wechat, reply)
     const body = await middle(ctx, next)
-    return ctx.body = body
+    return (ctx.body = body)
   }
 
   @get('/wechat-signature')
@@ -42,40 +43,39 @@ export class WechatController {
   }
 
   @post('/wechat-pay')
-  @required({ body: [ 'user', 'projectId', 'totalFee' ] })
+  @required({ body: ['user', 'projectId', 'totalFee'] })
   async payOrder(ctx, next) {
     const ip = ctx.ip.replace('::ffff:', '')
-    const {
-      user,
-      projectId,
-      totalFee
-    } = ctx.request.body
+    const { user, projectId, totalFee } = ctx.request.body
     const userInfo = await api.user.getUserByOpenid(user.openid)
     if (!userInfo) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: '用户不存在'
-      }
+      })
     }
     const project = await api.project.getProjectById(projectId)
     if (!project) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: '宝贝不存在'
-      }
+      })
     }
-    let payment = await api.payment.getPaymentByProjectId(project._id, userInfo._id)
+    let payment = await api.payment.getPaymentByProjectId(
+      project._id,
+      userInfo._id
+    )
     if (!payment) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: '订单不存在'
-      }
+      })
     }
     if (payment.success > 0) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: '不要重复提交订单'
-      }
+      })
     }
     try {
       let orderParams = {

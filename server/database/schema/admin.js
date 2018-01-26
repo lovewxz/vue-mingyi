@@ -33,14 +33,14 @@ const AdminSchema = new Schema({
   }
 })
 
-AdminSchema.pre('save', function (next) {
+AdminSchema.pre('save', function(next) {
   const admin = this
   if (!admin.isModified('password')) {
     return next()
   }
-  bcrypt.genSalt(saltRounds, function (err, salt) {
+  bcrypt.genSalt(saltRounds, function(err, salt) {
     if (err) return next(err)
-    bcrypt.hash(admin.password, salt, function (error, hash) {
+    bcrypt.hash(admin.password, salt, function(error, hash) {
       if (error) return next(error)
       admin.password = hash
       next()
@@ -49,9 +49,9 @@ AdminSchema.pre('save', function (next) {
 })
 
 AdminSchema.methods = {
-  comparePassWord: function (_password, password) {
+  comparePassWord: function(_password, password) {
     return new Promise((resolve, reject) => {
-      bcrypt.compare(_password, password, function (err, isMatch) {
+      bcrypt.compare(_password, password, function(err, isMatch) {
         if (!err) resolve(isMatch)
         else reject(err)
       })

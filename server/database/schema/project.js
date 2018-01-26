@@ -24,10 +24,12 @@ const ProjectSchema = new Schema({
     type: Number,
     default: 0
   },
-  category: [{
-    type: String,
-    ref: 'Category'
-  }],
+  category: [
+    {
+      type: String,
+      ref: 'Category'
+    }
+  ],
   isTop: {
     type: Boolean,
     default: false
@@ -44,7 +46,7 @@ const ProjectSchema = new Schema({
   }
 })
 
-ProjectSchema.pre('save', function (next) {
+ProjectSchema.pre('save', function(next) {
   if (this.isNew) {
     this.meta.createdAt = this.meta.updatedAt = Date.now()
   } else {

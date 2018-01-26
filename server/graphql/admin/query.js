@@ -1,12 +1,5 @@
-import {
-  GraphQLID,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLString
-} from 'graphql'
-import {
-  AdminType
-} from './model'
+import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql'
+import { AdminType } from './model'
 import api from '../../api'
 import jwt from '../../util/jwt'
 

@@ -13,17 +13,17 @@ export async function save(cate) {
 }
 
 export async function del(ids) {
-  const data = await Category.remove({_id: {$in: ids}}).exec()
+  const data = await Category.remove({ _id: { $in: ids } }).exec()
   return data
 }
 
 export async function getCategoryById(_id) {
-  const data = await Category.findOne({_id}).exec()
+  const data = await Category.findOne({ _id }).exec()
   return data
 }
 
 export async function update(cate) {
-  const {_id} = cate
-  cate = await Category.update({_id},{$set: cate})
+  const { _id } = cate
+  cate = await Category.update({ _id }, { $set: cate })
   return cate
 }

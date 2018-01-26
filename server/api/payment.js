@@ -15,12 +15,14 @@ export async function updatePayment(payment) {
 }
 
 export async function getPayment(_id) {
-  const payment = await Payment.findOne({_id}).populate([
-    {
-      path: 'user',
-      select: 'openid'
-    }
-  ]).exec()
+  const payment = await Payment.findOne({ _id })
+    .populate([
+      {
+        path: 'user',
+        select: 'openid'
+      }
+    ])
+    .exec()
   return payment
 }
 
@@ -47,24 +49,22 @@ export async function getPaymentList(limit = 10, page = 1, _id, success = -1) {
     return
   }
   const params = success < 0 ? { user: user._id } : { success, user: user._id }
-  const payment = await Payment
-  .find(params)
-  .populate([
-    {
-      path: 'project',
-      select: '_id title description price original_price cover_image'
-    }
-  ])
-  .skip((page - 1) * Number(limit))
-  .limit(Number(limit))
-  .sort({ 'meta.createdAt': -1 })
-  .exec()
+  const payment = await Payment.find(params)
+    .populate([
+      {
+        path: 'project',
+        select: '_id title description price original_price cover_image'
+      }
+    ])
+    .skip((page - 1) * Number(limit))
+    .limit(Number(limit))
+    .sort({ 'meta.createdAt': -1 })
+    .exec()
   return payment
 }
 
-
 export async function getPaymentCount(id) {
-  const params = id ? {user: id} : {}
+  const params = id ? { user: id } : {}
   const total = await Payment.find(params).count()
   return total
 }

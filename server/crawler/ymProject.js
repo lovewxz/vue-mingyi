@@ -9,9 +9,9 @@ import randomToken from 'random-token'
 import QiniuSDK from '../lib/qiniuSDK'
 
 let project = []
-const r = (path) => resolve(__dirname, path)
+const r = path => resolve(__dirname, path)
 
-export const getYMProject = async(page = 1) => {
+export const getYMProject = async (page = 1) => {
   const url = `http://m.yuemei.com/hospital/loadmoreservice/id/10659/page/${page}`
   console.log(`正在爬${page}页的数据`)
   let body = await rp(url)
@@ -22,7 +22,11 @@ export const getYMProject = async(page = 1) => {
   project = _.union(project, body.data)
   if (body.data.length < 20) {
     console.log('爬完了')
-    writeFileSync(r('../database/json/project.json'), JSON.stringify(project, null, 2), 'utf-8')
+    writeFileSync(
+      r('../database/json/project.json'),
+      JSON.stringify(project, null, 2),
+      'utf-8'
+    )
     return
   } else {
     await sleep(200)
@@ -31,26 +35,36 @@ export const getYMProject = async(page = 1) => {
   }
 }
 
-const fetchYMProjectDescAndParamsAndDetailImgs = async(url) => {
+const fetchYMProjectDescAndParamsAndDetailImgs = async url => {
   const options = {
     uri: url,
     transform: body => cheerio.load(body)
   }
   const $ = await rp(options)
-  let desc = $('.mainTit').children('p').text()
+  let desc = $('.mainTit')
+    .children('p')
+    .text()
   let detailImgs = []
-  $('.swiper-container .swiper-wrapper .swiper-slide a img').each(function () {
+  $('.swiper-container .swiper-wrapper .swiper-slide a img').each(function() {
     const img = $(this).attr('src')
     detailImgs.push(img)
   })
   let params = []
-  $('table.archives-data tbody tr').each(function () {
+  $('table.archives-data tbody tr').each(function() {
     params.push({
-      key: $(this).find('td').eq(0).text(),
-      value: $(this).find('td').eq(1).text()
+      key: $(this)
+        .find('td')
+        .eq(0)
+        .text(),
+      value: $(this)
+        .find('td')
+        .eq(1)
+        .text()
     })
   })
-  let doctorId = $('.outerBase .docBox').attr('href').match(/\/dr\/(.*?)\/$/)[1]
+  let doctorId = $('.outerBase .docBox')
+    .attr('href')
+    .match(/\/dr\/(.*?)\/$/)[1]
   return {
     detail_images: detailImgs,
     params,
@@ -59,7 +73,7 @@ const fetchYMProjectDescAndParamsAndDetailImgs = async(url) => {
   }
 }
 
-export const getYMProjectDetail = async() => {
+export const getYMProjectDetail = async () => {
   const data = require(r('../database/json/project.json'))
   for (let i = 0; i < data.length; i++) {
     const url = `http://m.yuemei.com/tao/${data[i].id}/`
@@ -68,12 +82,26 @@ export const getYMProjectDetail = async() => {
     await sleep(200)
     data[i].cover_image = data[i].small_image
     data[i] = R.compose(
-      R.pick(['title', 'id', 'price', 'original_price', 'cover_image', 'doctor', 'params', 'description', 'detail_images']),
+      R.pick([
+        'title',
+        'id',
+        'price',
+        'original_price',
+        'cover_image',
+        'doctor',
+        'params',
+        'description',
+        'detail_images'
+      ]),
       R.merge(desc)
     )(data[i])
   }
   R.filter(i => i.id && i.detail_images.length > 0 && i.doctor)(data)
-  writeFileSync(r('../database/json/mergeProject.json'), JSON.stringify(data, null, 2), 'utf-8')
+  writeFileSync(
+    r('../database/json/mergeProject.json'),
+    JSON.stringify(data, null, 2),
+    'utf-8'
+  )
   return data
 }
 
@@ -91,17 +119,21 @@ export const checkYMProject = () => {
     })
   )(data)
 
-  writeFileSync(r('../database/json/checkYMProject.json'), JSON.stringify(data, null, 2), 'utf-8')
+  writeFileSync(
+    r('../database/json/checkYMProject.json'),
+    JSON.stringify(data, null, 2),
+    'utf-8'
+  )
   return data
 }
 
-export const uploadYMProject = async() => {
+export const uploadYMProject = async () => {
   let data = require(r('../database/json/checkYMProject.json'))
   // data = [
   //   data[0],
   //   data[1]
   // ]
-  data = R.map(async(item) => {
+  data = R.map(async item => {
     try {
       const key = `${item.id}/${randomToken(32)}`
       const Qiniu = new QiniuSDK()
@@ -119,7 +151,11 @@ export const uploadYMProject = async() => {
     return item
   })(data)
   data = await Promise.all(data)
-  writeFileSync(r('../database/json/finalYMProject.json'), JSON.stringify(data, null, 2), 'utf-8')
+  writeFileSync(
+    r('../database/json/finalYMProject.json'),
+    JSON.stringify(data, null, 2),
+    'utf-8'
+  )
 }
 
 uploadYMProject()

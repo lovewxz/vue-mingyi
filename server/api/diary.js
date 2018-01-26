@@ -1,12 +1,16 @@
 import mongoose from 'mongoose'
 const Diary = mongoose.model('Diary')
 
-export async function getDiaryList({ limit = 10, page = 1, keyword = '', ...args }) {
+export async function getDiaryList({
+  limit = 10,
+  page = 1,
+  keyword = '',
+  ...args
+}) {
   if (keyword) {
     args.article = keyword
   }
-  const data = await Diary
-    .find(args)
+  const data = await Diary.find(args)
     .populate([
       {
         path: 'caseId',
@@ -29,17 +33,22 @@ export async function getDiaryCount({ keyword = '', ...args }) {
 }
 
 export async function getDiaryById(_id) {
-  const data = await Diary.findOne({ _id }).populate([
-    {
-      path: 'caseId',
-      select: '_id user_name'
-    }
-  ]).exec()
+  const data = await Diary.findOne({ _id })
+    .populate([
+      {
+        path: 'caseId',
+        select: '_id user_name'
+      }
+    ])
+    .exec()
   return data
 }
 
 export async function getDiariesByCaseId(caseId) {
-  const data = await Diary.find({ caseId }).where('status').ne(-1).exec()
+  const data = await Diary.find({ caseId })
+    .where('status')
+    .ne(-1)
+    .exec()
   return data
 }
 

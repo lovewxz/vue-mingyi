@@ -1,4 +1,10 @@
-import { get, controller, put, del, post, checkToken } from '../../lib/decorator/router'
+import {
+  get,
+  controller,
+  put,
+  post,
+  checkToken
+} from '../../lib/decorator/router'
 import api from '../../api'
 import xss from 'xss'
 import R from 'ramda'
@@ -10,14 +16,16 @@ export class projectController {
   @checkToken()
   async getProjectList(ctx, next) {
     let condition = ctx.query
-    let temp = {}
     condition = R.filter(item => !!item && item !== 0)(condition)
     if (condition.keyword) {
-      condition.keyword = new RegExp(xss(decodeURIComponent(condition.keyword)), 'i')
+      condition.keyword = new RegExp(
+        xss(decodeURIComponent(condition.keyword)),
+        'i'
+      )
     }
     const { limit, page, ...args } = condition
     const projects = await api.project.getProjectList(condition)
-    const count =  await api.project.getProjectCount(args)
+    const count = await api.project.getProjectCount(args)
     ctx.body = {
       success: true,
       data: {
@@ -49,17 +57,17 @@ export class projectController {
     let body = ctx.request.body
     const { _id } = body
     if (!_id) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: 'id不存在'
-      }
+      })
     }
     let project = await api.project.getProjectById(_id)
     if (!project) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: '项目不存在'
-      }
+      })
     }
     project.title = xss(body.title)
     project.price = xss(body.price)
@@ -94,17 +102,17 @@ export class projectController {
     const { _id } = body
     const { status } = body
     if (!_id) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: 'id不存在'
-      }
+      })
     }
     let project = await api.project.getProjectById(_id)
     if (!project) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: '项目不存在'
-      }
+      })
     }
     try {
       project = await api.project.updateStatus(_id, xss(status))
@@ -141,16 +149,15 @@ export class projectController {
     }
     try {
       const project = await api.project.save(body)
-      return ctx.body = {
+      return (ctx.body = {
         success: true,
         data: project
-      }
+      })
     } catch (e) {
-      ctx.body = {
+      return (ctx.body = {
         success: false,
         err: e
-      }
+      })
     }
   }
-
 }

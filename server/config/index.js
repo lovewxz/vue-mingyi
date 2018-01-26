@@ -14,7 +14,7 @@ export default {
     appId: 'wx93c6b1c4da3be676',
     partnerKey: 'oQdNXSdBMDCPEkaeNl1xTYScp3N8PRGd',
     mchId: '1439054002',
-    notifyUrl: 'http://frp.0755mingyi.com/notify',
+    notifyUrl: 'http://frp.0755mingyi.com/notify'
   },
   jwt: {
     token: 'yaojun',

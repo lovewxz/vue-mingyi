@@ -26,7 +26,6 @@ export class caseController {
     const { page } = ctx.request.body || 1
     const { success } = ctx.request.body
     const { _id } = ctx.request.body
-    console.log(_id)
     let payment = ''
     try {
       if (success < 0) {

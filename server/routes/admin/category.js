@@ -1,5 +1,5 @@
 import api from '../../api'
-import { controller, post, get, del, put, required } from '../../lib/decorator/router'
+import { controller, post, get, put } from '../../lib/decorator/router'
 import xss from 'xss'
 import R from 'ramda'
 
@@ -65,17 +65,17 @@ export class CategoryController {
     let body = ctx.request.body
     const { _id } = body
     if (!_id) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: 'id不存在'
-      }
+      })
     }
     let cate = await api.category.getCategoryById(_id)
     if (!cate) {
-      return ctx.body = {
+      return (ctx.body = {
         success: false,
         err: '分类不存在'
-      }
+      })
     }
     cate = {
       _id: Number(xss(body._id)),

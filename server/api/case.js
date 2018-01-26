@@ -1,12 +1,16 @@
 import mongoose from 'mongoose'
 const Case = mongoose.model('Case')
 
-export async function getPcaseList({ limit = 10, page = 1, keyword = '', ...args }) {
+export async function getPcaseList({
+  limit = 10,
+  page = 1,
+  keyword = '',
+  ...args
+}) {
   if (keyword) {
     args.title = keyword
   }
-  const data = await Case
-    .find(args)
+  const data = await Case.find(args)
     .populate([
       {
         path: 'category',
@@ -29,26 +33,27 @@ export async function getPcaseCount({ keyword = '', ...args }) {
 }
 
 export async function getPcaseById(_id) {
-  const data = await Case.findOne({ _id }).populate([
-    {
-      path: 'project',
-      select: '_id cover_image original_price price title'
-    },
-    {
-      path: 'doctor',
-      select: '_id avatar realname title'
-    }
-  ]).exec()
+  const data = await Case.findOne({ _id })
+    .populate([
+      {
+        path: 'project',
+        select: '_id cover_image original_price price title'
+      },
+      {
+        path: 'doctor',
+        select: '_id avatar realname title'
+      }
+    ])
+    .exec()
   return data
 }
 
-export async function getPcaseByDoctorId({ limit = 10, page = 1, ...args}) {
+export async function getPcaseByDoctorId({ limit = 10, page = 1, ...args }) {
   const { status, id } = args
-  const data = await Case
-    .find({
-      doctor: id,
-      status: status
-    })
+  const data = await Case.find({
+    doctor: id,
+    status: status
+  })
     .skip((page - 1) * Number(limit))
     .limit(Number(limit))
     .sort({ 'meta.createdAt': -1 })

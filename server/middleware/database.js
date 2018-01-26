@@ -6,10 +6,10 @@ import glob from 'glob'
 import bluebird from 'bluebird'
 
 const model = resolve(__dirname, '../database/schema')
-const r = (path) => resolve(__dirname, path)
+const r = path => resolve(__dirname, path)
 glob.sync(resolve(model, './*.js')).forEach(require)
 
-const formateData = (id) => {
+const formateData = id => {
   return R.map(i => {
     i._id = i[id]
     return i
@@ -32,10 +32,10 @@ export const database = app => {
   mongoose.connection.on('disconnected', () => {
     mongoose.connect(config.db, { useMongoClient: true })
   })
-  mongoose.connection.on('err', (err) => {
+  mongoose.connection.on('err', err => {
     console.error(err)
   })
-  mongoose.connection.on('open', async() => {
+  mongoose.connection.on('open', async () => {
     console.log('Connect to MongoDB', config.db)
 
     const Doctor = mongoose.model('Doctor')
@@ -55,14 +55,14 @@ export const database = app => {
     if (!existDiary.length) Diary.insertMany(diaryData)
 
     let admin = await Admin.findOne({
-      email: 'yaojun@qq.com',
+      email: 'yaojun@qq.com'
     }).exec()
 
     let editor = await Admin.findOne({
       email: 'editor@qq.com'
     }).exec()
 
-    if(!admin) {
+    if (!admin) {
       console.log('用户写入数据库')
       admin = new Admin({
         email: 'yaojun@qq.com',
@@ -74,7 +74,7 @@ export const database = app => {
       await admin.save()
     }
 
-    if(!editor) {
+    if (!editor) {
       console.log('用户写入数据库')
       admin = new Admin({
         email: 'editor@qq.com',

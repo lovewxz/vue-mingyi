@@ -1,4 +1,4 @@
-export const sleep = (time) => {
+export const sleep = time => {
   return new Promise((resolve, reject) => {
     if (time) {
       clearTimeout(time)

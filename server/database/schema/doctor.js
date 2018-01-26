@@ -8,14 +8,18 @@ const DoctorSchema = new Schema({
   title: String,
   avatar: String,
   desc: String,
-  project: [{
-    type: String,
-    ref: 'Project'
-  }],
-  case: [{
-    type: String,
-    ref: 'Case'
-  }],
+  project: [
+    {
+      type: String,
+      ref: 'Project'
+    }
+  ],
+  case: [
+    {
+      type: String,
+      ref: 'Case'
+    }
+  ],
   status: {
     type: Number,
     default: 0
@@ -32,8 +36,7 @@ const DoctorSchema = new Schema({
   }
 })
 
-
-DoctorSchema.pre('save', function (err) {
+DoctorSchema.pre('save', function(next) {
   if (this.isNew) {
     this.meta.createdAt = this.meta.updatedAt = Date.now()
   } else {

@@ -26,7 +26,7 @@ const DiarySchema = new Schema({
   }
 })
 
-DiarySchema.pre('save', function (next) {
+DiarySchema.pre('save', function(next) {
   if (this.isNew) {
     this.meta.createdAt = this.meta.updatedAt = Date.now()
   } else {

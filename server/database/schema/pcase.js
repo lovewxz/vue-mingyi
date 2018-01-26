@@ -14,18 +14,22 @@ const CaseSchema = new Schema({
     type: String,
     ref: 'Project'
   },
-  category: [{
-    type: String,
-    ref: 'Category'
-  }],
+  category: [
+    {
+      type: String,
+      ref: 'Category'
+    }
+  ],
   title: String,
   user_name: String,
   contents: String,
   all_item: [String],
-  sections: [{
-    type: String,
-    ref: 'Diary'
-  }],
+  sections: [
+    {
+      type: String,
+      ref: 'Diary'
+    }
+  ],
   compare_photo: {
     before: String,
     after: String
@@ -50,7 +54,7 @@ const CaseSchema = new Schema({
   }
 })
 
-CaseSchema.pre('save', function (next) {
+CaseSchema.pre('save', function(next) {
   const pcase = this
   if (pcase.isNew) {
     pcase.meta.createdAt = pcase.meta.updatedAt = Date.now()
@@ -73,6 +77,5 @@ CaseSchema.pre('update', async function(next) {
   await Diary.updateMany(idParam, statusObj)
   next()
 })
-
 
 const Case = mongoose.model('Case', CaseSchema)
