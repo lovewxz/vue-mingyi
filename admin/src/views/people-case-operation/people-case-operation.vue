@@ -1,109 +1,160 @@
 <template>
-<div class="people-case-handler">
-  <el-form :model="form" :rules="formRules" ref="form">
-    <sticky>
-      <template v-if="fetchSuccess">
-        <router-link style="margin-right:15px;" v-show='this.$route.params.id' :to="{ path:'diary-add' }">
-          <el-button type="info">新建日记</el-button>
-        </router-link>
-        <el-dropdown trigger="click">
-          <el-button plain>{{form.isTop?'已经置顶':'未置顶'}}
-            <i class="el-icon-caret-bottom el-icon--right"></i>
+  <div class="people-case-handler">
+    <el-form :model="form"
+             :rules="formRules"
+             ref="form">
+      <sticky>
+        <template v-if="fetchSuccess">
+          <router-link style="margin-right:15px;"
+                       v-show='this.$route.params.id'
+                       :to="{ path:'diary-add' }">
+            <el-button type="info">新建日记</el-button>
+          </router-link>
+          <el-dropdown trigger="click">
+            <el-button plain>{{form.isTop?'已经置顶':'未置顶'}}
+              <i class="el-icon-caret-bottom el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu class="no-padding"
+                              slot="dropdown">
+              <el-dropdown-item>
+                <el-radio-group style="padding: 10px;"
+                                v-model="form.isTop">
+                  <el-radio :label="true">设置置顶</el-radio>
+                  <el-radio :label="false">取消置顶</el-radio>
+                </el-radio-group>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-button v-loading="loading"
+                     style="margin-left: 10px;"
+                     type="success"
+                     @click="save()">发布
           </el-button>
-          <el-dropdown-menu class="no-padding" slot="dropdown">
-            <el-dropdown-item>
-              <el-radio-group style="padding: 10px;" v-model="form.isTop">
-                <el-radio :label="true">设置置顶</el-radio>
-                <el-radio :label="false">取消置顶</el-radio>
-              </el-radio-group>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="save()">发布
-        </el-button>
-        <el-button v-loading="loading" type="warning" @click="cancelBtn">取消</el-button>
-      </template>
-      <template v-else>
-        <el-tag>发送异常错误,刷新页面,或者联系程序员</el-tag>
-      </template>
-    </sticky>
-    <div class="createPost-main-container">
-      <el-row>
-        <el-col :span="21">
-          <el-form-item style="margin-bottom: 40px;" prop="title">
-            <MDinput name="title" v-model="form.title" required :maxlength="100">
-              标题
-            </MDinput>
-            <!-- <span v-show="form.title.length>=26" class='title-prompt'>app可能会显示不全</span> -->
-          </el-form-item>
-          <div class="postInfo-container">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="分类目录:" prop="category">
-                  <cate-cascader :selectedCateList="selectedCateList" @cateDataChange="cateDataChange"></cate-cascader>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="操作专家:" prop="doctor">
-                  <el-select placeholder="请选择专家" v-model="form.doctor">
-                    <el-option v-for="item in doctors" :key="item._id" :label="item.realname" :value="item._id">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="关联项目:" prop="project">
-                  <el-select placeholder="请选择专家" v-model="form.project">
-                    <el-option v-for="item in projects" :key="item._id" :label="item.title" :value="item._id">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </div>
-        </el-col>
-      </el-row>
-      <el-form-item label="模特姓名:" label-width="80px" props="user_name">
-        <el-col :span="4">
-          <el-input v-model="form.user_name"></el-input>
-        </el-col>
-      </el-form-item>
-      <el-form-item style="margin-bottom: 40px;" label-width="45px" label="简介:" prop="contents">
-        <el-input type="textarea" class="article-textarea" :rows="1" autosize placeholder="请输入内容" v-model="form.contents">
-        </el-input>
-        <!-- <span class="word-counter" v-show="contentShortLength">{{contentShortLength}}字</span> -->
-      </el-form-item>
-      <el-row style="margin-bottom: 40px;">
-        <el-col :span="12">
-          <el-form-item label="术前照片:" prop="before" label-width="85px" v-if="form.compare_photo">
-            <upload :file-list="form.compare_photo.before"></upload>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="术后照片:" prop="after" label-width="85px" v-if="form.compare_photo">
-            <upload :file-list="form.compare_photo.after"></upload>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-form-item label="标签" v-if="form.all_item" prop="tag" label-width="45px">
-        <tag :tag-list="form.all_item"></tag>
-      </el-form-item>
-      <div v-show="diaryListShow">
-        <el-row style="margin-bottom: 20px">
-          <el-col>相关日记:</el-col>
+          <el-button v-loading="loading"
+                     type="warning"
+                     @click="cancelBtn">取消</el-button>
+        </template>
+        <template v-else>
+          <el-tag>发送异常错误,刷新页面,或者联系程序员</el-tag>
+        </template>
+      </sticky>
+      <div class="createPost-main-container">
+        <el-row>
+          <el-col :span="21">
+            <el-form-item style="margin-bottom: 40px;"
+                          prop="title">
+              <MDinput name="title"
+                       v-model="form.title"
+                       required
+                       :maxlength="100">
+                标题
+              </MDinput>
+              <!-- <span v-show="form.title.length>=26" class='title-prompt'>app可能会显示不全</span> -->
+            </el-form-item>
+            <div class="postInfo-container">
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="分类目录:"
+                                prop="category">
+                    <cate-cascader :selectedCateList="selectedCateList"
+                                   @cateDataChange="cateDataChange"></cate-cascader>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="操作专家:"
+                                prop="doctor">
+                    <el-select placeholder="请选择专家"
+                               v-model="form.doctor">
+                      <el-option v-for="item in doctors"
+                                 :key="item._id"
+                                 :label="item.realname"
+                                 :value="item._id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="关联项目:"
+                                prop="project">
+                    <el-select placeholder="请选择专家"
+                               v-model="form.project">
+                      <el-option v-for="item in projects"
+                                 :key="item._id"
+                                 :label="item.title"
+                                 :value="item._id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
         </el-row>
-        <case-diary :case-id="$route.params.id" :table-data="diaryList" @filter="diaryFitler" @del="diaryDel" @batchDel="diaryBatchDel" ref="caseDiary" ></case-diary>
+        <el-form-item label="模特姓名:"
+                      label-width="80px"
+                      props="user_name">
+          <el-col :span="4">
+            <el-input v-model="form.user_name"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item style="margin-bottom: 40px;"
+                      label-width="45px"
+                      label="简介:"
+                      prop="contents">
+          <el-input type="textarea"
+                    class="article-textarea"
+                    :rows="1"
+                    autosize
+                    placeholder="请输入内容"
+                    v-model="form.contents">
+          </el-input>
+          <!-- <span class="word-counter" v-show="contentShortLength">{{contentShortLength}}字</span> -->
+        </el-form-item>
+        <el-row style="margin-bottom: 40px;">
+          <el-col :span="12">
+            <el-form-item label="术前照片:"
+                          prop="before"
+                          label-width="85px"
+                          v-if="form.compare_photo">
+              <upload :file-list="form.compare_photo.before"></upload>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="术后照片:"
+                          prop="after"
+                          label-width="85px"
+                          v-if="form.compare_photo">
+              <upload :file-list="form.compare_photo.after"></upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="标签"
+                      v-if="form.all_item"
+                      prop="tag"
+                      label-width="45px">
+          <tag :tag-list="form.all_item"></tag>
+        </el-form-item>
+        <div v-show="diaryListShow">
+          <el-row style="margin-bottom: 20px">
+            <el-col>相关日记:</el-col>
+          </el-row>
+          <case-diary :case-id="$route.params.id"
+                      :table-data="diaryList"
+                      @filter="diaryFitler"
+                      @del="diaryDel"
+                      @batchDel="diaryBatchDel"
+                      ref="caseDiary"></case-diary>
+        </div>
       </div>
-    </div>
-  </el-form>
-</div>
+    </el-form>
+  </div>
 </template>
 <script>
 import { getDoctorList } from '@/api/doctor'
 import { getProjectList } from '@/api/project'
 import { getPcaseById, savePcase, createPcase } from '@/api/pcase'
 import { getDiaryByCaseId } from '@/api/diary'
-import { removeURLToImage, addURLToImage} from '@/utils'
+import { removeURLToImage, addURLToImage } from '@/utils'
 import config from '@/config'
 import Upload from '@/components/upload/upload'
 import CaseDiary from '@/components/CaseDiary/CaseDiary'
@@ -136,18 +187,10 @@ export default {
     return {
       loading: false,
       formRules: {
-        title: [
-          { required: true, message: '请输入标题', trigger: 'blur' }
-        ],
-        category: [
-          { required: true, validator: checkCate, trigger: 'blur' }
-        ],
-        before: [
-          { required: true, validator: checkBefore, trigger: 'blur' }
-        ],
-        after: [
-          { required: true, validator: checkAfter, trigger: 'blur' }
-        ]
+        title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
+        category: [{ required: true, validator: checkCate, trigger: 'blur' }],
+        before: [{ required: true, validator: checkBefore, trigger: 'blur' }],
+        after: [{ required: true, validator: checkAfter, trigger: 'blur' }]
       },
       form: {
         title: '',
@@ -174,7 +217,7 @@ export default {
   methods: {
     // 保存
     save() {
-      this.$refs.form.validate(async(valid) => {
+      this.$refs.form.validate(async valid => {
         if (valid) {
           let res = ''
           const data = this._saveResult(this.form)
@@ -183,10 +226,12 @@ export default {
           } else {
             res = await createPcase(data)
           }
-          res.success ? this.$router.back() : this.$message({
-            message: res.err,
-            type: 'error'
-          })
+          res.success
+            ? this.$router.back()
+            : this.$message({
+                message: res.err,
+                type: 'error'
+              })
         }
       })
     },
@@ -235,8 +280,18 @@ export default {
     },
     _genResult(data) {
       if (data.compare_photo) {
-        data.compare_photo.before = [{ name: data.compare_photo.before, url: `${config.imgCDN}/${data.compare_photo.before}` }]
-        data.compare_photo.after = [{ name: data.compare_photo.after, url: `${config.imgCDN}/${data.compare_photo.after}` }]
+        data.compare_photo.before = [
+          {
+            name: data.compare_photo.before,
+            url: `${config.imgCDN}/${data.compare_photo.before}`
+          }
+        ]
+        data.compare_photo.after = [
+          {
+            name: data.compare_photo.after,
+            url: `${config.imgCDN}/${data.compare_photo.after}`
+          }
+        ]
       }
       this.selectedCateList = data.category.map(item => parseInt(item))
       return Object.assign({}, data)
@@ -287,7 +342,7 @@ export default {
     }
   },
   watch: {
-    '$route' (to, from) {
+    $route(to, from) {
       if (to.path.indexOf('add') > -1) {
         this.form = {}
         this.diaryList = []
@@ -307,7 +362,7 @@ export default {
 }
 </script>
 <style lang="scss">
-@import "src/styles/mixin.scss";
+@import 'src/styles/mixin.scss';
 .people-case-handler {
   .createPost-main-container {
     padding: 40px 45px 20px 50px;

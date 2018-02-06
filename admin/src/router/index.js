@@ -78,11 +78,39 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/doctor',
+    component: Layout,
+    redirect: '/doctor/index',
+    name: 'doctor',
+    meta: { title: '医生团队', icon: 'people' },
+    children: [
+      {
+        path: 'index',
+        name: 'doctor-index',
+        component: _import('doctor/doctor'),
+        meta: { title: '医生列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: 'doctor-add',
+        component: _import('doctor-operation/doctor-operation'),
+        meta: { title: '添加医生', icon: 'form' }
+      },
+      {
+        path: 'edit/:id',
+        name: 'doctor-edit',
+        hidden: true,
+        component: _import('doctor-operation/doctor-operation'),
+        meta: { title: '编辑医生' }
+      }
+    ]
+  },
+  {
     path: '/pcase',
     component: Layout,
     redirect: '/pcase/index',
     name: 'pcase',
-    meta: { title: '真人案例', icon: 'people' },
+    meta: { title: '真人案例', icon: 'peoples' },
     children: [
       {
         path: 'index',

@@ -8,6 +8,8 @@ const DoctorSchema = new Schema({
   title: String,
   avatar: String,
   desc: String,
+  tags: [String],
+  photos: [String],
   project: [
     {
       type: String,
@@ -20,6 +22,10 @@ const DoctorSchema = new Schema({
       ref: 'Case'
     }
   ],
+  isTop: {
+    type: Boolean,
+    default: false
+  },
   status: {
     type: Number,
     default: 0

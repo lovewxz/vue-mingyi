@@ -1,35 +1,19 @@
 <template>
-  <div class="diary">
+  <div class="doctor">
     <filter-bar @filter="filter"
                 @add="handleAdd"
-                style="padding-bottom:0;"
-                defaultPlaceholder="填写要搜索的日记内容">
-      <el-form-item>
-        <el-select placeholder="模特姓名"
-                   v-model="condition.caseId">
-          <el-option v-for="item in allUserName"
-                     :key="item._id"
-                     :label="item.user_name"
-                     :value="item._id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-    </filter-bar>
-    <el-table :data="diary"
+                style="padding-bottom:0;"></filter-bar>
+    <el-table :data="doctor"
               border
               @selection-change="selsChange"
               v-loading="listLoading">
-      <el-table-column type="selection"
-                       width="55"></el-table-column>
-      <el-table-column prop="article"
-                       label="日记内容"
-                       align="left"
-                       :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="caseId.user_name"
-                       label="模特姓名"
-                       align="center"
-                       width="150"
-                       :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column type="selection"></el-table-column>
+      <el-table-column prop="realname"
+                       label="医生姓名"
+                       align="left"></el-table-column>
+      <el-table-column prop="title"
+                       label="职称"
+                       align="left"></el-table-column>
       <el-table-column prop="time"
                        label="发布时间"
                        align="center"
@@ -67,49 +51,34 @@
 </template>
 <script>
 import config from '@/config'
-import { getDiaryList, delDiary } from '@/api/diary'
-import { getPcaseList } from '@/api/pcase'
+import { getDoctorList, delDoctor } from '@/api/doctor'
 import ProjectParams from '@/components/ProjectParams/ProjectParams'
 import FilterBar from '@/components/FilterBar/FilterBar'
-import { removeHTMLTag } from '@/utils'
 
 const imgCDN = config.imgCDN
 export default {
   data() {
     return {
       total: 0,
-      diary: [],
+      doctor: [],
       sels: [], //选中的数据
       // 分页
       condition: {
         page: 1,
         limit: 20,
-        keyword: '',
-        caseId: ''
+        keyword: ''
       },
-      listLoading: false,
-      allUserName: []
+      listLoading: false
     }
-  },
-  async beforeCreate() {
-    const params = {
-      limit: 0,
-      page: 0
-    }
-    await getPcaseList(params).then(res => {
-      if (res.success) {
-        this.allUserName = res.data.list
-      }
-    })
   },
   async created() {
-    await this.fetchDiary(this.condition)
+    await this.fetchDoctor(this.condition)
   },
   methods: {
     //分页
     async handleCurrentChange(page) {
       this.condition.page = page
-      await this.fetchDiary(this.condition)
+      await this.fetchDoctor(this.condition)
     },
     // 选择按钮
     selsChange(sels) {
@@ -117,11 +86,11 @@ export default {
     },
     // 增加按钮
     handleAdd() {
-      this.$router.push('/diary/add')
+      this.$router.push('/doctor/add')
     },
     // 编辑按钮
     handleEdit(index, row) {
-      this.$router.push(`/diary/edit/${row._id}`)
+      this.$router.push(`/doctor/edit/${row._id}`)
     },
     // 删除按钮
     handleDel(index, row) {
@@ -130,9 +99,9 @@ export default {
       }).then(
         async () => {
           const options = Object.assign({}, { _id: row._id }, { status: -1 })
-          const data = await delDiary(options)
+          const data = await deldoctor(options)
           if (data.success && data.data.ok === 1) {
-            await this.fetchDiary(this.condition)
+            await this.fetchDoctor(this.condition)
           }
         },
         () => {
@@ -140,17 +109,16 @@ export default {
         }
       )
     },
-    _genResult(data) {
-      data = data.map(item => {
-        item.article = removeHTMLTag(item.article)
-        return item
-      })
-      return data
+    getLastCate(data) {
+      if (data && data.length > 0) {
+        const cate = data.slice(-1)[0].name
+        return cate
+      }
     },
     // 过滤查询
     async filter(keyword) {
       this.condition.keyword = encodeURIComponent(keyword)
-      await this.fetchDiary(this.condition)
+      await this.fetchDoctor(this.condition)
     },
     // 批量删除
     async batchDel() {
@@ -162,18 +130,18 @@ export default {
           this.sels.forEach(item => {
             options.push(Object.assign({}, { _id: item._id }, { status: -1 }))
           })
-          let promises = options.map(option => delDiary(option))
+          let promises = options.map(option => delDoctor(option))
           let results = await Promise.all(promises)
-          await this.fetchDiary(this.condition)
+          await this.fetchDoctor(this.condition)
         }
       })
     },
-    async fetchDiary(condtion) {
+    async fetchDoctor(condtion) {
       this.listLoading = true
       try {
-        const res = await getDiaryList(condtion)
+        const res = await getDoctorList(condtion)
         if (res.success) {
-          this.diary = this._genResult(res.data.list)
+          this.doctor = res.data.list
           this.total = res.data.total
         }
       } catch (e) {
@@ -189,7 +157,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.diary {
+.doctor {
   padding: 20px;
   .now-price {
     display: block;
