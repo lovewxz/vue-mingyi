@@ -9,7 +9,8 @@
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src",
-    "server": "nodemon -w ./server -w ./start.js --exec node ./start.js"
+    "server": "nodemon -w ./server -w ./start.js --exec node ./start.js",
+    "frp": "./frp/frpc -c ./frp/frpc.ini"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -105,9 +106,5 @@
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
 }
